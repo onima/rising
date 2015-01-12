@@ -1,0 +1,49 @@
+---
+races:
+  - name: golems
+    troops_number: 5
+  - name: dragons
+    troops_number: 3
+  - name: elves
+    troops_number: 6
+  - name: undeads
+    troops_number: 6
+  - name: giants
+    troops_number: 4
+  - name: centaurs
+    troops_number: 7
+  - name: humans
+    troops_number: 5
+  - name: orcs
+    troops_number: 5
+  - name: dwarves
+    troops_number: 6
+  - name: skeletons
+    troops_number: 8
+  - name: sorcerers
+    troops_number: 5
+  - name: tritons
+    troops_number: 8
+  - name: trolls
+    troops_number: 5
+  - name: demons
+    troops_number: 3
+land_types:
+  - name: farmland
+    conquest_points: 2
+    color: '#FF8C00'
+  - name: forest
+    conquest_points: 2
+    color: '#228B22'
+  - name: hill
+    conquest_points: 2
+    color: '#FFD700'
+  - name: mountain
+    conquest_points: 3
+    color: '#708090'
+  - name: sea
+    conquest_points: 2
+    color: '#2266bb'
+  - name: swamp
+    conquest_points: 2
+    color: '#333300'
