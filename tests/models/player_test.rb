@@ -7,8 +7,9 @@ require 'errors'
 require 'config/game_state.rb'
 
 class TestPlayer < MiniTest::Unit::TestCase
+
   def setup
-    @state = GameState.instance
+    @state = GameState.new
     @state.reset!
     @map = Map.new(5,6, 400)
     @player = Player.new("alexis", "North")
@@ -23,13 +24,18 @@ class TestPlayer < MiniTest::Unit::TestCase
     @player.occupied_regions[1] = @map.regions[18]
   end
 
+  def test_price_of_race
+    race = @raceboard.active_races[3]
+    assert_equal 3, @player.price_of_race(race, @state)
+  end
+
   def test_can_pay_for_race
     race = @raceboard.active_races[1]
-    assert @player.can_pay_for_race?(race)
+    assert @player.can_pay_for_race?(race, @state)
 
     @player.pay(5)
 
-    refute @player.can_pay_for_race?(race)
+    refute @player.can_pay_for_race?(race, @state)
   end
 
   def test_is_player_territories_has_borders_with_region

@@ -1,6 +1,7 @@
 require_relative './region.rb'
 require_relative './race.rb'
 require_relative './map.rb'
+require 'config/game_state.rb'
 
 class Player
   attr_reader :name
@@ -14,8 +15,8 @@ class Player
     @occupied_regions= [] #array_of_regions_occupied_by_the_player
   end
 
-  def can_pay_for_race?(race)
-    coins >= price_of_race(race)
+  def can_pay_for_race?(race, game_state)
+    coins >= price_of_race(race, game_state)
   end
 
   def pay_for_race(race)
@@ -50,10 +51,8 @@ class Player
     bool
   end
 
-  private
-
-  def price_of_race(race)
-   GameState.instance.raceboard.active_races.index(race)
+  def price_of_race(race, game_state)
+   game_state.raceboard.active_races.index(race)
   end
 
 end

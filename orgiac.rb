@@ -7,10 +7,15 @@ require './models/game_master.rb'
 require './models/map.rb'
 require './models/map_drawer.rb'
 require './models/turn_tracker.rb'
+require './models/land_type.rb'
+require './serializer/serialize.rb'
+
+enable :sessions
 
 helpers do
+
   def game_state
-    GameState.instance
+    GameState.new
   end
 
   def raceboard
@@ -26,14 +31,27 @@ helpers do
   end
 
   def response_wrapper
-    yield
+    #if game state doesn t exist
+    # game_master_state = GameMaster.new(game_state)
+    # session[:game_state] = Serializer.new.serialize_game_master_game_state(game_master_state)
+    # game state exist now
+    #else
+    #  game_master_state
+    #  session_game_state
+    #end
+       #  state = Gamestate.new(session[:game_state])
+     res = yield game_master_state
+  #  session[:game_state] = state.serialize
+     res
   rescue RuntimeError, KeyError => e
     "There was an error parsing your request: #{e}"
   end
 end
 
 get '/' do
-  response_wrapper do
+  response_wrapper do |game_master_state|
+   # players = state....
+   # state = f(state)
     erb :index
   end
 end
@@ -49,7 +67,6 @@ post '/create_players' do
   response_wrapper do
     players_names = params['players'].split(',').map(&:strip)
     GameMaster.new.create_players(players_names)
-
     #TODO error if no players names given
     redirect to '/choose_race'
   end

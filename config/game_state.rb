@@ -1,22 +1,28 @@
 require 'yaml'
-require 'singleton'
+require 'models/land_type.rb'
+require 'models/player.rb'
+require 'models/raceboard.rb'
 
 class GameState
-  include Singleton
+  RULES_PATH = File.expand_path('rules.yml', File.dirname(__FILE__))
+  RULES      = YAML.load_file(RULES_PATH)
+  LAND_TYPES = RULES.fetch("land_types").map do |land_type|
+    LandType.new(
+      land_type.fetch("name"),
+      land_type.fetch("conquest_points"),
+      land_type.fetch("color")
+    )
+  end
+
   attr_accessor :players, :raceboard, :races, :land_types, :map, :turn_tracker
 
   def initialize
-    reset!
+    reset! 
   end
 
   def reset!
-    rules_path = File.expand_path('rules.yml', File.dirname(__FILE__))
-    @rules     = YAML.load_file(rules_path)
     @players   = []
-    @raceboard = RaceBoard.new(@rules)
-    @land_types = @rules.fetch("land_types").map do |land_type|
-      LandType.new(land_type.fetch("name"), land_type.fetch("conquest_points"), land_type.fetch("color"))
-    end
+    @raceboard = RaceBoard.new(RULES)
   end
 
   def map_generate
@@ -26,5 +32,4 @@ class GameState
   def turn_tracker_generate
     @turn_tracker = TurnTracker.new(10, @players)
   end
-
 end

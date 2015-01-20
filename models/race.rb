@@ -1,4 +1,5 @@
 class Race
+
   attr_reader :name
   attr_accessor :troops_number
 

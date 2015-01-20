@@ -13,7 +13,7 @@ class MapDrawer
   end
 
   def land_types
-    GameState.instance.land_types
+    GameState::LAND_TYPES
   end
 
   def regions

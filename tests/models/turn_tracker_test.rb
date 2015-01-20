@@ -5,7 +5,7 @@ require 'config/game_state.rb'
 
 class TestTurntracker < MiniTest::Unit::TestCase
   def setup
-    @state = GameState.instance
+    @state = GameState.new
     @state.reset!
     @player_1 = Player.new("alexis", "North")
     @player_2 = Player.new("manue", "East")

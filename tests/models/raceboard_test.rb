@@ -1,5 +1,4 @@
 require 'yaml'
-
 require 'models/race.rb'
 require 'models/raceboard.rb'
 require 'errors'
@@ -7,7 +6,7 @@ require 'config/game_state.rb'
 
 class TestRaceBoard < MiniTest::Unit::TestCase
   def setup
-    @state = GameState.instance
+    @state = GameState.new
     @state.reset!
     @raceboard = @state.raceboard
     @player = Player.new("Bob", "East")
