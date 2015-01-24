@@ -20,12 +20,6 @@ class TestRegion < MiniTest::Unit::TestCase
     assert_equal "<polygon style=\"fill:yellow;fill-opacity:0.7\" points=\"900.0,450.0 800.0,450.0 \"/>", @region.to_svg(@players)
   end
 
-  def test_has_external_border_returns_a_visual_description_of_the_borders
-    @map.regions.each do |region|
-      puts "Region with id #{region.id} has border?: #{region.external_borders}"
-    end
-  end
-
   def test_has_external_border_returns_true_if_it_is_on_a_corner
     assert @map.regions.first.has_external_border?
     assert @map.regions[2].has_external_border?
@@ -58,7 +52,6 @@ class TestRegion < MiniTest::Unit::TestCase
     @player_2 = Player.new("louis", "East")
     @players = [@player_1, @player_2]
     @player_1.occupied_regions << @map.regions[12]
-
     assert @map.regions[12].occupied?(@players)
     refute @map.regions[13].occupied?(@players)
   end

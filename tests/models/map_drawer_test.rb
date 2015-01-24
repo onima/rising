@@ -18,12 +18,6 @@ class TestMapDrawer < MiniTest::Unit::TestCase
     assert_includes %w(swamp hill forest mountain farmland), @map_drawer.map.regions[4].land_type.name
   end
 
-  def test_returns_a_visual_description_of_the_land_types
-    @map_drawer.map.regions.map do |region|
-      puts "Region with id #{region.id} has land type #{region.land_type.name}"
-    end
-  end
-
   def test_map_have_differents_tribes_on_different_regions
     expected_tribes_number = (@map_drawer.regions_without_sea.length) / MapDrawer::REGION_TRIBE_RATIO
     actual_tribes_number = @map_drawer.map.regions.count {|region| region.has_tribe == true}
@@ -31,12 +25,6 @@ class TestMapDrawer < MiniTest::Unit::TestCase
     assert_equal expected_tribes_number, actual_tribes_number
     refute(@map_drawer.map.regions.first.has_tribe)
     refute(@map_drawer.map.regions.last.has_tribe)
-  end
-
-  def test_returns_a_visual_description_of_the_land_types
-    @map_drawer.map.regions.map do |region|
-      puts "Region with id #{region.id} has tribe?: #{region.has_tribe}"
-    end
   end
 
   def test_if_each_region_has_the_good_idea
