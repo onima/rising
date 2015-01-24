@@ -1,12 +1,12 @@
 class Serializer
-  
+
   def serialize_game_master_game_state(game_master)
     {
       players:   serialize_players(game_master.game_state.players),
       raceboard: serialize_raceboard(game_master.game_state.raceboard)
     }
   end
-  
+
   def serialize_players(players)
     players.map do |player|
       serialize_player(player)
@@ -23,15 +23,15 @@ class Serializer
   def serialize_player(player)
       occupied_regions = player.occupied_regions.map do |region|
         serialize_region(region)
-      end 
+      end
     {
       name:             player.name,
       coins:            player.coins,
       cardinal_point:   player.cardinal_point,
       race:             serialize_player_race(player),
-      occupied_regions: occupied_regions, 
+      occupied_regions: occupied_regions,
       color:            player.color
-    } 
+    }
   end
 
   def serialize_region(region)
@@ -66,7 +66,7 @@ class Serializer
         races << serialize_race(race)
       end
     else
-      races 
+      races
     end
     races
   end

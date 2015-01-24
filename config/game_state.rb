@@ -17,7 +17,7 @@ class GameState
   attr_accessor :players, :raceboard, :races, :land_types, :map, :turn_tracker
 
   def initialize
-    reset! 
+    reset!
   end
 
   def reset!

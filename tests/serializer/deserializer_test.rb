@@ -36,15 +36,15 @@ class DeserializeTest < MiniTest::Unit::TestCase
             name:          "elves",
             troops_number: 6
           },
-          { 
+          {
             name:          "undeads",
             troops_number: 6
           },
-          { 
+          {
             name:          "giants",
             troops_number: 4
           },
-          { 
+          {
             name:          "centaurs",
             troops_number: 7
           },
@@ -52,7 +52,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
             name:          "humans",
             troops_number: 5
           },
-          { 
+          {
             name:          "orcs",
             troops_number: 5
           },
@@ -79,8 +79,8 @@ class DeserializeTest < MiniTest::Unit::TestCase
           {
             name:          "demons",
             troops_number: 3
-          } 
-        ], 
+          }
+        ],
         race_choices: []
       }
     )
@@ -92,7 +92,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
 
    races_names_array_2 = raceboard_test_object.races.map do |race|
     race.name
-   end 
+   end
 
    assert_equal races_names_array_1, races_names_array_2
   end
@@ -120,7 +120,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
           {
             x: 800.0,
             y: 450.0
-          } 
+          }
         ],
         land_type: {
           name:            "forest",
@@ -161,21 +161,21 @@ class DeserializeTest < MiniTest::Unit::TestCase
           troops_number: 5
         },
         occupied_regions:   [
-          { 
+          {
             coordinates: [
               {
                 x: 900.0,
                 y: 450.0
               },
               {
-                x: 800.0, 
+                x: 800.0,
                 y: 450.0
               }
             ],
             land_type: {
               name:            "forest",
               conquest_points: 2,
-              color:           "yellow" 
+              color:           "yellow"
             },
             has_tribe:      nil,
             id:             7,
@@ -201,21 +201,21 @@ class DeserializeTest < MiniTest::Unit::TestCase
           troops_number: 5
         },
         occupied_regions:   [
-          { 
+          {
             coordinates: [
               {
                 x: 900.0,
                 y: 450.0
               },
               {
-                x: 800.0, 
+                x: 800.0,
                 y: 450.0
               }
             ],
             land_type: {
               name:            "forest",
               conquest_points: 2,
-              color:           "yellow" 
+              color:           "yellow"
             },
             has_tribe:      nil,
             id:             7,
@@ -233,21 +233,21 @@ class DeserializeTest < MiniTest::Unit::TestCase
           troops_number: 3
         },
         occupied_regions:   [
-          { 
+          {
             coordinates: [
               {
                 x: 900.0,
                 y: 450.0
               },
               {
-                x: 800.0, 
+                x: 800.0,
                 y: 450.0
               }
             ],
             land_type: {
               name:            "forest",
               conquest_points: 2,
-              color:           "yellow" 
+              color:           "yellow"
             },
             has_tribe:      nil,
             id:             7,
@@ -262,7 +262,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
       Player.new("alexis", "North"),
       Player.new("tom", "East")
     ]
-    assert_equal players_object[0].name, deserialize_players[0].name 
+    assert_equal players_object[0].name, deserialize_players[0].name
   end
 
   def test_if_deserialize_game_master_game_state
@@ -289,7 +289,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
             name:          "golems",
             troops_number: 5
           },
-          { 
+          {
             name:          "dragons",
             troops_number: 3
           },
@@ -305,11 +305,11 @@ class DeserializeTest < MiniTest::Unit::TestCase
             name:          "giants",
             troops_number: 4
           },
-          { 
+          {
             name:          "centaurs",
             troops_number: 7
           },
-          { 
+          {
             name:          "humans",
             troops_number: 5
           },
@@ -325,7 +325,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
             name:          "skeletons",
             troops_number: 8
           },
-          { 
+          {
             name:          "sorcerers",
             troops_number: 5
           },
@@ -341,7 +341,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
             name:          "demons",
             troops_number: 3
           }
-        ], 
+        ],
         race_choices: []
       }
     }

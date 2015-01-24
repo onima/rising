@@ -1,5 +1,5 @@
 class SerializeTest < MiniTest::Unit::TestCase
-  
+
   def setup
     @state = GameState.new
     @state.reset!
@@ -26,7 +26,7 @@ class SerializeTest < MiniTest::Unit::TestCase
             name:          "golems",
             troops_number: 5
           },
-          { 
+          {
             name:          "dragons",
             troops_number: 3
           },
@@ -42,11 +42,11 @@ class SerializeTest < MiniTest::Unit::TestCase
             name:          "giants",
             troops_number: 4
           },
-          { 
+          {
             name:          "centaurs",
             troops_number: 7
           },
-          { 
+          {
             name:          "humans",
             troops_number: 5
           },
@@ -62,7 +62,7 @@ class SerializeTest < MiniTest::Unit::TestCase
             name:          "skeletons",
             troops_number: 8
           },
-          { 
+          {
             name:          "sorcerers",
             troops_number: 5
           },
@@ -78,7 +78,7 @@ class SerializeTest < MiniTest::Unit::TestCase
             name:          "demons",
             troops_number: 3
           }
-        ], 
+        ],
         race_choices: []
       }
     }
@@ -106,7 +106,7 @@ class SerializeTest < MiniTest::Unit::TestCase
     @region_1.land_type = LandType.new("forest", 2, "yellow")
     @player = Player.new("alexis", "North")
     @player.races[0] = Race.new("humans", 5)
-    @player.occupied_regions[0] = @region_1 
+    @player.occupied_regions[0] = @region_1
     @state.players = [@player]
     exp = [
       {
@@ -131,11 +131,11 @@ class SerializeTest < MiniTest::Unit::TestCase
                 y: 450.0
               }
             ],
-           land_type: 
+           land_type:
            {
              name:            "forest",
              conquest_points: 2,
-             color:           "yellow" 
+             color:           "yellow"
            },
            has_tribe:      nil,
            id:             7,
@@ -148,9 +148,9 @@ class SerializeTest < MiniTest::Unit::TestCase
     assert_equal exp, @serialize.serialize_players(@state.players)
   end
 
-  def test_if_serialize_method_serialize_raceboard 
+  def test_if_serialize_method_serialize_raceboard
     @raceboard = @state.raceboard
-    exp = 
+    exp =
       {
         races: [
           {
@@ -207,9 +207,9 @@ class SerializeTest < MiniTest::Unit::TestCase
           },
           {
             name:          "demons",
-            troops_number: 3 
+            troops_number: 3
           }
-        ], 
+        ],
         race_choices: []
       }
     @serialize.serialize_raceboard(@raceboard)

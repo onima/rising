@@ -1,5 +1,5 @@
 class Deserializer
-  
+
   def deserialize_game_master_game_state(game_master)
     game_master_object = GameMaster.new(GameState.new)
     raceboard_deserialize = deserialize_raceboard(
@@ -13,22 +13,19 @@ class Deserializer
     game_master_object
   end
 
-  def deserialize_raceboard(raceboard)
-    raceboard_object = GameMaster.new(GameState.new).game_state.raceboard
-    races = raceboard.fetch(:races).map do |race|
+  def deserialize_raceboard(hsh)
+    raceboard = RaceBoard.new(GameState::RULES)
+    races = hsh.fetch(:races).map do |race|
       deserialize_race(race)
     end
-    raceboard_object.races = races
-    raceboard_object
+    raceboard.races = races
+    raceboard
   end
 
   def deserialize_players(players)
-    players_object = GameMaster.new(GameState.new).game_state.players
-    players = players.map do |player|
+    players.map do |player|
       deserialize_player(player)
     end
-    players_object = players
-    players_object
   end
 
   def deserialize_player(player)
@@ -64,10 +61,10 @@ class Deserializer
   def deserialize_region(region)
     region_object = Region.new(
       region.fetch(:coordinates),
-      region[:width],
-      region[:height],
+      region.fetch(:width),
+      region.fetch(:height),
       region.fetch(:id)
-    ) 
+    )
     region_object.land_type = deserialize_land_type(region.fetch(:land_type))
     region_object.has_tribe = region.fetch(:has_tribe)
     region_object.player_defense = region.fetch(:player_defense)

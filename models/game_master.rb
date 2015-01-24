@@ -1,6 +1,6 @@
 require 'config/game_state.rb'
 class GameMaster
-  
+
   attr_accessor :game_state
 
   def initialize(game_state)
@@ -18,7 +18,7 @@ class GameMaster
     cardinal_points = ["North", "East", "South", "West"]
     players_names.each do |name|
       actual_players << Player.new(name, cardinal_points.shift)
-    end 
+    end
   end
 
   def assign_players_color(players)
