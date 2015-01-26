@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 class Region
-  attr_reader :width, :height
+  attr_reader :map_width, :map_height
   attr_accessor :coordinates, :land_type, :has_tribe, :id, :player_defense
 
   def initialize(coordinates, width, height, id)

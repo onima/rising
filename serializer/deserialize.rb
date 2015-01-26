@@ -1,12 +1,12 @@
 class Deserializer
 
-  def deserialize_game_master_game_state(game_master)
+  def deserialize_game_master_game_state(hsh)
     game_master_object = GameMaster.new(GameState.new)
     raceboard_deserialize = deserialize_raceboard(
-      game_master.fetch(:raceboard)
+      hsh.fetch(:raceboard)
     )
     players_deserialize = deserialize_players(
-      game_master.fetch(:players)
+      hsh.fetch(:players)
     )
     game_master_object.game_state.raceboard = raceboard_deserialize
     game_master_object.game_state.players = players_deserialize
@@ -18,13 +18,18 @@ class Deserializer
     races = hsh.fetch(:races).map do |race|
       deserialize_race(race)
     end
+    race_choices_array = hsh.fetch(:race_choices).map do |race|
+      [deserialize_race(race.first), race.last]
+    end
+
     raceboard.races = races
+    raceboard.race_choices = race_choices_array
     raceboard
   end
 
-  def deserialize_players(players)
-    players.map do |player|
-      deserialize_player(player)
+  def deserialize_players(hsh)
+    hsh.map do |p|
+      deserialize_player(p)
     end
   end
 
@@ -34,7 +39,9 @@ class Deserializer
       player.fetch(:cardinal_point)
     )
     player_object.coins = player.fetch(:coins)
-    player_object.races = [deserialize_race(player.fetch(:race))]
+    player_object.races = player.fetch(:races).map do |race|
+      deserialize_race(race)
+    end
     occupied_regions = player.fetch(:occupied_regions).map do |region|
       deserialize_region(region)
     end
@@ -43,31 +50,31 @@ class Deserializer
     player_object
   end
 
-  def deserialize_race(race)
+  def deserialize_race(hsh)
     Race.new(
-      race.fetch(:name),
-      race.fetch(:troops_number)
+      hsh.fetch(:name),
+      hsh.fetch(:troops_number)
     )
   end
 
-  def deserialize_land_type(land_type)
+  def deserialize_land_type(hsh)
     LandType.new(
-      land_type.fetch(:name),
-      land_type.fetch(:conquest_points),
-      land_type.fetch(:color)
+      hsh.fetch(:name),
+      hsh.fetch(:conquest_points),
+      hsh.fetch(:color)
     )
   end
 
-  def deserialize_region(region)
+  def deserialize_region(hsh)
     region_object = Region.new(
-      region.fetch(:coordinates),
-      region.fetch(:width),
-      region.fetch(:height),
-      region.fetch(:id)
+      hsh.fetch(:coordinates),
+      hsh.fetch(:width),
+      hsh.fetch(:height),
+      hsh.fetch(:id)
     )
-    region_object.land_type = deserialize_land_type(region.fetch(:land_type))
-    region_object.has_tribe = region.fetch(:has_tribe)
-    region_object.player_defense = region.fetch(:player_defense)
+    region_object.land_type = deserialize_land_type(hsh.fetch(:land_type))
+    region_object.has_tribe = hsh.fetch(:has_tribe)
+    region_object.player_defense = hsh.fetch(:player_defense)
     region_object
   end
 
