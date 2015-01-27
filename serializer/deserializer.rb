@@ -15,13 +15,12 @@ class Deserializer
 
   def deserialize_raceboard(hsh)
     raceboard = RaceBoard.new(GameState::RULES)
-    races = hsh.fetch(:races).map do |race|
-      deserialize_race(race)
+    races = hsh.fetch(:races).map do |r|
+      deserialize_race(r)
     end
-    race_choices_array = hsh.fetch(:race_choices).map do |race|
-      [deserialize_race(race.first), race.last]
+    race_choices_array = hsh.fetch(:race_choices).map do |r|
+      [deserialize_race(r.first), r.last]
     end
-
     raceboard.races = races
     raceboard.race_choices = race_choices_array
     raceboard
@@ -33,20 +32,20 @@ class Deserializer
     end
   end
 
-  def deserialize_player(player)
+  def deserialize_player(hsh)
     player_object = Player.new(
-      player.fetch(:name),
-      player.fetch(:cardinal_point)
+      hsh.fetch(:name),
+      hsh.fetch(:cardinal_point)
     )
-    player_object.coins = player.fetch(:coins)
-    player_object.races = player.fetch(:races).map do |race|
+    player_object.coins = hsh.fetch(:coins)
+    player_object.races = hsh.fetch(:races).map do |race|
       deserialize_race(race)
     end
-    occupied_regions = player.fetch(:occupied_regions).map do |region|
+    occupied_regions = hsh.fetch(:occupied_regions).map do |region|
       deserialize_region(region)
     end
     player_object.occupied_regions = occupied_regions
-    player_object.color = player.fetch(:color)
+    player_object.color = hsh.fetch(:color)
     player_object
   end
 
