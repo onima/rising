@@ -1,4 +1,3 @@
-require './orgiac'
-
-$:.push('.').uniq!
+$: << __dir__
+require 'orgiac'
 run Sinatra::Application
