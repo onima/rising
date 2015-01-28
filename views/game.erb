@@ -4,7 +4,7 @@
         <div class="col-lg-1 col-lg-push-7">
           <svg width="435px" height="625px"
           xmlns="http://www.w3.org/2000/svg" version="1.1">
-          <% map.regions.each do |region| %>
+          <% @map.regions.each do |region| %>
           <%= region.to_svg(@players) %>
           <% if region.land_type.name.length < 5 %>
           <text x="<%= region.coordinates[2][:x] + 15 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
@@ -30,11 +30,11 @@
           </tr>
           <tr>
             <td>Turns left</td>
-            <td><%= turn_tracker.turns_left %></td>
+            <td><%= @turn_tracker.turns_left %></td>
           </tr>
           <tr>
             <td>Actual Turn</td>
-            <td><%= turn_tracker.actual_turn %></td>
+            <td><%= @turn_tracker.actual_turn %></td>
           </tr>
           <tr>
             <td>Player</td>
@@ -67,7 +67,7 @@
           <tr>
             <td>Lands that can be conquered</td>
             <td>
-              <% map.regions.each do |region| %>
+              <% @map.regions.each do |region| %>
               <% if @player.occupied_regions.include?(region) == false %>
               <%= region.id if @player.can_attack_region?(region) %>
               <% end %>
@@ -78,14 +78,14 @@
         <form action="/play_turn" method="post" class="well">
           <fieldset>
 
-            <% if @player.can_yet_attack?(map) %>
+            <% if @player.can_yet_attack?(@map) %>
               <legend><h4>Which Land Do You Want To Attack ?</h4></legend>
             <% else %>
               <legend><h4>Not Enough Troops</h4></legend>
             <% end %>
 
               <div class="col-lg-12">
-                <% map.regions.each do |region| %>
+                <% @map.regions.each do |region| %>
                 <% if @player.occupied_regions.include?(region) == false %>
                 <% if @player.can_attack_region?(region) %>
                 <div class="radio">
@@ -101,7 +101,7 @@
                 <% end %>
               </div>
               <input type="hidden" name="name" value="<%= @player.name %>">
-              <% if @player.can_yet_attack?(map) %>
+              <% if @player.can_yet_attack?(@map) %>
               <input class="col-lg-4 col-lg-offset-4 btn btn-primary" type="submit" value="Invade">
               <% else %>
                 <input class="col-lg-4 col-lg-offset-4 btn btn-default" type="submit" value="Finish Turn">

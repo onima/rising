@@ -15,18 +15,6 @@ enable :sessions
 
 helpers do
 
-  def raceboard
-    game_master.game_state.raceboard
-  end
-
-  def map
-    game_master.game_state.map
-  end
-
-  def turn_tracker
-    game_master.game_state.turn_tracker
-  end
-
   def serialize(object)
     Serializer.new.serialize_game_master_game_state(object)
   end
@@ -35,95 +23,100 @@ helpers do
     Deserializer.new.deserialize_game_master_game_state(hsh)
   end
 
-  def response_wrapper(hsh)
-    yield deserialize(hsh)
-    serialize(hsh)
+  def response_wrapper
+    puts "----------------------BEFORE -----------------------"
+    p session[:game_master]
+    game_master =
+      if session[:game_master]
+        deserialize(session[:game_master])
+      else
+        session[:game_master] = GameMaster.new(GameState.new)
+      end
+    res = yield game_master # mutate insiste yield
+    session[:game_master] = serialize(game_master)
+    puts "----------------------AFTER -----------------------"
+    p session[:game_master]
+    res
   rescue RuntimeError, KeyError => e
     "There was an error parsing your request: #{e}"
   end
 end
 
 get '/' do
-  session[:game_master] = Serializer.new.serialize_game_master_game_state(GameMaster.new(GameState.new))
-  response_wrapper(session[:game_master]) do |game_master_obj|
+  response_wrapper do |game_master_obj|
   end
     erb :index
 end
 
-#get '/players_choice' do
-#  response_wrapper(session[:game_master]) do |game_master_obj|
-#    game_master_obj.game_state.raceboard.pick_active_races
-#  end
-#  erb :players_choice
-#end
+get '/players_choice' do
+  response_wrapper do |game_master_obj|
+    game_master_obj.game_state.raceboard.pick_active_races
+  end
+  erb :players_choice
+end
 
-#post '/create_players' do
-#  response_wrapper(session[:game_master]) do |game_master_obj|
-#    players_names = params['players'].split(',').map(&:strip)
-#    game_master_obj.create_players(players_names)
-#  end
-#  redirect to '/choose_race'
-#end
+post '/create_players' do
+  response_wrapper do |game_master_obj|
+    players_names = params['players'].split(',').map(&:strip)
+    game_master_obj.create_players(players_names)
+  end
+  redirect to '/choose_race'
+end
 
-#get '/choose_race' do
-#  response_wrapper(session[:game_master]) do |game_master_obj|
-#    @race_choices = game_master_obj.game_state.raceboard.race_choices
-#    @active_races = game_master_obj.game_state.raceboard.active_races
-#    @players = game_master_obj.game_state.players
-#    game_master_obj.assign_players_color(@players)
-#  end
-#  erb :race_choice
-#end
+get '/choose_race' do
+  response_wrapper do |game_master_obj|
+    @race_choices = game_master_obj.game_state.raceboard.race_choices
+    @active_races = game_master_obj.game_state.raceboard.active_races
+    @players = game_master_obj.game_state.players
+    game_master_obj.assign_players_color(@players)
+  end
+  erb :race_choice
+end
 
-#post '/create_players' do
-#  response_wrapper do
-#    players_names = params['players'].split(',').map(&:strip)
-#    GameMaster.new.create_players(players_names)
-#    #TODO error if no players names given
-#    redirect to '/choose_race'
-#  end
-#end
-#
-#get '/choose_race' do
-#  @race_choices = raceboard.race_choices
-#  @active_races = raceboard.active_races
-#  @players = game_state.players
-#  GameMaster.new.assign_players_color(@players)
-#  erb :race_choice
-#end
-#
-#post '/choose_race' do
-#  #TODO what happens if choose_race before choose players and choose active races?
-#  response_wrapper do
-#    player_name = params["player"]
-#    race_name = params["race"]
-#    player = game_state.players.find { |p| p.name == player_name }
-#    chosen_race = raceboard.active_races.find { |r| r.name == race_name }
-#
-#    #TODO move check inside pick_race
-#    if player && player.can_pay_for_race?(chosen_race) && chosen_race
-#      raceboard.pick_race(chosen_race, player)
-#    end
-#
-#    redirect to 'choose_race'
-#  end
-#end
-#
+post '/choose_race' do
+  response_wrapper do |game_master_obj|
+    player_name = params["player"]
+    race_name = params["race"]
+    player = game_master_obj.game_state.players.find { |p| p.name == player_name }
+    chosen_race = game_master_obj.game_state.raceboard.active_races.find { |r| r.name == race_name }
+    if player && player.can_pay_for_race?(chosen_race, game_master_obj.game_state) && chosen_race
+      game_master_obj.game_state.raceboard.pick_race(chosen_race, player)
+    end
+  end
+  redirect to 'choose_race'
+end
+
+get '/game' do
+  response_wrapper do |game_master_obj|
+    if game_master_obj.game_state.raceboard.active_races.empty? || game_master_obj.game_state.players.empty?
+      redirect to '/'
+    else
+      @players = game_master_obj.game_state.players
+      game_master_obj.game_state.map_generate
+      @map = game_master_obj.game_state.map
+      game_master_obj.game_state.turn_tracker_generate
+      @turn_tracker = game_master_obj.game_state.turn_tracker
+      @player = game_master_obj.game_state.players.first
+      erb :game
+    end
+  end
+end
+
 #get '/game' do
-#  #TODO make sure all players have chosen a race
-#  #if raceboard.active_races.empty? || game_state.players.empty?
-#  #  redirect to '/'
-#  #else
+  #TODO make sure all players have chosen a race
+  #if raceboard.active_races.empty? || game_state.players.empty?
+  #  redirect to '/'
+  #else
 #    @players = game_state.players
 #    game_state.map_generate
 #    map
 #    game_state.turn_tracker_generate
 #    turn_tracker
-#    @player = game_state.players.first
+#   @player = game_state.players.first
 #    erb :game
-#  #end
+  #end
 #end
-#
+
 #get '/play_turn' do
 #  @players = game_state.players
 #  map

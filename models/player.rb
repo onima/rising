@@ -1,6 +1,6 @@
-require_relative './region.rb'
-require_relative './race.rb'
-require_relative './map.rb'
+require 'models/region.rb'
+require 'models/race.rb'
+require 'models/map.rb'
 require 'config/game_state.rb'
 
 class Player

@@ -1,5 +1,5 @@
-require "serializer/deserialize.rb"
-require "serializer/serialize.rb"
+require "serializer/deserializer.rb"
+require "serializer/serializer.rb"
 require "config/game_state.rb"
 require "models/player.rb"
 require "models/game_master.rb"
