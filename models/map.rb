@@ -13,15 +13,3 @@ class Map
     @grid_width = grid_width
   end
 end
-
-
-#----------------
-#
-#map_hsh = session[:game_master][:map]
-#
-#map =
-#  if map_hsh
-#    bob.deserialize_map(map_hsh)
-#  else
-#    MapDrawer.new.create_map
-#  end

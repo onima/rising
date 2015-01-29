@@ -30,7 +30,10 @@ helpers do
       if session[:game_master]
         deserialize(session[:game_master])
       else
-        session[:game_master] = GameMaster.new(GameState.new)
+        game_master = GameMaster.new(GameState.new)
+        game_master.game_state.map_generate
+        game_master.game_state.turn_tracker_generate
+        session[:game_master] = game_master
       end
     res = yield game_master # mutate insiste yield
     session[:game_master] = serialize(game_master)
@@ -92,9 +95,7 @@ get '/game' do
       redirect to '/'
     else
       @players = game_master_obj.game_state.players
-      game_master_obj.game_state.map_generate
       @map = game_master_obj.game_state.map
-      game_master_obj.game_state.turn_tracker_generate
       @turn_tracker = game_master_obj.game_state.turn_tracker
       @player = game_master_obj.game_state.players.first
       erb :game
