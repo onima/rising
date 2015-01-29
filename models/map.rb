@@ -1,17 +1,27 @@
-require_relative './region.rb'
-require_relative './land_type.rb'
+require 'models/region.rb'
+require 'models/land_type.rb'
 
 class Map
 
   attr_reader :width, :height, :grid_width
   attr_accessor :regions
 
-  def initialize (width, height, grid_width)
-    @regions = []
+  def initialize (regions, width, height, grid_width)
+    @regions = regions
     @width   = width
     @height  = height
     @grid_width = grid_width
-
-    MapDrawer.new(self).draw_map
   end
 end
+
+
+#----------------
+#
+#map_hsh = session[:game_master][:map]
+#
+#map =
+#  if map_hsh
+#    bob.deserialize_map(map_hsh)
+#  else
+#    MapDrawer.new.create_map
+#  end

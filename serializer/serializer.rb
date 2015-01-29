@@ -2,8 +2,10 @@ class Serializer
 
   def serialize_game_master_game_state(game_master)
     {
-      players:   serialize_players(game_master.game_state.players),
-      raceboard: serialize_raceboard(game_master.game_state.raceboard)
+      players:      serialize_players(game_master.game_state.players),
+      raceboard:    serialize_raceboard(game_master.game_state.raceboard),
+      map:          serialize_map(game_master.game_state.map),
+      turn_tracker: serialize_turn_tracker(game_master.game_state.turn_tracker)
     }
   end
 
@@ -11,15 +13,6 @@ class Serializer
     players.map do |p|
       serialize_player(p)
     end
-  end
-
-  def serialize_raceboard(raceboard)
-    {
-      races:        raceboard.races.map {|r| serialize_race(r)},
-      race_choices: raceboard.race_choices.map do |r, coins|
-        [serialize_race(r), coins]
-      end
-    }
   end
 
   def serialize_player(player)
@@ -33,6 +26,40 @@ class Serializer
       races:            serialize_player_race(player),
       occupied_regions: occupied_regions,
       color:            player.color
+    }
+  end
+
+  def serialize_player_race(player)
+      player.races.map do |r|
+         serialize_race(r)
+      end
+  end
+
+  def serialize_raceboard(raceboard)
+    {
+      races:        raceboard.races.map {|r| serialize_race(r)},
+      race_choices: raceboard.race_choices.map do |r, coins|
+        [serialize_race(r), coins]
+      end
+    }
+  end
+
+  def serialize_race(race)
+    {
+      name:          race.name,
+      troops_number: race.troops_number
+    }
+  end
+
+  def serialize_map(game_map)
+    map_regions = game_map.regions.map do |r|
+      serialize_region(r)
+    end
+    { 
+      regions:    map_regions,
+      width:      game_map.width,
+      height:     game_map.height,
+      grid_width: game_map.grid_width
     }
   end
 
@@ -56,17 +83,13 @@ class Serializer
      }
   end
 
-  def serialize_race(race)
+  def serialize_turn_tracker(turn_tracker)
     {
-      name:          race.name,
-      troops_number: race.troops_number
+      turns_left:  turn_tracker.turns_left,
+      players:     serialize_players(turn_tracker.players), 
+      turn_played: serialize_players(turn_tracker.players),
+      actual_turn: turn_tracker.actual_turn
     }
-  end
-
-  def serialize_player_race(player)
-      player.races.map do |r|
-         serialize_race(r)
-      end
   end
 
 end

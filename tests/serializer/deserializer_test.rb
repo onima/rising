@@ -38,7 +38,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
            has_tribe: nil,
            id: 1,
            width: 3,
-           height: 3, 
+           height: 3,
            player_defense: nil
           }
           ],
@@ -66,6 +66,96 @@ class DeserializeTest < MiniTest::Unit::TestCase
             }, 0 
           ]
         ]
+      },
+      map: {
+        regions: [{
+            coordinates: [
+              { x: 900.0, y: 450.0 },
+              { x: 800.0, y: 450.0 }
+            ],
+           land_type: {
+             name: "forest",
+             conquest_points: 2,
+             color: "yellow"
+           },
+           has_tribe: nil,
+           id: 1,
+           width: 3,
+           height: 3,
+           player_defense: nil
+          }
+        ],
+        width: 6,
+        height: 5,
+        grid_width: 1000
+      },
+      turn_tracker: {
+        turns_left: 10,
+        players: [
+        {
+          name: "bob",
+          coins: 5,
+          cardinal_point: "North",
+          races: [
+          {
+            name: "humans",
+            troops_number: 5
+          }
+          ],
+          occupied_regions: [
+            {
+            coordinates: [
+              { x: 900.0, y: 450.0 },
+              { x: 800.0, y: 450.0 }
+            ],
+           land_type: {
+             name: "forest",
+             conquest_points: 2,
+             color: "yellow"
+           },
+           has_tribe: nil,
+           id: 1,
+           width: 3,
+           height: 3,
+           player_defense: nil
+          }
+          ],
+          color: nil
+        }
+      ],
+      turn_played: [
+        {
+          name: "bob",
+          coins: 5,
+          cardinal_point: "North",
+          races: [
+          {
+            name: "humans",
+            troops_number: 5
+          }
+          ],
+          occupied_regions: [
+            {
+            coordinates: [
+              { x: 900.0, y: 450.0 },
+              { x: 800.0, y: 450.0 }
+            ],
+           land_type: {
+             name: "forest",
+             conquest_points: 2,
+             color: "yellow"
+           },
+           has_tribe: nil,
+           id: 1,
+           width: 3,
+           height: 3,
+           player_defense: nil
+          }
+          ],
+          color: nil
+        }
+      ],
+      actual_turn: 1
       }
     }
     game_master_game_state_deserialize = Deserializer.new.deserialize_game_master_game_state(exp)

@@ -4,7 +4,7 @@ class TestRegion < MiniTest::Unit::TestCase
   def setup
     @region = Region.new([{:x=>900.0, :y=>450.0}, {:x=>800.0, :y=>450.0}], 3, 3, 1)
     @region.land_type = LandType.new("forest", 2, "yellow")
-    @map = Map.new(5,6, 400)
+    @map = MapDrawer.new.create_new_map(5, 6, 400)
     @player = Player.new("alexis", "North")
   end
 

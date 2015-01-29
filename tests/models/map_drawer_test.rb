@@ -3,8 +3,8 @@ require 'models/map_drawer'
 
 class TestMapDrawer < MiniTest::Unit::TestCase
   def setup
-    map = Map.new(6,5,1000)
-    @map_drawer = MapDrawer.new(map)
+    @map_drawer = MapDrawer.new
+    @map = @map_drawer.create_new_map(6, 5, 1000)
   end
 
   def test_find_hexagon_coordinates_returns_points_of_a_polygon

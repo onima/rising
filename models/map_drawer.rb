@@ -1,15 +1,18 @@
 class MapDrawer
+
   REGION_TRIBE_RATIO = 4
 
-  attr_reader :map
+  attr_reader :map, :radius, :x_base_offset, :hexagon_semi_vertical_height, :y_base_offset, :y_base_offset_lower
 
-  def initialize(map)
-    @map = map
+  def create_new_map(width, height, grid_width)
+    @map = Map.new([], width, height, grid_width)
     @radius  = @map.grid_width / (@map.width * 1.5)
     @x_base_offset = 55
     @hexagon_semi_vertical_height = Math.sqrt(3) * @radius/2
     @y_base_offset = 55
     @y_base_offset_lower = @y_base_offset + @hexagon_semi_vertical_height
+    draw_map
+    @map
   end
 
   def land_types

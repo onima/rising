@@ -11,7 +11,7 @@ class TestPlayer < MiniTest::Unit::TestCase
   def setup
     @state = GameState.new
     @state.reset!
-    @map = Map.new(5,6, 400)
+    @map = MapDrawer.new.create_new_map(5,6, 400)
     @player = Player.new("alexis", "North")
     @player.races[0] = Race.new("humans", 5)
     @player_2 = Player.new("manue", "South")
