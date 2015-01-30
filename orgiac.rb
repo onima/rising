@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'mongo'
 require 'config/game_state.rb'
 require 'models/race.rb'
 require 'models/raceboard.rb'
@@ -8,8 +9,10 @@ require 'models/map.rb'
 require 'models/map_drawer.rb'
 require 'models/turn_tracker.rb'
 require 'models/land_type.rb'
+require 'services/game_master_service.rb'
 require 'serializer/serializer.rb'
 require 'serializer/deserializer.rb'
+include Mongo
 
 enable :sessions
 
@@ -24,22 +27,39 @@ helpers do
   end
 
   def response_wrapper
-    puts "----------------------BEFORE -----------------------"
-    p session[:game_master]
+    game_master_service = GameMasterService.new
+    orgiac_id = session[:orgiac_id]
     game_master =
-      if session[:game_master]
-        deserialize(session[:game_master])
+      if orgiac_id
+        gm_hsh = game_master_service.find_by_id(orgiac_id).to_a.first
+        deserialize(gm_hsh)
       else
+        orgiac_id = Time.now.to_f
         game_master = GameMaster.new(GameState.new)
         game_master.game_state.map_generate
         game_master.game_state.turn_tracker_generate
-        session[:game_master] = game_master
+        game_master
       end
-    res = yield game_master # mutate insiste yield
-    session[:game_master] = serialize(game_master)
-    puts "----------------------AFTER -----------------------"
-    p session[:game_master]
+    res = yield game_master
+    serialized_gm = serialize(game_master)
+    game_master_service.insert(serialized_gm.merge(orgiac_id: orgiac_id))
+    session[:orgiac_id] = orgiac_id
     res
+   # game_master =
+   #   if session[:game_master]
+   #     deserialize(session[:game_master])
+   #   else
+   #     game_master = GameMaster.new(GameState.new)
+   #     game_master.game_state.map_generate
+   #     game_master.game_state.turn_tracker_generate
+   #     session[:game_master] = game_master
+   #   end
+   # res = yield game_master # mutate insiste yield
+   # session[:game_master] = serialize(game_master)
+   # game_master_service = GameMasterService.new
+   # game_master_service.insert(session[:game_master])
+   # require 'pry'; binding.pry
+   # res
   rescue RuntimeError, KeyError => e
     "There was an error parsing your request: #{e}"
   end
