@@ -19,7 +19,9 @@ class GameMasterService
     collection.find(orgiac_id: id)
   end
 
-  private
+  def update(hsh_1, hsh_2)
+    collection.update(hsh_1, hsh_2)
+  end
 
   def database
     @mongo_client.db(MONGO_CLIENT_DB)

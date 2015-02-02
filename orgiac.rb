@@ -31,7 +31,8 @@ helpers do
     orgiac_id = session[:orgiac_id]
     game_master =
       if orgiac_id
-        gm_hsh = game_master_service.find_by_id(orgiac_id).to_a.first
+        gm_hsh = game_master_service.collection.find({orgiac_id: orgiac_id})
+    require 'pry'; binding.pry
         deserialize(gm_hsh)
       else
         orgiac_id = Time.now.to_f
@@ -42,9 +43,10 @@ helpers do
       end
     res = yield game_master
     serialized_gm = serialize(game_master)
-    game_master_service.insert(serialized_gm.merge(orgiac_id: orgiac_id))
+    game_master_service.update(game_master_service.collection.find({_id: orgiac_id}), serialized_gm)
     session[:orgiac_id] = orgiac_id
     res
+    #game_master_service.insert(serialized_gm.merge(orgiac_id: orgiac_id))
    # game_master =
    #   if session[:game_master]
    #     deserialize(session[:game_master])
@@ -73,7 +75,10 @@ end
 
 get '/players_choice' do
   response_wrapper do |game_master_obj|
-    game_master_obj.game_state.raceboard.pick_active_races
+    if game_master_obj.game_state.raceboard.race_choices.empty?
+      game_master_obj.game_state.raceboard.pick_active_races
+    end
+    require 'pry'; binding.pry
   end
   erb :players_choice
 end
@@ -82,8 +87,9 @@ post '/create_players' do
   response_wrapper do |game_master_obj|
     players_names = params['players'].split(',').map(&:strip)
     game_master_obj.create_players(players_names)
+    require 'pry'; binding.pry
   end
-  redirect to '/choose_race'
+  redirect to 'choose_race'
 end
 
 get '/choose_race' do
