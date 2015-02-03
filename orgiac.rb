@@ -32,7 +32,6 @@ helpers do
     game_master =
       if orgiac_id
         gm_hsh = game_master_service.collection.find({orgiac_id: orgiac_id})
-    require 'pry'; binding.pry
         deserialize(gm_hsh)
       else
         orgiac_id = Time.now.to_f
@@ -78,7 +77,6 @@ get '/players_choice' do
     if game_master_obj.game_state.raceboard.race_choices.empty?
       game_master_obj.game_state.raceboard.pick_active_races
     end
-    require 'pry'; binding.pry
   end
   erb :players_choice
 end
@@ -87,7 +85,6 @@ post '/create_players' do
   response_wrapper do |game_master_obj|
     players_names = params['players'].split(',').map(&:strip)
     game_master_obj.create_players(players_names)
-    require 'pry'; binding.pry
   end
   redirect to 'choose_race'
 end

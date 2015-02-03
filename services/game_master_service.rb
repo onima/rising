@@ -16,12 +16,14 @@ class GameMasterService
   end
 
   def find_by_id(id)
-    collection.find(orgiac_id: id)
+    collection.find("orgiac_id" => id).to_a
   end
 
   def update(hsh_1, hsh_2)
     collection.update(hsh_1, hsh_2)
   end
+
+  private
 
   def database
     @mongo_client.db(MONGO_CLIENT_DB)
