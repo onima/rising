@@ -61,15 +61,15 @@ class Region
   end
 
   def text_name_coordinate_y
-    @coordinates[2][:y] - ((@coordinates[2][:y] - @coordinates[4][:y]) / 2)
+    @coordinates[2]["y"] - ((@coordinates[2]["y"] - @coordinates[4]["y"]) / 2)
   end
 
   def text_id_coordinate_x
-    @coordinates[2][:x] + (@coordinates[2][:x] - @coordinates[3][:x])
+    @coordinates[2]["x"] + (@coordinates[2]["x"] - @coordinates[3]["x"])
   end
 
   def text_id_coordinate_y
-    @coordinates[0][:y] + ((@coordinates[1][:y] - @coordinates[0][:y]) / 2 )
+    @coordinates[0]["y"] + ((@coordinates[1]["y"] - @coordinates[0]["y"]) / 2 )
   end
 
   private

@@ -7,13 +7,13 @@
           <% @map.regions.each do |region| %>
           <%= region.to_svg(@players) %>
           <% if region.land_type.name.length < 5 %>
-          <text x="<%= region.coordinates[2][:x] + 15 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
+          <text x="<%= region.coordinates[2]["x"] + 15 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
           <% elsif region.land_type.name.length == 6 %>
-          <text x="<%= region.coordinates[2][:x] + 5 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
+          <text x="<%= region.coordinates[2]["x"] + 5 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
           <% elsif region.land_type.name.length == 8 %>
-          <text x="<%= region.coordinates[2][:x] - 5 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
+          <text x="<%= region.coordinates[2]["x"] - 5 %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
           <% else %>
-          <text x="<%= region.coordinates[2][:x] %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
+          <text x="<%= region.coordinates[2]["x"] %>" y="<%= region.text_name_coordinate_y %>"><%= region.land_type.name.capitalize %></text>
           <% end %>
           <% if region.id > 9 %>
           <text x="<%= region.text_id_coordinate_x - 10 %>" y="<%= region.text_id_coordinate_y %>"><%= region.id %></text>

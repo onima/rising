@@ -112,20 +112,22 @@ get '/game' do
   end
 end
 
-#get '/game' do
-  #TODO make sure all players have chosen a race
-  #if raceboard.active_races.empty? || game_state.players.empty?
-  #  redirect to '/'
-  #else
-#    @players = game_state.players
-#    game_state.map_generate
-#    map
-#    game_state.turn_tracker_generate
-#    turn_tracker
-#   @player = game_state.players.first
-#    erb :game
-  #end
-#end
+get '/play_turn' do
+  response_wrapper do |game_master_obj|
+    @players = game_master_obj.game_state.players
+    @map = game_master_obj.game_state.map
+    @turn_tracker = game_master_obj.game_state.turn_tracker
+    game_master_obj.game_state.players.map.with_index do |player, index|
+      @players = player if turn_tracker.turn_played.length == index
+    end
+    erb :game
+  end
+end
+
+post '/play_turn' do
+  response_wrapper do |game_master_obj|
+  end
+end
 
 #get '/play_turn' do
 #  @players = game_state.players
