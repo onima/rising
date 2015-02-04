@@ -14,7 +14,7 @@ class GameState
     )
   end
 
-  attr_accessor :players, :raceboard, :races, :land_types, :map, :turn_tracker
+  attr_accessor :players, :raceboard, :races, :land_types, :map, :turn_tracker, :orgiac_id
 
   def initialize
     reset!
@@ -31,5 +31,9 @@ class GameState
 
   def turn_tracker_generate
     @turn_tracker = TurnTracker.new(10, @players)
+  end
+
+  def initialize_orgiac_id
+    @orgiac_id = Time.now.to_f
   end
 end

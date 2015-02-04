@@ -33,7 +33,7 @@ class TestGameMasterService < MiniTest::Unit::TestCase
     @game_master_service.insert(@doc_1)
     @game_master_service.insert(@doc_2)
     assert_equal 1422978712.8383105,
-      @game_master_service.find_by_id(@orgiac_id)[0].fetch("orgiac_id")
+      @game_master_service.find_by_id(@orgiac_id).fetch("orgiac_id")
     delete_orgiac_db
   end
 
@@ -42,7 +42,7 @@ class TestGameMasterService < MiniTest::Unit::TestCase
     @game_master_service.insert(@doc_1)
     @game_master_service.update(@doc_1, @doc_3)
     assert_equal "kerrigan",
-      @game_master_service.find_by_id(@orgiac_id)[0].fetch("name")
+      @game_master_service.find_by_id(@orgiac_id).fetch("name")
     delete_orgiac_db
   end
 

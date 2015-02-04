@@ -12,151 +12,152 @@ class DeserializeTest < MiniTest::Unit::TestCase
 
   def test_if_deserialize_game_master_game_state
     exp = {
-      players:
+      "players" =>
       [
         {
-          name: "bob",
-          coins: 5,
-          cardinal_point: "North",
-          races: [
+          "name" => "bob",
+          "coins" => 5,
+          "cardinal_point" => "North",
+          "races" => [
           {
-            name: "humans",
-            troops_number: 5
+            "name" => "humans",
+            "troops_number" => 5
           }
           ],
-          occupied_regions: [
+          "occupied_regions" => [
             {
-            coordinates: [
-              { x: 900.0, y: 450.0 },
-              { x: 800.0, y: 450.0 }
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
             ],
-           land_type: {
-             name: "forest",
-             conquest_points: 2,
-             color: "yellow"
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
            },
-           has_tribe: nil,
-           id: 1,
-           width: 3,
-           height: 3,
-           player_defense: nil
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
           }
           ],
-          color: nil
+          "color" => nil
         }
       ],
-      raceboard: {
-        races: [
+      "raceboard" => {
+        "races" => [
           {
-            name: "golems",
-            troops_number: 5
+            "name" => "golems",
+            "troops_number" => 5
           },
         ],
-        race_choices: [
+        "race_choices" => [
           [
             {
-              name: "dragons",
-              troops_number: 5
+              "name" => "dragons",
+              "troops_number" => 5
             }, 0 
           ],
           [
             {
-              name: "elves",
-              troops_number: 5
+              "name" => "elves",
+              "troops_number" => 5
             }, 0 
           ]
         ]
       },
-      map: {
-        regions: [{
-            coordinates: [
-              { x: 900.0, y: 450.0 },
-              { x: 800.0, y: 450.0 }
+      "map" => {
+        "regions" => [{
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
             ],
-           land_type: {
-             name: "forest",
-             conquest_points: 2,
-             color: "yellow"
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
            },
-           has_tribe: nil,
-           id: 1,
-           width: 3,
-           height: 3,
-           player_defense: nil
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
           }
         ],
-        width: 6,
-        height: 5,
-        grid_width: 1000
+        "width" => 6,
+        "height" => 5,
+        "grid_width" => 1000
       },
-      turn_tracker: {
-        turns_left: 10,
-        players: [
+      "turn_tracker" => {
+        "turns_left" => 10,
+        "players" => [
         {
-          name: "bob",
-          coins: 5,
-          cardinal_point: "North",
-          races: [
+          "name" => "bob",
+          "coins" => 5,
+          "cardinal_point" => "North",
+          "races" => [
           {
-            name: "humans",
-            troops_number: 5
+            "name" => "humans",
+            "troops_number" => 5
           }
           ],
-          occupied_regions: [
+          "occupied_regions" => [
             {
-            coordinates: [
-              { x: 900.0, y: 450.0 },
-              { x: 800.0, y: 450.0 }
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
             ],
-           land_type: {
-             name: "forest",
-             conquest_points: 2,
-             color: "yellow"
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
            },
-           has_tribe: nil,
-           id: 1,
-           width: 3,
-           height: 3,
-           player_defense: nil
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
           }
           ],
-          color: nil
+          "color" => nil
         }
       ],
-      turn_played: [
+      "turn_played" => [
         {
-          name: "bob",
-          coins: 5,
-          cardinal_point: "North",
-          races: [
+          "name" => "bob",
+          "coins" => 5,
+          "cardinal_point" => "North",
+          "races" => [
           {
-            name: "humans",
-            troops_number: 5
+            "name" => "humans",
+            "troops_number" => 5
           }
           ],
-          occupied_regions: [
+          "occupied_regions" => [
             {
-            coordinates: [
-              { x: 900.0, y: 450.0 },
-              { x: 800.0, y: 450.0 }
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
             ],
-           land_type: {
-             name: "forest",
-             conquest_points: 2,
-             color: "yellow"
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
            },
-           has_tribe: nil,
-           id: 1,
-           width: 3,
-           height: 3,
-           player_defense: nil
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
           }
           ],
-          color: nil
+          "color" => nil
         }
       ],
-      actual_turn: 1
-      }
+      "actual_turn" => 1
+      },
+      "orgiac_id" => 1423065615.304268
     }
     game_master_game_state_deserialize = Deserializer.new.deserialize_game_master_game_state(exp)
     game_master_object = GameMaster.new(GameState.new)

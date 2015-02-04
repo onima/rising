@@ -14,10 +14,12 @@ class Deserializer
     turn_tracker_deserialize = deserialize_turn_tracker(
       hsh.fetch("turn_tracker")
     ) 
+    orgiac_id_deserialize = hsh.fetch("orgiac_id")
     game_master_object.game_state.raceboard = raceboard_deserialize
     game_master_object.game_state.players = players_deserialize
     game_master_object.game_state.map = map_deserialize
     game_master_object.game_state.turn_tracker = turn_tracker_deserialize
+    game_master_object.game_state.orgiac_id = orgiac_id_deserialize
     game_master_object
   end
 

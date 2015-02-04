@@ -30,37 +30,23 @@ helpers do
     game_master_service = GameMasterService.new
     orgiac_id = session[:orgiac_id]
     game_master =
-      if orgiac_id
-        gm_hsh = game_master_service.collection.find({orgiac_id: orgiac_id})
-        deserialize(gm_hsh)
-      else
-        orgiac_id = Time.now.to_f
+      if !orgiac_id
         game_master = GameMaster.new(GameState.new)
         game_master.game_state.map_generate
         game_master.game_state.turn_tracker_generate
+        game_master.game_state.initialize_orgiac_id
+        session[:orgiac_id] = game_master.game_state.orgiac_id
+        game_master_service.insert(serialize(game_master))
         game_master
+      else
+        gm_hsh = game_master_service.find_by_id(orgiac_id)
+        deserialize(gm_hsh)
       end
+    gm_hsh = game_master_service.find_by_id(session[:orgiac_id])
     res = yield game_master
     serialized_gm = serialize(game_master)
-    game_master_service.update(game_master_service.collection.find({_id: orgiac_id}), serialized_gm)
-    session[:orgiac_id] = orgiac_id
+    game_master_service.update(gm_hsh, serialized_gm)
     res
-    #game_master_service.insert(serialized_gm.merge(orgiac_id: orgiac_id))
-   # game_master =
-   #   if session[:game_master]
-   #     deserialize(session[:game_master])
-   #   else
-   #     game_master = GameMaster.new(GameState.new)
-   #     game_master.game_state.map_generate
-   #     game_master.game_state.turn_tracker_generate
-   #     session[:game_master] = game_master
-   #   end
-   # res = yield game_master # mutate insiste yield
-   # session[:game_master] = serialize(game_master)
-   # game_master_service = GameMasterService.new
-   # game_master_service.insert(session[:game_master])
-   # require 'pry'; binding.pry
-   # res
   rescue RuntimeError, KeyError => e
     "There was an error parsing your request: #{e}"
   end

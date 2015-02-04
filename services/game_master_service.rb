@@ -16,7 +16,8 @@ class GameMasterService
   end
 
   def find_by_id(id)
-    collection.find("orgiac_id" => id).to_a
+    doc = collection.find("orgiac_id" => id).to_a
+    doc[0]
   end
 
   def update(hsh_1, hsh_2)
