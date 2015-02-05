@@ -27,7 +27,7 @@ helpers do
   end
 
   def response_wrapper
-    game_master_service = GameMasterService.new
+    game_master_service = GameMasterService.new('orgiac_db', 'orgiac_coll')
     orgiac_id = session[:orgiac_id]
     game_master =
       if !orgiac_id
@@ -47,8 +47,6 @@ helpers do
     serialized_gm = serialize(game_master)
     game_master_service.update(gm_hsh, serialized_gm)
     res
-  rescue RuntimeError, KeyError => e
-    "There was an error parsing your request: #{e}"
   end
 end
 

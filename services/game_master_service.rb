@@ -2,13 +2,12 @@ require 'mongo'
 
 class GameMasterService
 
-  MONGO_CLIENT_DB = "orgiac_db"
-  MONGO_CLIENT_COLL = "orgiac_coll"
-
   attr_accessor :mongo_client
 
-  def initialize
+  def initialize(database_name, collection_name)
     @mongo_client = MongoClient.new("localhost", 27017)
+    @mongo_client_db = database_name
+    @mongo_client_coll = collection_name
   end
 
   def insert(doc)
@@ -27,10 +26,10 @@ class GameMasterService
   private
 
   def database
-    @mongo_client.db(MONGO_CLIENT_DB)
+    @mongo_client.db(@mongo_client_db)
   end
 
   def collection
-    database.collection(MONGO_CLIENT_COLL)
+    database.collection(@mongo_client_coll)
   end
 end 

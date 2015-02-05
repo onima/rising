@@ -12,19 +12,21 @@ class TestGameMasterService < MiniTest::Unit::TestCase
     delete_orgiac_db
     assert_equal [
       "local",
+      "orgiac_db",
       "admin"
     ], @game_master_service.mongo_client.database_names
     @game_master_service.insert(@doc_1)
     assert_equal [
+      "test_app_db",
       "local",
       "orgiac_db",
       "admin"
     ], @game_master_service.mongo_client.database_names
     assert_equal [
-      "orgiac_coll",
+      "test_app_coll",
       "system.indexes"
     ], @database.collection_names
-    assert_equal @database['orgiac_coll'].count, 1 
+    assert_equal @database['test_app_coll'].count, 1
     delete_orgiac_db
   end
 
@@ -49,12 +51,12 @@ class TestGameMasterService < MiniTest::Unit::TestCase
   private
 
   def delete_orgiac_db
-    @game_master_service.mongo_client.drop_database('orgiac_db')
+    @game_master_service.mongo_client.drop_database('test_app_db')
   end
 
   def setup!
-    @game_master_service = GameMasterService.new
-    @database = @game_master_service.mongo_client['orgiac_db']
+    @game_master_service = GameMasterService.new('test_app_db', 'test_app_coll')
+    @database = @game_master_service.mongo_client['test_app_db']
     @orgiac_id = 1422978712.8383105
     @doc_1 = {
       "name" => "mongo",
