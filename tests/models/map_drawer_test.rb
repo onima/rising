@@ -1,14 +1,15 @@
-require 'models/map'
-require 'models/map_drawer'
+require 'models/map.rb'
+require 'models/map_drawer.rb'
 
 class TestMapDrawer < MiniTest::Unit::TestCase
+
   def setup
     @map_drawer = MapDrawer.new
     @map = @map_drawer.create_new_map(6, 5, 1000)
   end
 
   def test_find_hexagon_coordinates_returns_points_of_a_polygon
-    assert_includes @map_drawer.find_hexagon_coordinates(450, 450, 450), ({:x=>900.0, :y=>450.0})
+    assert_includes @map_drawer.find_hexagon_coordinates(450, 450, 450), ({"x"=>900.0, "y"=>450.0})
   end
 
   def test_assign_lands_randomly_assigns_lands_to_regions
@@ -19,7 +20,7 @@ class TestMapDrawer < MiniTest::Unit::TestCase
   end
 
   def test_map_have_differents_tribes_on_different_regions
-    expected_tribes_number = (@map_drawer.regions_without_sea.length) / MapDrawer::REGION_TRIBE_RATIO
+    expected_tribes_number = (@map_drawer.regions_without_sea(@map).length) / MapDrawer::REGION_TRIBE_RATIO
     actual_tribes_number = @map_drawer.map.regions.count {|region| region.has_tribe == true}
 
     assert_equal expected_tribes_number, actual_tribes_number
