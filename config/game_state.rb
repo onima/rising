@@ -1,7 +1,5 @@
 require 'yaml'
 require 'models/land_type.rb'
-require 'models/player.rb'
-require 'models/raceboard.rb'
 
 class GameState
   RULES_PATH = File.expand_path('rules.yml', File.dirname(__FILE__))
@@ -14,7 +12,7 @@ class GameState
     )
   end
 
-  attr_accessor :players, :raceboard, :races, :land_types, :map, :turn_tracker, :orgiac_id
+  attr_accessor :players, :raceboard, :map, :turn_tracker, :orgiac_id
 
   def initialize
     reset!
@@ -24,6 +22,14 @@ class GameState
     @players   = []
     @raceboard = RaceBoard.new(RULES)
   end
+
+  def initialize_map_turn_tracker_orgiac_id
+    map_generate
+    turn_tracker_generate
+    initialize_orgiac_id
+  end
+
+  private
 
   def map_generate
     @map = MapDrawer.new.create_new_map(5, 6, 400)
@@ -36,4 +42,5 @@ class GameState
   def initialize_orgiac_id
     @orgiac_id = Time.now.to_f
   end
+
 end

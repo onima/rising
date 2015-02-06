@@ -35,5 +35,4 @@ class TestMapDrawer < MiniTest::Unit::TestCase
     assert_equal 30, id_last_region
     assert_equal 8, id_random_regions
   end
-
 end

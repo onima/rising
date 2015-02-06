@@ -187,7 +187,6 @@ class SerializeTest < MiniTest::Unit::TestCase
       [ Race.new("elves", 5), 0 ]
     ]
     @game_master.game_state.map = @map
-    @game_master.game_state.initialize_orgiac_id
     @game_master.game_state.orgiac_id = 1423065615.304268
     @players = @game_master.game_state.players
     @player = @game_master.game_state.players.first 
