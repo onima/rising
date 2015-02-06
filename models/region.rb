@@ -33,13 +33,17 @@ class Region
     end
     root = obj.doc.root
     root['style'] = "fill:#{land_type.color};fill-opacity:0.7"
-    players.each {|player| root['style'] = "fill:#{land_type.color};stroke:#{player.color};stroke-width:2.5px;fill-opacity:0.7" if player.occupied_regions.include?(self)}
+    players.each do |player|
+      if player.occupied_regions.include?(self)
+      root['style'] = "fill:#{land_type.color};stroke:#{player.color};stroke-width:2.5px;fill-opacity:0.7"
+      end
+    end
     root['points'] = svg_coordinates
     root.to_xml
   end
 
   def svg_coordinates
-    @coordinates.map{ |h| "#{h[:x]},#{h[:y]} " }.reduce("",:<<)
+    @coordinates.map{ |h| "#{h.fetch("x")},#{h.fetch("y")} " }.reduce("",:<<)
   end
 
   def is_not_a_sea?
@@ -47,7 +51,7 @@ class Region
   end
 
   def round_coordinates
-    coordinates.map {|hash| {x: hash[:x].round, y: hash[:y].round}}
+    @coordinates.map {|hash| {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}}
   end
 
   def neutral_defense_points
