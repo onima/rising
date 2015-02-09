@@ -5,56 +5,56 @@
       <tr class="info">
         <td>Name</td>
         <td>Troops number</td> <td>Coins</td> </tr>
-      </thead>
-      <tbody>
-        <% @race_choices.each do |race_choice| %>
-        <tr>
-          <td><%= race_choice.first.name %></td>
-          <td><%= race_choice.first.troops_number %></td>
-          <td><%= race_choice.last %></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </fieldset>
-  </table>
-  <% @players.each do |player| %>
-    <% if player.races.empty? %>
-      <% @players_without_race = true %>
+    </thead>
+    <tbody>
+    <% @race_choices.each do |race_choice| %>
+      <tr>
+      <td><%= race_choice.first.name %></td>
+      <td><%= race_choice.first.troops_number %></td>
+      <td><%= race_choice.last %></td>
+    </tr>
+  <% end %>
+    </tbody>
+  </fieldset>
+</table>
+<% @players.each do |player| %>
+  <% if player.races.empty? %>
+  <% @players_without_race = true %>
     <% end %>
   <% end %>
-  <% if @players_without_race == true %>
+<% if @players_without_race == true %>
   <form action="/choose_race" method="post">
-    <fieldset>
-      <legend>RaceChoice</legend>
+  <fieldset>
+    <legend>RaceChoice</legend>
     <div class="form-group form-horizontal">
-      <div class="row form-inline">
-          <label class="col-lg-offset-1 control-label">Select Player</label>
+      <div class="row">
+        <label class="col-lg-offset-1 control-label left-shift">Select Player</label>
+        <div class="btn-group" data-toggle="buttons">
           <% @players.each do |player| %>
             <% if player.races.empty? %>
-          <div class="radio">
-            <label class="control-label col-lg-offset-4"><input type="radio" name="player" value="<%= player.name %>"><%= player.name %></label>
-          </div>
+            <label class="btn btn-primary btn-sm round left-shift"><input type="radio" name="player" value="<%= player.name %>"><%= player.name %></label>
         <% end %>
-          <% end %><br>
+        <% end %>
         </div>
-        <div class="row form-inline">
-          <label class=" col-lg-offset-1 control-label">Select A Race</label>
+      </div><br>
+      <div class="row">
+        <label class="col-lg-offset-1 control-label left-shift">Select A Race</label>
+        <div class="btn-group" data-toggle="buttons">
           <% @active_races.each do |race| %>
-          <div class="radio">
-            <label class="control-label col-lg-offset-3"><input type="radio" name="race" value="<%= race.name %>"><%= race.name %></label>
-          </div>
-          <% end %>
+            <label class="btn btn-primary btn-sm left-shift"><input type="radio" name="race" value="<%= race.name %>"><%= race.name %></label>
+        <% end %>
         </div>
-          <div class="row starter-template">
-          <input type="submit" value="Submit" class="btn btn-primary">
-          </div>
+      </div>
+      <div class="row starter-template">
+        <input type="submit" value="Submit" class="btn btn-sm btn-info">
+      </div>
     </div>
   </fieldset>
-  </form>
+</form>
 <% end %>
-  <table class="table table-striped table-condensed table-hover table-responsive">
-    <fieldset>
-      <legend>Players Board</legend>
+<table class="table table-striped table-condensed table-hover table-responsive">
+  <fieldset>
+    <legend>Players Board</legend>
     <thead>
       <tr class="info">
         <th>#</th>
@@ -65,8 +65,8 @@
       </tr>
     </thead>
     <tbody>
-        <% index = 1%>
-      <% @players.each do |player| %>
+    <% index = 1%>
+    <% @players.each do |player| %>
       <tr>
       <td><%= index %></td>
       <% index += 1 %>
@@ -74,11 +74,11 @@
       <td><%= player.races.first.name if !player.races.empty? %></td>
       <td><%= player.coins %></td>
       <td><%= player.color %></td>
-      </tr>
-      <% end %>
+    </tr>
+  <% end %>
     </tbody>
   </fieldset>
-  </table>
-  <div class="row starter-template">
-    <a href="/game" class="btn btn-default">Go To Battlefield <span class="glyphicon glyphicon-circle-arrow-up"></span></a>
-  </div>
+</table>
+<div class="row starter-template">
+  <a href="/game" class="btn btn-default">Go To Battlefield <span class="glyphicon glyphicon-circle-arrow-up"></span></a>
+</div>
