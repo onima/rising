@@ -82,6 +82,7 @@ get '/choose_race' do
     @race_choices = game_master_obj.game_state.raceboard.race_choices
     @active_races = game_master_obj.game_state.raceboard.active_races
     @players = game_master_obj.game_state.players
+    @players_without_race = false
     game_master_obj.assign_players_color(@players)
   end
   erb :race_choice

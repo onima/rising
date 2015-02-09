@@ -17,23 +17,31 @@
       </tbody>
     </fieldset>
   </table>
+  <% @players.each do |player| %>
+    <% if player.races.empty? %>
+      <% @players_without_race = true %>
+    <% end %>
+  <% end %>
+  <% if @players_without_race == true %>
   <form action="/choose_race" method="post">
     <fieldset>
       <legend>RaceChoice</legend>
     <div class="form-group form-horizontal">
       <div class="row form-inline">
-          <label class="col-lg-offset-1 control-label">Select A Player</label>
+          <label class="col-lg-offset-1 control-label">Select Player</label>
           <% @players.each do |player| %>
+            <% if player.races.empty? %>
           <div class="radio">
-            <label class="control-label col-lg-offset-6"><input type="radio" name="player" value="<%= player.name %>"><%= player.name %></label>
+            <label class="control-label col-lg-offset-4"><input type="radio" name="player" value="<%= player.name %>"><%= player.name %></label>
           </div>
+        <% end %>
           <% end %><br>
         </div>
         <div class="row form-inline">
-          <label class=" col-lg-offset-2 control-label">Select A Race</label>
+          <label class=" col-lg-offset-1 control-label">Select A Race</label>
           <% @active_races.each do |race| %>
           <div class="radio">
-            <label class="control-label col-lg-offset-6"><input type="radio" name="race" value="<%= race.name %>"><%= race.name %></label>
+            <label class="control-label col-lg-offset-3"><input type="radio" name="race" value="<%= race.name %>"><%= race.name %></label>
           </div>
           <% end %>
         </div>
@@ -43,6 +51,7 @@
     </div>
   </fieldset>
   </form>
+<% end %>
   <table class="table table-striped table-condensed table-hover table-responsive">
     <fieldset>
       <legend>Players Board</legend>
