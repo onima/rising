@@ -6,4 +6,14 @@ class TestGameState < MiniTest::Unit::TestCase
     assert @game_state.map
   end
 
+  def test_if_players_have_races
+    @game_master = GameMaster.new(GameState.new) 
+    @game_master.create_players(["bob", "alice"])
+    @players = @game_master.game_state.players
+    assert @game_master.game_state.players_without_races?
+    @game_master.game_state.players[0].races[0] = Race.new("humans", 5)
+    @game_master.game_state.players[1].races[0] = Race.new("orcs", 6)
+    refute @game_master.game_state.players_without_races?
+  end
+
 end

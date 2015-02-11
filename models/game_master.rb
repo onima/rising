@@ -27,4 +27,12 @@ class GameMaster
       player.color = colors.next
     end
   end
+
+  def attribute_race(player, race)
+    if race && player && player.can_pay_for_race?(race, @game_state)
+      @game_state.raceboard.pick_race(race, player)
+    else
+      raise RaceNotAssign 
+    end
+  end
 end

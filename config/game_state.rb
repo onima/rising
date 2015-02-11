@@ -29,6 +29,14 @@ class GameState
     initialize_orgiac_id
   end
 
+  def players_without_races?
+    player_without_races = false
+    @players.each do |player|
+      player_without_races = true if player.races.empty?
+    end
+    player_without_races
+  end
+
   private
 
   def map_generate

@@ -1,4 +1,7 @@
 require 'mongo'
+require 'models/game_master.rb'
+require 'serializer/serializer.rb'
+require 'serializer/deserializer.rb'
 
 class GameMasterService
 
@@ -23,6 +26,18 @@ class GameMasterService
     collection.update(hsh_1, hsh_2)
   end
 
+  def generate_game_master_with_session_id(session_id)
+    if session_id
+      g_m_hsh = find_by_id(session_id)
+      Deserializer.new.deserialize_game_master_game_state(g_m_hsh)
+    else
+      g_m = GameMaster.new(GameState.new)
+      g_m.game_state.initialize_map_turn_tracker_orgiac_id
+      insert(Serializer.new.serialize_game_master_game_state(g_m))
+      g_m
+    end
+  end
+
   private
 
   def database
@@ -32,4 +47,5 @@ class GameMasterService
   def collection
     database.collection(@mongo_client_coll)
   end
+
 end 

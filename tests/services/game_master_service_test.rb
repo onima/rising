@@ -1,4 +1,7 @@
 require 'services/game_master_service.rb'
+require 'models/game_master.rb'
+require 'serializer/serializer.rb'
+require 'serializer/deserializer.rb'
 require 'mongo'
 include Mongo 
 
@@ -48,6 +51,18 @@ class TestGameMasterService < MiniTest::Unit::TestCase
     delete_orgiac_db
   end
 
+  def test_if_method_generate_game_master_with_session_id_works
+    delete_orgiac_db
+    @game_master_service.insert(@exp)
+    g_m = @game_master_service.generate_game_master_with_session_id(1423065615.254268)
+    assert_equal 1423065615.254268, g_m.game_state.orgiac_id
+    delete_orgiac_db
+    @game_master_service.insert(@exp)
+    g_m = @game_master_service.generate_game_master_with_session_id(nil)
+    assert_equal "golems", g_m.game_state.raceboard.races[0].name
+    delete_orgiac_db
+  end
+
   private
 
   def delete_orgiac_db
@@ -71,6 +86,153 @@ class TestGameMasterService < MiniTest::Unit::TestCase
       "race" => "zerg",
       "orgiac_id" => 1422978712.8383105
     }
+    @exp = {
+      "players" =>
+      [
+        {
+          "name" => "bob",
+          "coins" => 5,
+          "cardinal_point" => "North",
+          "races" => [
+          {
+            "name" => "humans",
+            "troops_number" => 5
+          }
+          ],
+          "occupied_regions" => [
+            {
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
+            ],
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
+           },
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
+          }
+          ],
+          "color" => nil
+        }
+      ],
+      "raceboard" => {
+        "races" => [
+          {
+            "name" => "golems",
+            "troops_number" => 5
+          },
+        ],
+        "race_choices" => [
+          [
+            {
+              "name" => "dragons",
+              "troops_number" => 5
+            }, 0 
+          ],
+          [
+            {
+              "name" => "elves",
+              "troops_number" => 5
+            }, 0 
+          ]
+        ]
+      },
+      "map" => {
+        "regions" => [{
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
+            ],
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
+           },
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
+          }
+        ],
+        "width" => 6,
+        "height" => 5,
+        "grid_width" => 1000
+      },
+      "turn_tracker" => {
+        "turns_left" => 10,
+        "players" => [
+        {
+          "name" => "bob",
+          "coins" => 5,
+          "cardinal_point" => "North",
+          "races" => [
+          {
+            "name" => "humans",
+            "troops_number" => 5
+          }
+          ],
+          "occupied_regions" => [
+            {
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
+            ],
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
+           },
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
+          }
+          ],
+          "color" => nil
+        }
+      ],
+      "turn_played" => [
+        {
+          "name" => "bob",
+          "coins" => 5,
+          "cardinal_point" => "North",
+          "races" => [
+          {
+            "name" => "humans",
+            "troops_number" => 5
+          }
+          ],
+          "occupied_regions" => [
+            {
+            "coordinates" => [
+              { "x" => 900.0, "y" => 450.0 },
+              { "x" => 800.0, "y" => 450.0 }
+            ],
+           "land_type" => {
+             "name" => "forest",
+             "conquest_points" => 2,
+             "color" => "yellow"
+           },
+           "has_tribe" => nil,
+           "id" => 1,
+           "width" => 3,
+           "height" => 3,
+           "player_defense" => nil
+          }
+          ],
+          "color" => nil
+        }
+      ],
+      "actual_turn" => 1
+      },
+      "orgiac_id" => 1423065615.254268
+    }
   end
-
 end

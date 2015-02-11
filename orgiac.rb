@@ -17,6 +17,8 @@ include Mongo
 
 enable :sessions
 
+logger = Logger.new(STDERR)
+
 helpers do
 
   def serialize(object)

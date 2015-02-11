@@ -68,22 +68,23 @@
             <td>Lands that can be conquered</td>
             <td>
               <% @map.regions.each do |region| %>
-              <% if @player.occupied_regions.include?(region) == false %>
-              <%= region.id if @player.can_attack_region?(region) %>
-              <% end %>
+                <% region_id = region.id %>
+                <% @player.occupied_regions.each do |occupied_region| %>
+                  <% if region_id != occupied_region.id %>
+                    <%= region.id if @player.can_attack_region?(region) %>
+                  <% end %>
+                <% end %>
               <% end %>
             </td>
           </tr>
         </table>
         <form action="/play_turn" method="post" class="well">
           <fieldset>
-
             <% if @player.can_yet_attack?(@map) %>
               <legend><h4>Which Land Do You Want To Attack ?</h4></legend>
             <% else %>
               <legend><h4>Not Enough Troops</h4></legend>
             <% end %>
-
               <div class="col-lg-12">
                 <% @map.regions.each do |region| %>
                 <% if @player.occupied_regions.include?(region) == false %>

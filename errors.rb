@@ -21,3 +21,6 @@ end
 
 class IdenticalPlayersNames < RuntimeError
 end
+
+class RaceNotAssign < RuntimeError
+end
