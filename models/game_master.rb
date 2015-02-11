@@ -1,6 +1,6 @@
 require 'config/game_state.rb'
 class GameMaster
-
+# Must To be Clean
   attr_accessor :game_state
 
   def initialize(game_state)

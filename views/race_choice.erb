@@ -4,7 +4,9 @@
     <thead>
       <tr class="info">
         <td>Name</td>
-        <td>Troops number</td> <td>Coins</td> </tr>
+        <td>Troops number</td>
+        <td>Coins</td>
+      </tr>
     </thead>
     <tbody>
     <% @race_choices.each do |race_choice| %>
@@ -17,31 +19,36 @@
     </tbody>
   </fieldset>
 </table>
-<% @players.each do |player| %>
-  <% if player.races.empty? %>
-  <% @players_without_race = true %>
-    <% end %>
-  <% end %>
-<% if @players_without_race == true %>
+<% if @players_without_race %>
   <form action="/choose_race" method="post">
   <fieldset>
     <legend>RaceChoice</legend>
     <div class="form-group form-horizontal">
       <div class="row">
-        <label class="col-lg-offset-1 control-label left-shift">Select Player</label>
+        <label class="col-lg-offset-1 control-label left-shift">
+          Select Player
+        </label>
         <div class="btn-group" data-toggle="buttons">
           <% @players.each do |player| %>
             <% if player.races.empty? %>
-            <label class="btn btn-primary btn-sm round left-shift"><input type="radio" name="player" value="<%= player.name %>"><%= player.name %></label>
+            <label class="btn btn-primary btn-sm round left-shift">
+            <input type="radio" name="player" value="<%= player.name %>">
+            <%= player.name %>
+          </label>
         <% end %>
         <% end %>
         </div>
       </div><br>
       <div class="row">
-        <label class="col-lg-offset-1 control-label left-shift">Select A Race</label>
+        <label class="col-lg-offset-1 control-label left-shift">
+          Select A Race
+        </label>
         <div class="btn-group" data-toggle="buttons">
           <% @active_races.each do |race| %>
-            <label class="btn btn-primary btn-sm left-shift"><input type="radio" name="race" value="<%= race.name %>"><%= race.name %></label>
+            <label class="btn btn-primary btn-sm left-shift">
+            <input type="radio" name="race" value="<%= race.name %>">
+            <%= race.name %>
+          </label>
         <% end %>
         </div>
       </div>
@@ -71,7 +78,7 @@
       <td><%= index %></td>
       <% index += 1 %>
       <td><%= player.name %></td>
-      <td><%= player.races.first.name if !player.races.empty? %></td>
+      <td><%= player.races.first.name if player.races.any? %></td>
       <td><%= player.coins %></td>
       <td><%= player.color %></td>
     </tr>
@@ -80,5 +87,7 @@
   </fieldset>
 </table>
 <div class="row starter-template">
-  <a href="/game" class="btn btn-default">Go To Battlefield <span class="glyphicon glyphicon-circle-arrow-up"></span></a>
+  <a href="/game" class="btn btn-default">
+    Go To Battlefield <span class="glyphicon glyphicon-circle-arrow-up"></span>
+  </a>
 </div>

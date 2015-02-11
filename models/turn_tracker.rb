@@ -10,9 +10,11 @@ class TurnTracker
 
   def update(player)
     @turn_played << player
-    @turns_left -= 1 if turn_played_by_all
-    @actual_turn += 1 if turn_played_by_all
-    @turn_played.clear if turn_played_by_all
+    if turn_played_by_all
+      @turns_left -= 1
+      @actual_turn += 1
+      @turn_played.clear
+    end
   end
 
   private
