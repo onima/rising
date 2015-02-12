@@ -1,9 +1,3 @@
-require 'yaml'
-require 'models/race.rb'
-require 'models/raceboard.rb'
-require 'errors'
-require 'config/game_state.rb'
-
 class TestRaceBoard < MiniTest::Unit::TestCase
   def setup
     @state = GameState.new
@@ -46,6 +40,12 @@ class TestRaceBoard < MiniTest::Unit::TestCase
       assert_raises(TooManyRacesRequired) { @raceboard.pick_active_races }
     end
 
+    def test_if_active_races_is_empty
+      assert @raceboard.active_races_empty?
+      @raceboard.pick_active_races
+      refute @raceboard.active_races_empty?
+    end
+
     def test_throw_error_if_races_already_picked
       assert_raises(ActiveRacesAlreadyPicked) do
         @raceboard.pick_active_races
@@ -75,7 +75,6 @@ class TestRaceBoard < MiniTest::Unit::TestCase
       @raceboard.pick_active_races
       chosen_race = @raceboard.active_races[3]
       @raceboard.pick_race(chosen_race, @player)
-
       @raceboard.race_choices[0..2].each do |race_choice|
         assert_equal 1, race_choice.last
       end
@@ -88,21 +87,17 @@ class TestRaceBoard < MiniTest::Unit::TestCase
       @raceboard.pick_active_races
       chosen_race = @raceboard.active_races[3]
       @raceboard.pick_race(chosen_race, @player)
-
       assert_equal 2, @player.coins
     end
 
     def test_readjust_players_coins_when_other_player_picked_race
       @raceboard.pick_active_races
-
       # First player chooses 4th race
       chosen_race_1 = @raceboard.active_races[3]
       @raceboard.pick_race(chosen_race_1, @player)
-
       # Second player chooses 3rd race
       chosen_race_2 = @raceboard.active_races[0]
       @raceboard.pick_race(chosen_race_2, @player2)
-
       assert_equal 6, @player2.coins
     end
   end
