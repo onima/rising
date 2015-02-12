@@ -29,7 +29,7 @@ class GameState
     initialize_orgiac_id
   end
 
-  def players_without_races?
+  def players_without_race?
     player_without_races = false
     @players.each do |player|
       player_without_races = true if player.races.empty?
