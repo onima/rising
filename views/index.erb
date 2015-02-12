@@ -12,7 +12,7 @@
   </figure>
   <div class="row">
     <div class="col-lg-offset-1 starter-template">
-      <% if @players.empty? %>
+      <% if @presenter.players.empty? %>
         <a href="/players_choice" class="btn btn-default btn-lg">New Game</a>
     <% else %>
         <a href="/choose_race" class="btn btn-default btn-lg">Continue Game</a>

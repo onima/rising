@@ -13,6 +13,7 @@ require 'models/land_type.rb'
 require 'services/game_master_service.rb'
 require 'serializer/serializer.rb'
 require 'serializer/deserializer.rb'
+require 'presenters/presenter.rb'
 include Mongo
 
 enable :sessions
@@ -35,19 +36,24 @@ helpers do
       'orgiac_coll'
     )
     orgiac_id = session[:orgiac_id]
-    logger.info("Found orgiac id #{orgiac_id}")
-    game_master = game_master_service.generate_game_master_with_session_id(orgiac_id)
+    logger.info("Found orgiac id #{ orgiac_id }")
+    game_master = game_master_service.generate_game_master_with_session_id(
+      orgiac_id
+    )
+    logger.info("GameMaster deserialized => #{ game_master.inspect }")
     orgiac_id = game_master.game_state.orgiac_id
     yield game_master
-    game_master_service.update({ "orgiac_id" => orgiac_id }, serialize(game_master))
-    logger.info("GameMaster serialized => #{serialize(game_master)}")
+    game_master_service.update(
+                               { "orgiac_id" => orgiac_id }, serialize(game_master)
+                              )
+    logger.info("GameMaster serialized => #{ serialize(game_master) }")
     session[:orgiac_id] = orgiac_id
   end
 end
 
 get '/' do
   response_wrapper do |game_master_obj|
-    @players = game_master_obj.game_state.players
+    @presenter = GamePresenter.new(game_master_obj)
   end
   erb :index
 end
@@ -72,11 +78,8 @@ end
 
 get '/choose_race' do
   response_wrapper do |game_master_obj|
-    @race_choices = game_master_obj.game_state.raceboard.race_choices
-    @active_races = game_master_obj.game_state.raceboard.active_races
-    @players = game_master_obj.game_state.players
-    @players_without_race = game_master_obj.game_state.players_without_races?
-    game_master_obj.assign_players_color(@players)
+    @presenter = GamePresenter.new(game_master_obj)
+    game_master_obj.assign_players_color(@presenter.players)
   end
   erb :race_choice
 end
@@ -95,32 +98,22 @@ post '/choose_race' do
   end
   redirect to 'choose_race'
 end
-# Must To Be Clean
+
 get '/game' do
   response_wrapper do |game_master_obj|
-    if game_master_obj.game_state.raceboard.active_races.empty? || game_master_obj.game_state.players.empty?
-      redirect to '/'
-    else
-      @players = game_master_obj.game_state.players
-      logger.info "Players are => #{@players.map {|player| player.name }}"
-      @map = game_master_obj.game_state.map
-      @turn_tracker = game_master_obj.game_state.turn_tracker
-      @player = game_master_obj.game_state.players.first
-    end
+    redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
+    redirect to '/' if game_master_obj.game_state.players.empty?
+    @presenter = GamePresenter.new(game_master_obj)
+    logger.info "Players are => #{ @presenter.players.map { |player| player.name } }"
   end
   erb :game
 end
 
 get '/play_turn' do
   response_wrapper do |game_master_obj|
-    @players = game_master_obj.game_state.players
-    logger.info "Players are => #{@players.map {|player| player.name }}"
-    @map = game_master_obj.game_state.map
-    @turn_tracker = game_master_obj.game_state.turn_tracker
-    index_actual_player = @turn_tracker.turn_played.count
-    logger.info "The index of actual player is => #{index_actual_player}"
-    @player = @players.at(index_actual_player)
-    logger.info "Player who will play this turn is => #{@player.name}"
+    @presenter = GamePresenter.new(game_master_obj)
+    logger.info "Players are => #{@presenter.players.map { |player| player.name } }"
+    logger.info "Player who will play this turn is => #{ @presenter.player.name }"
   end
   erb :game
 end
@@ -130,39 +123,41 @@ post '/play_turn' do
   response_wrapper do |game_master_obj|
     region_id = params["land"]
     player_string = params["name"]
+    @presenter = GamePresenter.new(game_master_obj)
     logger.info "Region_id from params_land is =>  #{region_id}"
     logger.info "Player_string from params_name is =>  #{player_string}"
+    # Need to be Correct
     player = game_master_obj.game_state.players.find do |p| 
       p.name == player_string
     end
-    @player = player
-    logger.info "Show player_create with params => #{@player.inspect}"
-    @players = game_master_obj.game_state.players
+    @presenter.player 
+    logger.info "Show player_create with params => #{@presenter.player.inspect}"
+    @presenter.players 
 
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
         r.id == region_id.to_i
       end
       logger.info "Show region_created with region_id => #{region.inspect}"
-      if region.occupied?(@players)
-        logger.info "#{@player.name}_troops_number = #{@player.races[0].troops_number}"
+      if region.occupied?(@presenter.players)
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
         logger.info "Subtract player_troops_number with region_player_defense_number"
-        @player.races[0].troops_number -= region.player_defense
-        logger.info "#{@player.name}_troops_number = #{@player.races[0].troops_number}"
+        player.races[0].troops_number -= region.player_defense
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
       else
-        logger.info "#{@player.name}_troops_number = #{@player.races[0].troops_number}"
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
         logger.info "Substract player_troops_number with region_neutral_defense"
-        @player.races[0].troops_number -= region.neutral_defense_points
-        logger.info "#{@player.name}_troops_number = #{@player.races[0].troops_number}"
+        player.races[0].troops_number -= region.neutral_defense_points
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
         region.player_defense = region.neutral_defense_points
       end
-      @player.occupied_regions << region
-      logger.info "#{@player.name}' occupied_regions are => #{@player.occupied_regions.map {|occupied_region| p occupied_region.id}}"
+      player.occupied_regions << region
+      logger.info "#{@presenter.player.name}' occupied_regions are => #{@presenter.player.occupied_regions.map {|occupied_region| p occupied_region.id}}"
     else
       logger.info "Region_id is nil so the game will update soon"
-      logger.info "Turn_tracker before update => #{game_master_obj.game_state.turn_tracker.turn_played.map {|p| p.name}}"
-      game_master_obj.game_state.turn_tracker.update(@player)
-      logger.info "Turn_tracker after update => #{game_master_obj.game_state.turn_tracker.turn_played.map { |p| p.name}}"
+      logger.info "Turn_tracker before update => #{@presenter.turn_tracker.turn_played.map {|p| p.name}}"
+      game_master_obj.game_state.turn_tracker.update(player)
+      logger.info "Turn_tracker after update => #{@presenter.turn_tracker.turn_played.map { |p| p.name}}"
     end
   end
   redirect to '/play_turn'

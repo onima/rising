@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-    <% @race_choices.each do |race_choice| %>
+    <% @presenter.race_choices.each do |race_choice| %>
       <tr>
       <td><%= race_choice.first.name %></td>
       <td><%= race_choice.first.troops_number %></td>
@@ -19,7 +19,7 @@
     </tbody>
   </fieldset>
 </table>
-<% if @players_without_race %>
+<% if @presenter.players_without_race %>
   <form action="/choose_race" method="post">
   <fieldset>
     <legend>RaceChoice</legend>
@@ -29,7 +29,7 @@
           Select Player
         </label>
         <div class="btn-group" data-toggle="buttons">
-          <% @players.each do |player| %>
+          <% @presenter.players.each do |player| %>
             <% if player.races.empty? %>
             <label class="btn btn-primary btn-sm round left-shift">
             <input type="radio" name="player" value="<%= player.name %>">
@@ -44,7 +44,7 @@
           Select A Race
         </label>
         <div class="btn-group" data-toggle="buttons">
-          <% @active_races.each do |race| %>
+          <% @presenter.active_races.each do |race| %>
             <label class="btn btn-primary btn-sm left-shift">
             <input type="radio" name="race" value="<%= race.name %>">
             <%= race.name %>
@@ -73,7 +73,7 @@
     </thead>
     <tbody>
     <% index = 1%>
-    <% @players.each do |player| %>
+    <% @presenter.players.each do |player| %>
       <tr>
       <td><%= index %></td>
       <% index += 1 %>
