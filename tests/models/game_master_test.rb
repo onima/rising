@@ -1,7 +1,7 @@
 require "models/game_master"
 require "errors"
 class GameMasterTest < MiniTest::Unit::TestCase
-# Must To Be Clean 
+
   def setup
     @game_master = GameMaster.new(GameState.new)
   end
@@ -21,11 +21,11 @@ class GameMasterTest < MiniTest::Unit::TestCase
 
   def test_create_players_adds_players_to_the_game
     @game_master.create_players( ["alice", "bob", "jack", "george"] )
-    assert_equal(4, @game_master.game_state.players.length)
+    assert_equal 4, @game_master.game_state.players.length
     only_cardinals = @game_master.game_state.players.map do |player|
       player.cardinal_point
     end
-    assert_equal(["North","East","South","West"], only_cardinals)
+    assert_equal ["North","East","South","West"], only_cardinals
   end
 
   def test_create_player_raises_error_if_one_of_players_names_is_empty
@@ -47,7 +47,7 @@ class GameMasterTest < MiniTest::Unit::TestCase
   end
 
   def test_if_attribute_race
-    @game_master.create_players(["bob", "alice"])
+    @game_master.create_players( ["bob", "alice"] )
     @player = @game_master.game_state.players[0]
     @game_master.game_state.raceboard.pick_active_races
     @race_1 = Race.new("humans", 5)
