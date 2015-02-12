@@ -40,12 +40,6 @@ class TestRaceBoard < MiniTest::Unit::TestCase
       assert_raises(TooManyRacesRequired) { @raceboard.pick_active_races }
     end
 
-    def test_if_active_races_is_empty
-      assert @raceboard.active_races_empty?
-      @raceboard.pick_active_races
-      refute @raceboard.active_races_empty?
-    end
-
     def test_throw_error_if_races_already_picked
       assert_raises(ActiveRacesAlreadyPicked) do
         @raceboard.pick_active_races

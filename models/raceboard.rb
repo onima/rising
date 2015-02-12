@@ -18,12 +18,6 @@ class RaceBoard
     @race_choices.map { |race_choice| race_choice.first }
   end
 
-  def active_races_empty?
-    tester = false
-    tester = true if active_races.empty?
-    tester
-  end
-
   def pick_active_races
     raise ActiveRacesAlreadyPicked if @race_choices.length == ACTIVE_RACE_NUM
     raise TooManyRacesRequired if @races.length < ACTIVE_RACE_NUM
