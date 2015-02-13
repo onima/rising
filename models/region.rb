@@ -1,15 +1,7 @@
 require 'nokogiri'
 
-class Region
-  attr_reader :map_width, :map_height
-  attr_accessor :coordinates, :land_type, :has_tribe, :id, :player_defense
-
-  def initialize(coordinates, width, height, id)
-    @coordinates = coordinates
-    @map_width = width
-    @map_height = height
-    @id = id
-  end
+class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
+  attr_accessor :land_type, :has_tribe, :player_defense
 
   def has_external_border?
     has_west_border? ||
@@ -43,7 +35,7 @@ class Region
   end
 
   def svg_coordinates
-    @coordinates.map{ |h| "#{h.fetch("x")},#{h.fetch("y")} " }.reduce("",:<<)
+    coordinates.map{ |h| "#{h.fetch("x")},#{h.fetch("y")} " }.reduce("",:<<)
   end
 
   def is_not_a_sea?
@@ -51,7 +43,7 @@ class Region
   end
 
   def round_coordinates
-    @coordinates.map {|hash| {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}}
+    coordinates.map {|hash| {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}}
   end
 
   def neutral_defense_points
@@ -59,39 +51,44 @@ class Region
   end
 
   def occupied?(players)
-     occupied = false
-     players.each {|player| occupied = true  if player.occupied_regions.include?(self)}
-     occupied
+     players.any? {|player| player.occupied_regions.include?(self) }
   end
 
   def text_name_coordinate_y
-    @coordinates[2]["y"] - ((@coordinates[2]["y"] - @coordinates[4]["y"]) / 2)
+    coordinates[2]["y"] - ((coordinates[2]["y"] - coordinates[4]["y"]) / 2)
   end
 
   def text_id_coordinate_x
-    @coordinates[2]["x"] + (@coordinates[2]["x"] - @coordinates[3]["x"])
+    coordinates[2]["x"] + (coordinates[2]["x"] - coordinates[3]["x"])
   end
 
   def text_id_coordinate_y
-    @coordinates[0]["y"] + ((@coordinates[1]["y"] - @coordinates[0]["y"]) / 2 )
+    coordinates[0]["y"] + ((coordinates[1]["y"] - coordinates[0]["y"]) / 2 )
+  end
+
+  def region_name_equal_5
+  end
+
+  def can_be_attacked?(player)
+    player.can_attack_region?(self)
   end
 
   private
 
   def has_west_border?
-    @id <= @map_height
+    id <= map_height
   end
 
   def has_east_border?
-    @id > @map_width * @map_height - @map_height && @id <= @map_width * @map_height
+    id > map_width * map_height - map_height && id <= map_width * map_height
   end
 
   def has_north_border?
-    (@id - 1) % @map_height == 0
+    (id - 1) % map_height == 0
   end
 
   def has_south_border?
-    (@id) % @map_height == 0
+    (id) % map_height == 0
   end
 
 end

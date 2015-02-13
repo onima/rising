@@ -57,6 +57,10 @@ class TestPlayer < MiniTest::Unit::TestCase
     refute @player_2.can_attack_region?(@map.regions.last)
   end
 
+  def test_player_cannot_attack_owned_region
+    refute @player.can_attack_region?(@map.regions[6])
+  end
+
   def test_if_player_can_yet_attack
     assert @player_2.can_yet_attack?(@map)
     refute @player_3.can_yet_attack?(@map)

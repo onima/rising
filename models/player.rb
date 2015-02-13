@@ -29,27 +29,33 @@ class Player
   end
 
   def can_attack_region?(region)
-    region.is_not_a_sea? && has_enough_troops?(region) && (can_conquest_region_on_first_turn?(region) || occupied_regions_have_border_with_region?(region))
+    region.is_not_a_sea?               &&
+    has_enough_troops?(region)         &&
+    !occupied_regions.include?(region) &&
+    (can_conquest_region_on_first_turn?(region) || occupied_regions_have_border_with_region?(region))
   end
 
   def can_conquest_region_on_first_turn?(region)
-    @cardinal_point == "North" && region.external_borders.include?("N") || @cardinal_point == "East" && region.external_borders.include?("E") || @cardinal_point == "South" && region.external_borders.include?("S") || @cardinal_point == "West" && region.external_borders.include?("W")
+    @cardinal_point == "North" && region.external_borders.include?("N") ||
+    @cardinal_point == "East"  && region.external_borders.include?("E") ||
+    @cardinal_point == "South" && region.external_borders.include?("S") ||
+    @cardinal_point == "West"  && region.external_borders.include?("W")
   end
 
   def has_enough_troops?(region)
-      region.has_tribe ? @races[0].troops_number >= region.land_type.conquest_points + 1 : @races[0].troops_number >= region.land_type.conquest_points
+      region.has_tribe ? @races.first.troops_number >= region.land_type.conquest_points + 1 : @races.first.troops_number >= region.land_type.conquest_points
   end
 
   def occupied_regions_have_border_with_region?(region)
-    @occupied_regions.any? {|occupied_region| (occupied_region.round_coordinates & region.round_coordinates).length == 2}
+    @occupied_regions.any? do |occupied_region|
+      (occupied_region.round_coordinates & region.round_coordinates).length == 2
+    end
   end
 
   def can_yet_attack?(map)
-    bool = false
-    map.regions.each do |region|
-     bool = true if (occupied_regions.include?(region) == false) && (can_attack_region?(region))
+    map.regions.any? do |region|
+     occupied_regions.include?(region) == false && can_attack_region?(region)
     end
-    bool
   end
 
   def price_of_race(race, game_state)

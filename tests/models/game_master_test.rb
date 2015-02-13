@@ -53,7 +53,7 @@ class GameMasterTest < MiniTest::Unit::TestCase
     @race_1 = Race.new("humans", 5)
     @game_master.game_state.raceboard.race_choices[0][0] = @race_1
     @game_master.attribute_race(@player, @race_1)
-    assert_equal "humans", @player.races[0].name
+    assert_equal "humans", @player.races.first.name
   end
 
 end

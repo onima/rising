@@ -1,19 +1,21 @@
 require 'sinatra'
 require 'mongo'
 require 'logger'
-require 'config/game_state.rb'
-require 'models/race.rb'
-require 'models/raceboard.rb'
-require 'models/player.rb'
-require 'models/game_master.rb'
-require 'models/map.rb'
-require 'models/map_drawer.rb'
-require 'models/turn_tracker.rb'
-require 'models/land_type.rb'
-require 'services/game_master_service.rb'
-require 'serializer/serializer.rb'
-require 'serializer/deserializer.rb'
-require 'presenters/presenter.rb'
+require 'config/game_state'
+require 'models/race'
+require 'models/raceboard'
+require 'models/player'
+require 'models/game_master'
+require 'models/map'
+require 'models/map_drawer'
+require 'models/turn_tracker'
+require 'models/land_type'
+require 'services/game_master_service'
+require 'serializer/serializer'
+require 'serializer/deserializer'
+require 'presenters/game'
+require 'presenters/region'
+
 include Mongo
 
 enable :sessions
@@ -40,20 +42,20 @@ helpers do
     game_master = game_master_service.generate_game_master_with_session_id(
       orgiac_id
     )
-    logger.info("GameMaster deserialized => #{ game_master.inspect }")
+    logger.debug("GameMaster deserialized => #{ game_master.inspect }")
     orgiac_id = game_master.game_state.orgiac_id
     yield game_master
     game_master_service.update(
-                               { "orgiac_id" => orgiac_id }, serialize(game_master)
-                              )
-    logger.info("GameMaster serialized => #{ serialize(game_master) }")
+      { "orgiac_id" => orgiac_id }, serialize(game_master)
+    )
+    logger.debug("GameMaster serialized => #{ serialize(game_master) }")
     session[:orgiac_id] = orgiac_id
   end
 end
 
 get '/' do
   response_wrapper do |game_master_obj|
-    @presenter = GamePresenter.new(game_master_obj)
+    @presenter = Presenters::Game.new(game_master_obj)
   end
   erb :index
 end
@@ -78,7 +80,7 @@ end
 
 get '/choose_race' do
   response_wrapper do |game_master_obj|
-    @presenter = GamePresenter.new(game_master_obj)
+    @presenter = Presenters::Game.new(game_master_obj)
     game_master_obj.assign_players_color(@presenter.players)
   end
   erb :race_choice
@@ -99,31 +101,29 @@ post '/choose_race' do
   redirect to 'choose_race'
 end
 
-get '/game' do
+get '/play_turn' do
   response_wrapper do |game_master_obj|
     redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
     redirect to '/' if game_master_obj.game_state.players.empty?
-    @presenter = GamePresenter.new(game_master_obj)
-    logger.info "Players are => #{ @presenter.players.map { |player| player.name } }"
-  end
-  erb :game
-end
+    @presenter = Presenters::Game.new(game_master_obj)
+    player = @presenter.player
+    regions = @presenter.map.regions
 
-get '/play_turn' do
-  response_wrapper do |game_master_obj|
-    @presenter = GamePresenter.new(game_master_obj)
-    logger.info "Players are => #{@presenter.players.map { |player| player.name } }"
+    @conquerable_regions = Presenters::Region.conquerable_regions(player, regions)
+    @owned_regions = Presenters::Region.owned_regions(player, regions)
+
+    logger.info "Players are => #{@presenter.players.map(&:name)}"
     logger.info "Player who will play this turn is => #{ @presenter.player.name }"
   end
   erb :game
 end
-
+# Must be clean
 post '/play_turn' do
 
   response_wrapper do |game_master_obj|
     region_id = params["land"]
     player_string = params["name"]
-    @presenter = GamePresenter.new(game_master_obj)
+    @presenter = Presenters::Game.new(game_master_obj)
     logger.info "Region_id from params_land is =>  #{region_id}"
     logger.info "Player_string from params_name is =>  #{player_string}"
     # Need to be Correct
@@ -140,15 +140,15 @@ post '/play_turn' do
       end
       logger.info "Show region_created with region_id => #{region.inspect}"
       if region.occupied?(@presenter.players)
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
         logger.info "Subtract player_troops_number with region_player_defense_number"
-        player.races[0].troops_number -= region.player_defense
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
+        player.races.first.troops_number -= region.player_defense
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
       else
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
         logger.info "Substract player_troops_number with region_neutral_defense"
-        player.races[0].troops_number -= region.neutral_defense_points
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races[0].troops_number}"
+        player.races.first.troops_number -= region.neutral_defense_points
+        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
         region.player_defense = region.neutral_defense_points
       end
       player.occupied_regions << region
