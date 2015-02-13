@@ -88,7 +88,7 @@ class Serializer
     {
       "turns_left"  => turn_tracker.turns_left,
       "players"     => serialize_players(turn_tracker.players),
-      "turn_played" => serialize_players(turn_tracker.players),
+      "turn_played" => serialize_players(turn_tracker.turn_played),
       "actual_turn" => turn_tracker.actual_turn
     }
   end

@@ -194,6 +194,7 @@ class SerializeTest < MiniTest::Unit::TestCase
     @player.occupied_regions[0] = @region_1
     @turn_tracker = TurnTracker.new(10, @players)
     @game_master.game_state.turn_tracker = @turn_tracker
+    @game_master.game_state.turn_tracker.turn_played << @player
   end 
 
 end
