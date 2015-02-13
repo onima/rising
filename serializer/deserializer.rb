@@ -37,10 +37,10 @@ class Deserializer
     player_object.coins = hsh.fetch("coins")
     player_object.races = hsh.fetch("races").map do |race|
       deserialize_race(race)
-    end
+    end.to_set
     occupied_regions = hsh.fetch("occupied_regions").map do |region|
       deserialize_region(region)
-    end
+    end.to_set
     player_object.occupied_regions = occupied_regions
     player_object.color = hsh.fetch("color")
     player_object

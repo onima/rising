@@ -190,8 +190,8 @@ class SerializeTest < MiniTest::Unit::TestCase
     @game_master.game_state.orgiac_id = 1423065615.304268
     @players = @game_master.game_state.players
     @player = @game_master.game_state.players.first 
-    @player.races[0] = Race.new("humans", 5)
-    @player.occupied_regions[0] = @region_1
+    @player.races = [Race.new("humans", 5)].to_set
+    @player.occupied_regions = [@region_1].to_set
     @turn_tracker = TurnTracker.new(10, @players)
     @game_master.game_state.turn_tracker = @turn_tracker
     @game_master.game_state.turn_tracker.turn_played << @player

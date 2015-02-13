@@ -1,7 +1,8 @@
-require 'models/region.rb'
-require 'models/race.rb'
-require 'models/map.rb'
-require 'config/game_state.rb'
+require 'models/region'
+require 'models/race'
+require 'models/map'
+require 'config/game_state'
+require 'set'
 
 class Player
   attr_reader :name
@@ -11,8 +12,8 @@ class Player
     @name = name
     @coins = 5
     @cardinal_point = cardinal_point
-    @races = []
-    @occupied_regions= [] #array_of_regions_occupied_by_the_player
+    @races = Set.new
+    @occupied_regions = Set.new #array_of_regions_occupied_by_the_player
   end
 
   def can_pay_for_race?(race, game_state)
