@@ -8,8 +8,14 @@ class GameMasterService
   attr_accessor :mongo_client
 
   def initialize(database_name, collection_name)
-    @mongo_client = MongoClient.new("localhost", 27017)
-    @mongo_client_db = database_name
+    if ENV['RACK_ENV'] == 'production'
+      mongo_uri = ENV['MONGOLAB_URI']
+      @mongo_client_db = mongo_uri[%r{/([^/\?]+)(\?|$)}, 1]
+      @mongo_client = MongoClient.from_uri(mongo_uri)
+    else
+      @mongo_client = MongoClient.new("localhost", 27017)
+      @mongo_client_db = database_name
+    end
     @mongo_client_coll = collection_name
   end
 
