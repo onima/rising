@@ -1,1 +1,1 @@
-web: bundle exec ruby orgiac.rb -p $PORT
+web: rackup config.ru -p $PORT
