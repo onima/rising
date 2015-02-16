@@ -12,7 +12,7 @@ class GameState
     )
   end
 
-  attr_accessor :players, :raceboard, :map, :turn_tracker, :orgiac_id
+  attr_accessor :players, :raceboard, :map, :turn_tracker, :rising_id
 
   def initialize
     reset!
@@ -23,10 +23,10 @@ class GameState
     @raceboard = RaceBoard.new(RULES)
   end
 
-  def initialize_map_turn_tracker_orgiac_id
+  def initialize_map_turn_tracker_rising_id
     map_generate
     turn_tracker_generate
-    initialize_orgiac_id
+    initialize_rising_id
   end
 
   def players_without_race?
@@ -47,8 +47,8 @@ class GameState
     @turn_tracker = TurnTracker.new(10, @players)
   end
 
-  def initialize_orgiac_id
-    @orgiac_id = Time.now.to_f
+  def initialize_rising_id
+    @rising_id = Time.now.to_f
   end
 
 end

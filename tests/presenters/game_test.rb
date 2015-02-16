@@ -4,7 +4,7 @@ module Presenters
 
     def setup
       @game_presenter = Game.new(GameMaster.new(GameState.new))
-      @game_presenter.game_master.game_state.initialize_map_turn_tracker_orgiac_id
+      @game_presenter.game_master.game_state.initialize_map_turn_tracker_rising_id
       @raceboard = @game_presenter.game_master.game_state.raceboard
       @players = @game_presenter.game_master.game_state.players 
       @turn_tracker = @game_presenter.game_master.game_state.turn_tracker
@@ -43,12 +43,12 @@ module Presenters
     end
 
     def test_if_method_map_show_map
-      @game_presenter.game_master.game_state.initialize_map_turn_tracker_orgiac_id
+      @game_presenter.game_master.game_state.initialize_map_turn_tracker_rising_id
       assert_equal 1, @game_presenter.map.regions[0].id
     end
 
     def test_if_method_turn_tracker_show_turn_tracker
-      @game_presenter.game_master.game_state.initialize_map_turn_tracker_orgiac_id
+      @game_presenter.game_master.game_state.initialize_map_turn_tracker_rising_id
       assert_equal 1, @game_presenter.turn_tracker.actual_turn
     end
 

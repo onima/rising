@@ -1,2 +1,2 @@
 # rising
-A fantasy game just to improve ruby and others skills
+A fantasy game

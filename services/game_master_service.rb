@@ -24,7 +24,7 @@ class GameMasterService
   end
 
   def find_by_id(id)
-    doc = collection.find("orgiac_id" => id).to_a
+    doc = collection.find("rising_id" => id).to_a
     doc[0]
   end
 
@@ -38,7 +38,7 @@ class GameMasterService
       Deserializer.new.deserialize_game_master_game_state(g_m_hsh)
     else
       g_m = GameMaster.new(GameState.new)
-      g_m.game_state.initialize_map_turn_tracker_orgiac_id
+      g_m.game_state.initialize_map_turn_tracker_rising_id
       insert(Serializer.new.serialize_game_master_game_state(g_m))
       g_m
     end

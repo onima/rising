@@ -6,7 +6,7 @@ class Serializer
       "raceboard"    => serialize_raceboard(game_master.game_state.raceboard),
       "map"          => serialize_map(game_master.game_state.map),
       "turn_tracker" => serialize_turn_tracker(game_master.game_state.turn_tracker),
-      "orgiac_id"    => game_master.game_state.orgiac_id
+      "rising_id"    => game_master.game_state.rising_id
     }
   end
 

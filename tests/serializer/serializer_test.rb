@@ -151,7 +151,7 @@ class SerializeTest < MiniTest::Unit::TestCase
       ],
       "actual_turn" => 1
       },
-      "orgiac_id" => 1423065615.304268
+      "rising_id" => 1423065615.304268
     }
     assert_equal exp, @serialize.serialize_game_master_game_state(@game_master)
   end
@@ -187,7 +187,7 @@ class SerializeTest < MiniTest::Unit::TestCase
       [ Race.new("elves", 5), 0 ]
     ]
     @game_master.game_state.map = @map
-    @game_master.game_state.orgiac_id = 1423065615.304268
+    @game_master.game_state.rising_id = 1423065615.304268
     @players = @game_master.game_state.players
     @player = @game_master.game_state.players.first 
     @player.races = [Race.new("humans", 5)].to_set

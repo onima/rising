@@ -1,3 +1,3 @@
 $: << __dir__
-require 'orgiac'
+require 'rising'
 run Sinatra::Application

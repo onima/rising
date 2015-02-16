@@ -157,7 +157,7 @@ class DeserializeTest < MiniTest::Unit::TestCase
       ],
       "actual_turn" => 1
       },
-      "orgiac_id" => 1423065615.304268
+      "rising_id" => 1423065615.304268
     }
     game_master_game_state_deserialize = Deserializer.new.deserialize_game_master_game_state(exp)
     game_master_object = GameMaster.new(GameState.new)

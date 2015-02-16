@@ -12,17 +12,17 @@ class TestGameMasterService < MiniTest::Unit::TestCase
   end
 
   def test_if_insert_method_create_database_with_collection_and_document
-    delete_orgiac_db
+    delete_rising_db
     assert_equal [
       "local",
-      "orgiac_db",
+      "rising_db",
       "admin"
     ], @game_master_service.mongo_client.database_names
     @game_master_service.insert(@doc_1)
     assert_equal [
       "test_app_db",
       "local",
-      "orgiac_db",
+      "rising_db",
       "admin"
     ], @game_master_service.mongo_client.database_names
     assert_equal [
@@ -30,53 +30,53 @@ class TestGameMasterService < MiniTest::Unit::TestCase
       "system.indexes"
     ], @database.collection_names
     assert_equal @database['test_app_coll'].count, 1
-    delete_orgiac_db
+    delete_rising_db
   end
 
   def test_if_find_by_id_method_find_the_good_id
-    delete_orgiac_db
+    delete_rising_db
     @game_master_service.insert(@doc_1)
     @game_master_service.insert(@doc_2)
     assert_equal 1422978712.8383105,
-      @game_master_service.find_by_id(@orgiac_id).fetch("orgiac_id")
-    delete_orgiac_db
+      @game_master_service.find_by_id(@rising_id).fetch("rising_id")
+    delete_rising_db
   end
 
   def test_if_update_method_update_a_document
-    delete_orgiac_db
+    delete_rising_db
     @game_master_service.insert(@doc_1)
     @game_master_service.update(@doc_1, @doc_3)
     assert_equal "kerrigan",
-      @game_master_service.find_by_id(@orgiac_id).fetch("name")
-    delete_orgiac_db
+      @game_master_service.find_by_id(@rising_id).fetch("name")
+    delete_rising_db
   end
 
   def test_if_method_generate_game_master_with_session_id_works
-    delete_orgiac_db
+    delete_rising_db
     @game_master_service.insert(@exp)
     g_m = @game_master_service.generate_game_master_with_session_id(1423065615.254268)
-    assert_equal 1423065615.254268, g_m.game_state.orgiac_id
-    delete_orgiac_db
+    assert_equal 1423065615.254268, g_m.game_state.rising_id
+    delete_rising_db
     @game_master_service.insert(@exp)
     g_m = @game_master_service.generate_game_master_with_session_id(nil)
     assert_equal "golems", g_m.game_state.raceboard.races[0].name
-    delete_orgiac_db
+    delete_rising_db
   end
 
   private
 
-  def delete_orgiac_db
+  def delete_rising_db
     @game_master_service.mongo_client.drop_database('test_app_db')
   end
 
   def setup!
     @game_master_service = GameMasterService.new('test_app_db', 'test_app_coll')
     @database = @game_master_service.mongo_client['test_app_db']
-    @orgiac_id = 1422978712.8383105
+    @rising_id = 1422978712.8383105
     @doc_1 = {
       "name" => "mongo",
       "race" => "db",
-      "orgiac_id" => 1422978712.8383105
+      "rising_id" => 1422978712.8383105
     }
     @doc_2 = {
       "name" => "bobby"
@@ -84,7 +84,7 @@ class TestGameMasterService < MiniTest::Unit::TestCase
     @doc_3 = {
       "name" => "kerrigan",
       "race" => "zerg",
-      "orgiac_id" => 1422978712.8383105
+      "rising_id" => 1422978712.8383105
     }
     @exp = {
       "players" =>
@@ -232,7 +232,7 @@ class TestGameMasterService < MiniTest::Unit::TestCase
       ],
       "actual_turn" => 1
       },
-      "orgiac_id" => 1423065615.254268
+      "rising_id" => 1423065615.254268
     }
   end
 end
