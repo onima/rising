@@ -14,15 +14,15 @@ class TestGameMasterService < MiniTest::Unit::TestCase
   def test_if_insert_method_create_database_with_collection_and_document
     delete_rising_db
     assert_equal [
-      "local",
       "rising_db",
+      "local",
       "admin"
     ], @game_master_service.mongo_client.database_names
     @game_master_service.insert(@doc_1)
     assert_equal [
       "test_app_db",
-      "local",
       "rising_db",
+      "local",
       "admin"
     ], @game_master_service.mongo_client.database_names
     assert_equal [
