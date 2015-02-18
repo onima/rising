@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require "serializer/deserializer.rb"
 require "serializer/serializer.rb"
 require "config/game_state.rb"

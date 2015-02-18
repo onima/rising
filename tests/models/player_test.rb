@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require "models/race"
 require "models/player"
 require "models/map.rb"

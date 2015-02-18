@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'models/map.rb'
 require 'models/map_drawer.rb'
 

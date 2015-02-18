@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'presenters/game'
 module Presenters
   class GameTest < MiniTest::Unit::TestCase

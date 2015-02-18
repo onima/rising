@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'models/turn_tracker.rb'
 require 'models/player.rb'
 require 'models/game_master.rb'

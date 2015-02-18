@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 class SerializeTest < MiniTest::Unit::TestCase
 
   def setup

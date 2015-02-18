@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'presenters/region'
 
 module Presenters

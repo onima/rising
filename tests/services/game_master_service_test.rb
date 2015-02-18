@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'services/game_master_service.rb'
 require 'models/game_master.rb'
 require 'serializer/serializer.rb'

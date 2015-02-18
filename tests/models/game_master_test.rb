@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require "models/game_master"
 require "errors"
 class GameMasterTest < MiniTest::Unit::TestCase

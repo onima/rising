@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 class TestRaceBoard < MiniTest::Unit::TestCase
   def setup
     @state = GameState.new

@@ -1,5 +1,6 @@
-class TestGameState < MiniTest::Unit::TestCase
+require 'minitest/autorun'
 
+class TestGameState < MiniTest::Unit::TestCase
   def test_if_initialize_map_turn_tracker_rising_id_method_works
     @game_state = GameState.new
     @game_state.initialize_map_turn_tracker_rising_id

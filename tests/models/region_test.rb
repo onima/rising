@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'models/region'
 
 class TestRegion < MiniTest::Unit::TestCase
