@@ -32,6 +32,22 @@ helpers do
     Deserializer.new.deserialize_game_master_game_state(hsh)
   end
 
+  def display_player_troops_number
+    "#{ @presenter.player.name }_troops_number = #{ @presenter.player.races.first.troops_number }"
+  end
+
+  def display_player_occupied_regions
+    "#{ @presenter.player.name }' occupied_regions are => #{
+      @presenter.player.occupied_regions.map do |occupied_region|
+        p occupied_region.id
+      end
+    }"
+  end
+
+  def display_turn_tracker
+    @presenter.turn_tracker.turn_played.map {|p| p.name}
+  end
+
   def response_wrapper
     game_master_service = GameMasterService.new(
       'rising_db',
@@ -100,7 +116,7 @@ post '/choose_race' do
   end
   redirect to 'choose_race'
 end
-# Must be clean
+
 get '/play_turn' do
   response_wrapper do |game_master_obj|
     redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
@@ -108,10 +124,20 @@ get '/play_turn' do
     @presenter = Presenters::Game.new(game_master_obj)
     player = @presenter.player
     regions = @presenter.map.regions
-    @conquerable_regions = Presenters::Region.conquerable_regions(player, regions)
-    @owned_regions = Presenters::Region.owned_regions(player, regions)
-    logger.info "Players are => #{@presenter.players.map(&:name)}"
-    logger.info "Player who will play this turn is => #{ @presenter.player.name }"
+    @conquerable_regions = Presenters::Region.conquerable_regions(
+      player,
+      regions
+    )
+    @owned_regions = Presenters::Region.owned_regions(
+      player,
+      regions
+    )
+    logger.info "Players are => #{
+      @presenter.players.map(&:name)
+    }"
+    logger.info "Player who will play this turn is => #{
+      @presenter.player.name
+    }"
   end
   erb :game
 end
@@ -122,40 +148,39 @@ post '/play_turn' do
     region_id = params["land"]
     player_string = params["name"]
     @presenter = Presenters::Game.new(game_master_obj)
-    logger.info "Region_id from params_land is =>  #{region_id}"
-    logger.info "Player_string from params_name is =>  #{player_string}"
-    # Need to be Correct
+    logger.info "Region_id from params_land is =>  #{ region_id }"
+    logger.info "Player_string from params_name is =>  #{ player_string }"
     player = game_master_obj.game_state.players.find do |p| 
       p.name == player_string
     end
-    @presenter.player 
-    logger.info "Show player_create with params => #{@presenter.player.inspect}"
-    @presenter.players 
+    logger.info "Show player_create with params => #{
+      @presenter.player.inspect
+    }"
 
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
         r.id == region_id.to_i
       end
-      logger.info "Show region_created with region_id => #{region.inspect}"
+      logger.info "Region_created with region_id => #{ region.inspect }"
       if region.occupied?(@presenter.players)
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
+        logger.info display_player_troops_number
         logger.info "Subtract player_troops_number with region_player_defense_number"
         player.races.first.troops_number -= region.player_defense
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
+        logger.info display_player_troops_number
       else
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
+        logger.info display_player_troops_number
         logger.info "Substract player_troops_number with region_neutral_defense"
         player.races.first.troops_number -= region.neutral_defense_points
-        logger.info "#{@presenter.player.name}_troops_number = #{@presenter.player.races.first.troops_number}"
+        logger.info display_player_troops_number
         region.player_defense = region.neutral_defense_points
       end
       player.occupied_regions << region
-      logger.info "#{@presenter.player.name}' occupied_regions are => #{@presenter.player.occupied_regions.map {|occupied_region| p occupied_region.id}}"
+      logger.info display_player_occupied_regions
     else
       logger.info "Region_id is nil so the game will update soon"
-      logger.info "Turn_tracker before update => #{@presenter.turn_tracker.turn_played.map {|p| p.name}}"
+      logger.info "Turn_tracker before update => #{display_turn_tracker}"
       game_master_obj.game_state.turn_tracker.update(player)
-      logger.info "Turn_tracker after update => #{@presenter.turn_tracker.turn_played.map { |p| p.name}}"
+      logger.info "Turn_tracker after update => #{display_turn_tracker}"
     end
   end
   redirect to '/play_turn'
