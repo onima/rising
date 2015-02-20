@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require "models/game_master"
 require "errors"
-class GameMasterTest < MiniTest::Unit::TestCase
+class GameMasterTest < Minitest::Test
 
   def setup
     @game_master = GameMaster.new(GameState.new)

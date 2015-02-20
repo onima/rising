@@ -4,7 +4,7 @@ require 'models/player.rb'
 require 'models/game_master.rb'
 require 'config/game_state.rb'
 
-class TestTurntracker < MiniTest::Unit::TestCase
+class TestTurntracker < Minitest::Test
   def setup
     @state = GameState.new
     @state.reset!

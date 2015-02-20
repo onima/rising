@@ -6,7 +6,7 @@ require 'serializer/deserializer.rb'
 require 'mongo'
 include Mongo 
 
-class TestGameMasterService < MiniTest::Unit::TestCase
+class TestGameMasterService < Minitest::Test
   
   def setup
     setup!
@@ -16,10 +16,6 @@ class TestGameMasterService < MiniTest::Unit::TestCase
     delete_test_app_db
     @game_master_service.insert(@doc_1)
     assert @game_master_service.mongo_client.database_names.include?("test_app_db")
-    assert_equal [
-      "test_app_coll",
-      "system.indexes"
-    ], @database.collection_names
     assert_equal 1, @database['test_app_coll'].count
     delete_test_app_db
   end

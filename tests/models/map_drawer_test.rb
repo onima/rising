@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'models/map.rb'
 require 'models/map_drawer.rb'
 
-class TestMapDrawer < MiniTest::Unit::TestCase
+class TestMapDrawer < Minitest::Test
 
   def setup
     @map_drawer = MapDrawer.new

@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-class TestRaceBoard < MiniTest::Unit::TestCase
+class TestRaceBoard < Minitest::Test
   def setup
     @state = GameState.new
     @state.reset!

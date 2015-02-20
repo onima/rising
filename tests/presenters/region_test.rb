@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'presenters/region'
 
 module Presenters
-  class RegionTest < MiniTest::Unit::TestCase
+  class RegionTest < Minitest::Test
   end
 
   class ConquerableRegionsTest < RegionTest

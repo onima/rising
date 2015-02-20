@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'presenters/game'
 module Presenters
-  class GameTest < MiniTest::Unit::TestCase
+  class GameTest < Minitest::Test
 
     def setup
       @game_presenter = Game.new(GameMaster.new(GameState.new))

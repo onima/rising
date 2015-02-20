@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'models/region'
 
-class TestRegion < MiniTest::Unit::TestCase
+class TestRegion < Minitest::Test
   def setup
     @region = Region.new([{"x"=>900.0, "y"=>450.0}, {"x"=>800.0, "y"=>450.0}], 3, 3, 1)
     @region.land_type = LandType.new("forest", 2, "yellow")

@@ -7,7 +7,7 @@ require 'models/raceboard.rb'
 require 'errors'
 require 'config/game_state.rb'
 
-class TestPlayer < MiniTest::Unit::TestCase
+class TestPlayer < Minitest::Test
 
   def setup
     @state = GameState.new

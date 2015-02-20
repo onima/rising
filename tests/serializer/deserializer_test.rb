@@ -9,7 +9,7 @@ require "models/map.rb"
 require "models/region.rb"
 require "models/raceboard.rb"
 
-class DeserializeTest < MiniTest::Unit::TestCase
+class DeserializeTest < Minitest::Test
 
   def test_if_deserialize_game_master_game_state
     exp = {
