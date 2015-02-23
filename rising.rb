@@ -156,7 +156,6 @@ post '/play_turn' do
     logger.info "Show player_create with params => #{
       @presenter.player.inspect
     }"
-
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
         r.id == region_id.to_i

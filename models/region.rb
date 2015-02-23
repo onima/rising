@@ -54,19 +54,34 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
      players.any? {|player| player.occupied_regions.include?(self) }
   end
 
-  def text_name_coordinate_y
+  def adjust_x_text
+    case land_type.name.length
+    when 0..4
+      coordinates[2]["x"] + 15
+    when 6
+      coordinates[2]["x"] + 5
+    when 8
+      coordinates[2]["x"] - 5
+    else
+      coordinates[2]["x"]
+    end
+  end
+
+  def adjust_y_text
     coordinates[2]["y"] - ((coordinates[2]["y"] - coordinates[4]["y"]) / 2)
   end
 
-  def text_id_coordinate_x
-    coordinates[2]["x"] + (coordinates[2]["x"] - coordinates[3]["x"])
+  def adjust_x_id
+    coord = coordinates[2]["x"] + (coordinates[2]["x"] - coordinates[3]["x"])
+    if id > 9
+      coord - 10
+    else
+      coord - 5
+    end
   end
 
-  def text_id_coordinate_y
+  def adjust_y_id
     coordinates[0]["y"] + ((coordinates[1]["y"] - coordinates[0]["y"]) / 2 )
-  end
-
-  def region_name_equal_5
   end
 
   def can_be_attacked?(player)
