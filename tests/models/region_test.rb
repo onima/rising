@@ -18,7 +18,8 @@ class TestRegion < Minitest::Test
     @player_2 = Player.new("louis", "East")
     @player_3 = Player.new("susy", "South")
     @players = [@player_1, @player_2, @player_3]
-    assert_equal "<polygon style=\"fill:yellow;fill-opacity:0.7\" points=\"900.0,450.0 800.0,450.0 \"/>", @region.to_svg(@players)
+    assert_equal "<polygon style=\"fill:yellow;fill-opacity:0.7\" points=\"900.0,450.0 800.0,450.0 \"/>",
+      @region.to_svg(@players)
   end
 
   def test_has_external_border_returns_true_if_it_is_on_a_corner

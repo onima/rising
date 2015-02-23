@@ -15,13 +15,13 @@ class TestPlayer < Minitest::Test
     @map = MapDrawer.new.create_new_map(5,6, 400)
     @player = Player.new("alexis", "North")
     @player.races = [Race.new("humans", 5)].to_set
+    @player.occupied_regions= [@map.regions[6],  @map.regions[18]].to_set
     @player_2 = Player.new("manue", "South")
     @player_2.races = [Race.new("orcs", 6)].to_set
     @player_3 = Player.new("tom", "East")
     @player_3.races = [Race.new("elves", 1)].to_set
     @raceboard = @state.raceboard
     @raceboard.pick_active_races
-    @player.occupied_regions= [@map.regions[6],  @map.regions[18]].to_set
   end
 
   def test_price_of_race
