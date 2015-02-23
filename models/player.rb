@@ -32,7 +32,10 @@ class Player
     region.is_not_a_sea?               &&
     has_enough_troops?(region)         &&
     !occupied_regions.include?(region) &&
-    (can_conquest_region_on_first_turn?(region) || occupied_regions_have_border_with_region?(region))
+    (
+      can_conquest_region_on_first_turn?(region) ||
+      occupied_regions_have_border_with_region?(region)
+    )
   end
 
   def can_conquest_region_on_first_turn?(region)
@@ -43,7 +46,11 @@ class Player
   end
 
   def has_enough_troops?(region)
-      region.has_tribe ? @races.first.troops_number >= region.land_type.conquest_points + 1 : @races.first.troops_number >= region.land_type.conquest_points
+      if region.has_tribe
+        @races.first.troops_number >= region.land_type.conquest_points + 1
+      else
+        @races.first.troops_number >= region.land_type.conquest_points
+      end
   end
 
   def occupied_regions_have_border_with_region?(region)

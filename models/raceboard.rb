@@ -33,7 +33,7 @@ class RaceBoard
       item[1] += 1 if item_index < race_index
     end
     player.pay(race_index)
-    picked_race = @race_choices.find {|race, coins| chosen_race == race}
+    picked_race = @race_choices.find { |race, coins| chosen_race == race }
     chosen_race_coins = picked_race.last
     player.coins += chosen_race_coins
     player.races << chosen_race

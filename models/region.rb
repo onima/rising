@@ -24,10 +24,10 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
       polygon
     end
     root = obj.doc.root
-    root['style'] = "fill:#{land_type.color};fill-opacity:0.7"
+    fill_region_with_color(root)
     players.each do |player|
       if player.occupied_regions.include?(self)
-      root['style'] = "fill:#{land_type.color};stroke:#{player.color};stroke-width:2.5px;fill-opacity:0.7"
+        draw_stroke(root, player)
       end
     end
     root['points'] = svg_coordinates
@@ -35,7 +35,10 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
   end
 
   def svg_coordinates
-    coordinates.map{ |h| "#{h.fetch("x")},#{h.fetch("y")} " }.reduce("",:<<)
+    svg_coordinates = coordinates.map do |h|
+      "#{h.fetch("x")},#{h.fetch("y")} "
+    end
+    svg_coordinates.reduce("",:<<)
   end
 
   def is_not_a_sea?
@@ -43,7 +46,9 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
   end
 
   def round_coordinates
-    coordinates.map {|hash| {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}}
+    coordinates.map do |hash|
+      {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}
+    end
   end
 
   def neutral_defense_points
@@ -51,7 +56,7 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
   end
 
   def occupied?(players)
-     players.any? {|player| player.occupied_regions.include?(self) }
+     players.any? { |player| player.occupied_regions.include?(self) }
   end
 
   def adjust_x_text
@@ -104,6 +109,16 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
 
   def has_south_border?
     (id) % map_height == 0
+  end
+
+  def fill_region_with_color(root)
+    root['style'] = "fill:#{land_type.color};fill-opacity:0.7"
+  end
+
+  def draw_stroke(root, player)
+    root['style'] = "fill:#{land_type.color};
+    stroke:#{player.color};
+    stroke-width:2.5px;fill-opacity:0.7"
   end
 
 end

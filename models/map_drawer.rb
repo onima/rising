@@ -36,7 +36,6 @@ class MapDrawer
     [map.regions.first, map.regions.last, map.regions[middle_region(map)]].each do |region|
       region.land_type = sea_land_type
     end
-
     regions_without_sea(map).each do |region|
       region.land_type = land_types_without_sea.sample
     end
@@ -45,19 +44,30 @@ class MapDrawer
   def assign_tribes(map)
     number_of_tribes = (regions_without_sea(map).length) / REGION_TRIBE_RATIO
     regions_occupied_by_tribes = regions_without_sea(map).sample(number_of_tribes)
-    regions_occupied_by_tribes.each {|region_occupied| region_occupied.has_tribe = true}
+    regions_occupied_by_tribes.each do |region_occupied|
+      region_occupied.has_tribe = true
+    end
   end
 
   def draw_hexagon_col(map, x, x_offset, y_offset, width_index)
     map.height.times do |height_index|
       y = height_index * @radius * Math.sqrt(3)
-      coordinates = find_hexagon_coordinates(x + x_offset, y + y_offset, @radius)
+      coordinates = find_hexagon_coordinates(
+        x + x_offset,
+        y + y_offset,
+        @radius
+      )
       create_region(map, coordinates, width_index, height_index)
     end
   end
 
   def create_region(map, coordinates, width_index, height_index)
-    map.regions << Region.new(coordinates, map.width, map.height, height_index + 1 + map.height * width_index)
+    map.regions << Region.new(
+      coordinates,
+      map.width,
+      map.height,
+      height_index + 1 + map.height * width_index
+    )
   end
 
   def find_hexagon_coordinates(x_centre, y_centre, radius)
@@ -70,7 +80,10 @@ class MapDrawer
   end
 
   def regions_without_sea(map)
-   map.regions.map.with_index { |region, i| region if region_is_not_sea?(map, i) }.compact
+   regions_without_sea = map.regions.map.with_index do |region, i|
+     region if region_is_not_sea?(map, i)
+   end
+     regions_without_sea.compact
   end
 
   private
@@ -80,12 +93,12 @@ class MapDrawer
   end
 
   def sea_land_type
-    land_types.find{|land_type| land_type.name == 'sea'}
+    land_types.find { |land_type| land_type.name == 'sea' }
   end
 
 
   def land_types_without_sea
-    land_types.reject {|land_type| land_type.name == 'sea'}
+    land_types.reject { |land_type| land_type.name == 'sea' }
   end
 
   def middle_region(map)
