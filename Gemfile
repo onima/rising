@@ -8,5 +8,5 @@ ruby '2.1.2'
 group :development, :test do
   gem 'pry'
   gem 'rake', '~> 10.4.2'
-  gem 'minitest-colorize'
+  gem 'minitest', '~> 5.5.1'
 end
