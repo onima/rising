@@ -59,33 +59,19 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
      players.any? { |player| player.occupied_regions.include?(self) }
   end
 
-  def adjust_x_text
-    case land_type.name.length
-    when 0..4
-      coordinates[2]["x"] + 15
-    when 6
-      coordinates[2]["x"] + 5
-    when 8
-      coordinates[2]["x"] - 5
-    else
-      coordinates[2]["x"]
-    end
+  def x_text
+    coordinates[3]["x"]
   end
 
-  def adjust_y_text
+  def y_text
     coordinates[2]["y"] - ((coordinates[2]["y"] - coordinates[4]["y"]) / 2)
   end
 
-  def adjust_x_id
-    coord = coordinates[2]["x"] + (coordinates[2]["x"] - coordinates[3]["x"])
-    if id > 9
-      coord - 10
-    else
-      coord - 5
-    end
+  def x_id
+    coordinates[3]["x"]
   end
 
-  def adjust_y_id
+  def y_id
     coordinates[0]["y"] + ((coordinates[1]["y"] - coordinates[0]["y"]) / 2 )
   end
 

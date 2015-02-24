@@ -6,11 +6,11 @@
           xmlns="http://www.w3.org/2000/svg" version="1.1">
           <% @presenter.map.regions.each do |region| %>
             <%= region.to_svg(@presenter.players) %>
-            <text x="<%= region.adjust_x_text %>" y="<%= region.adjust_y_text %>">
-              <%= region.land_type.name.capitalize %>
+            <text style="font-family: monospace" x="<%= region.x_text %>" y="<%= region.y_text %>">
+              <%= region.land_type.name.center(14,"x").gsub("x", "&nbsp;") %>
             </text>
-            <text x="<%= region.adjust_x_id %>" y="<%= region.adjust_y_id %>">
-              <%= region.id %>
+            <text style="font-family: monospace" x="<%= region.x_id %>" y="<%= region.y_id %>">
+              <%= ("" + region.id.to_s).center(14, "x").gsub("x", "&nbsp;") %>
             </text>
           <% end %>
         </svg>
