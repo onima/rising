@@ -1,3 +1,5 @@
+require 'coveralls'
+Coveralls.wear!
 require 'minitest/autorun'
 require "models/race"
 require "models/player"

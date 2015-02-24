@@ -1,3 +1,5 @@
+require 'coveralls'
+Coveralls.wear!
 require 'minitest/autorun'
 require "serializer/deserializer.rb"
 require "serializer/serializer.rb"

@@ -1,3 +1,5 @@
+require 'coveralls'
+Coveralls.wear!
 require 'minitest/autorun'
 class SerializeTest < Minitest::Test
 

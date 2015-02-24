@@ -1,3 +1,5 @@
+require 'coveralls'
+Coveralls.wear!
 require 'minitest/autorun'
 require 'models/turn_tracker.rb'
 require 'models/player.rb'
