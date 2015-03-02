@@ -10,4 +10,5 @@ group :development, :test do
   gem 'pry'
   gem 'rake', '~> 10.4.2'
   gem 'minitest', '~> 5.5.1'
+  gem 'capybara'
 end
