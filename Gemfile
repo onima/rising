@@ -10,5 +10,4 @@ group :development, :test do
   gem 'pry'
   gem 'rake', '~> 10.4.2'
   gem 'minitest', '~> 5.5.1'
-  gem 'cucumber-sinatra', '~> 0.5.0'
 end
