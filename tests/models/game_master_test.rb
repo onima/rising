@@ -59,4 +59,9 @@ class GameMasterTest < Minitest::Test
     assert_equal "humans", @player.races.first.name
   end
 
+  def test_if_check_if_players_names_method_is_valid
+    assert @game_master.check_if_players_names_are_valid?("franck alex")
+    refute @game_master.check_if_players_names_are_valid?("bobby")
+  end
+
 end

@@ -34,4 +34,8 @@ class GameMaster
       raise RaceNotAssign 
     end
   end
+
+  def check_if_players_names_are_valid?(players_params)
+    !players_params.include?(",") && players_params.split.count > 1
+  end
 end

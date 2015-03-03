@@ -88,8 +88,12 @@ end
 
 post '/create_players' do
   response_wrapper do |game_master_obj|
-    players_names = params['players'].split(',').map(&:strip)
-    game_master_obj.create_players(players_names)
+    if game_master_obj.check_if_players_names_are_valid?(params['players'])
+      players_names = params['players'].split
+      game_master_obj.create_players(players_names)
+    else
+      redirect to 'players_choice'
+    end
   end
   redirect to 'choose_race'
 end
