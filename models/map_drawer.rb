@@ -96,7 +96,6 @@ class MapDrawer
     land_types.find { |land_type| land_type.name == 'sea' }
   end
 
-
   def land_types_without_sea
     land_types.reject { |land_type| land_type.name == 'sea' }
   end

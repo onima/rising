@@ -2,18 +2,7 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-1 col-lg-push-7">
-        <svg width="435px" height="625px"
-          xmlns="http://www.w3.org/2000/svg" version="1.1">
-          <% @presenter.map.regions.each do |region| %>
-            <%= region.to_svg(@presenter.players) %>
-            <text style="font-family: monospace" x="<%= region.x_text %>" y="<%= region.y_text %>">
-              <%= region.land_type.name.center(14,"x").gsub("x", "&nbsp;") %>
-            </text>
-            <text style="font-family: monospace" x="<%= region.x_id %>" y="<%= region.y_id %>">
-              <%= ("" + region.id.to_s).center(14, "x").gsub("x", "&nbsp;") %>
-            </text>
-          <% end %>
-        </svg>
+        <svg id="svg" width="500" height="600"></svg>
       </div>
       <div class="col-lg-4">
         <table class="table table-bordered table-striped table-condensed table-responsive">
