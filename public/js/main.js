@@ -1,13 +1,13 @@
 (function() {
 
-  var map = { width: 5, height: 6, gridWidth: 400 },
-      radius = map.gridWidth / (map.width * 1.5),
-      xBaseOffset = 50,
-      hexagonSemiVerticalHeight = Math.sqrt(3) * radius / 2,
-      yBaseOffset = 50,
-      yBaseOffsetLower = yBaseOffset + hexagonSemiVerticalHeight;
-
-  var svg = Snap("#svg");
+  var map                       = { width: 5, height: 6, gridWidth: 400 };
+  var radius                    = map.gridWidth / (map.width * 1.5);
+  var xBaseOffset               = 55;
+  var hexagonSemiVerticalHeight = Math.sqrt(3) * radius / 2;
+  var yBaseOffset               = 50;
+  var yBaseOffsetLower          = yBaseOffset + hexagonSemiVerticalHeight;
+  var hexagonArray              = [];
+  var svg                       = Snap("#svg");
 
   var findHexagonCoordinates = function findHexagonCoordinates(xCentre, yCentre, radius) {
     var hexagonCoordinates = [];
@@ -26,7 +26,7 @@
   var drawHexagonCol = function drawHexagonCol(map, x, xOffset, yOffset, widthIndex) {
     for(var j = 0; j < map.height; j++) {
       var y = j * radius * Math.sqrt(3);
-      svg.polyline((findHexagonCoordinates( x + xOffset, y + yOffset, radius)));
+      hexagonArray.push(svg.polyline((findHexagonCoordinates( x + xOffset, y + yOffset, radius))));
     }
   };
 
@@ -36,6 +36,21 @@
     }
   };
 
+//  var assignHexagonColors = function () {
+//    var hexagonColors = ["#FF8C00", "#228B22", "#FFD700", "#708090", "#333300"];
+//    var hexagonSea = [hexagonArray[0], hexagonArray[15], hexagonArray[29]];
+//    var rand = hexagonColors[Math.floor(Math.random() * hexagonColors.length)];
+//
+//    hexagonArray.forEach(function(hexagon) {
+//      hexagon.attr({ fill: rand });
+//    });
+//
+//    hexagonSea.forEach(function(hexagon) {
+//      hexagon.attr({ fill: "#2266bb"});
+//    });
+//  };
+
   drawMap(map);
+//  assignHexagonColors();
 // console.log(JSON.stringify(findHexagonCoordinates(450, 450, 450)));
 }) ();
