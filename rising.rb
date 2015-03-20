@@ -1,13 +1,13 @@
 require 'sinatra'
 require 'mongo'
 require 'logger'
+require 'json'
 require 'config/game_state'
 require 'models/race'
 require 'models/raceboard'
 require 'models/player'
 require 'models/game_master'
 require 'models/map'
-require 'models/map_drawer'
 require 'models/turn_tracker'
 require 'models/land_type'
 require 'services/game_master_service'
@@ -126,6 +126,8 @@ get '/play_turn' do
     redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
     redirect to '/' if game_master_obj.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master_obj)
+    @game_master_json = game_master_obj.game_state.map.inspect.to_json
+    require 'pry'; binding.pry 
     player = @presenter.player
     regions = @presenter.map.regions
     @conquerable_regions = Presenters::Region.conquerable_regions(

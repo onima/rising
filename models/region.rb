@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
+class Region < Struct.new(:id)
   attr_accessor :land_type, :has_tribe, :player_defense
 
   def has_external_border?
@@ -19,60 +19,22 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
     cardinal_points
   end
 
-  def to_svg(players)
-    obj = Nokogiri::XML::Builder.new do
-      polygon
-    end
-    root = obj.doc.root
-    fill_region_with_color(root)
-    players.each do |player|
-      if player.occupied_regions.include?(self)
-        draw_stroke(root, player)
-      end
-    end
-    root['points'] = svg_coordinates
-    root.to_xml
-  end
-
-  def svg_coordinates
-    svg_coordinates = coordinates.map do |h|
-      "#{h.fetch("x")},#{h.fetch("y")} "
-    end
-    svg_coordinates.reduce("",:<<)
-  end
-
   def is_not_a_sea?
     land_type.name != "sea"
   end
-
+=begin
   def round_coordinates
     coordinates.map do |hash|
       {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}
     end
   end
-
+=end
   def neutral_defense_points
     has_tribe ? land_type.conquest_points + 1 : land_type.conquest_points
   end
 
   def occupied?(players)
      players.any? { |player| player.occupied_regions.include?(self) }
-  end
-
-  def x_text
-    coordinates[3]["x"]
-  end
-
-  def y_text
-    coordinates[2]["y"] - ((coordinates[2]["y"] - coordinates[4]["y"]) / 2)
-  end
-
-  def x_id
-    coordinates[3]["x"]
-  end
-
-  def y_id
-    coordinates[0]["y"] + ((coordinates[1]["y"] - coordinates[0]["y"]) / 2 )
   end
 
   def can_be_attacked?(player)
@@ -95,16 +57,6 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
 
   def has_south_border?
     (id) % map_height == 0
-  end
-
-  def fill_region_with_color(root)
-    root['style'] = "fill:#{land_type.color};fill-opacity:0.7"
-  end
-
-  def draw_stroke(root, player)
-    root['style'] = "fill:#{land_type.color};
-    stroke:#{player.color};
-    stroke-width:2.5px;fill-opacity:0.7"
   end
 
 end

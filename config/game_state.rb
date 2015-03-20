@@ -40,7 +40,7 @@ class GameState
   private
 
   def map_generate
-    @map = MapDrawer.new.create_new_map(5, 6, 400)
+    @map = Map.new
   end
 
   def turn_tracker_generate
