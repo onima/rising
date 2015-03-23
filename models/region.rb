@@ -22,13 +22,7 @@ class Region < Struct.new(:id)
   def is_not_a_sea?
     land_type.name != "sea"
   end
-=begin
-  def round_coordinates
-    coordinates.map do |hash|
-      {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}
-    end
-  end
-=end
+
   def neutral_defense_points
     has_tribe ? land_type.conquest_points + 1 : land_type.conquest_points
   end
@@ -44,19 +38,19 @@ class Region < Struct.new(:id)
   private
 
   def has_west_border?
-    id <= map_height
+    [1,2,3,4,5,6].include?(id)
   end
 
   def has_east_border?
-    id > map_width * map_height - map_height && id <= map_width * map_height
+    [25,26,27,28,29,30].include?(id)
   end
 
   def has_north_border?
-    (id - 1) % map_height == 0
+    [1,7,13,19,25].include?(id)
   end
 
   def has_south_border?
-    (id) % map_height == 0
+    [6,12,18,24,30].include?(id)
   end
 
 end

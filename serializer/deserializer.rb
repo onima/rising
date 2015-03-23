@@ -47,16 +47,16 @@ class Deserializer
   end
 
   def deserialize_raceboard(hsh)
-    raceboard = RaceBoard.new(GameState::RULES)
+    raceboard_object = RaceBoard.new(GameState::RULES)
     races = hsh.fetch("races").map do |r|
       deserialize_race(r)
     end
     race_choices_array = hsh.fetch("race_choices").map do |r|
       [deserialize_race(r.first), r.last]
     end
-    raceboard.races = races
-    raceboard.race_choices = race_choices_array
-    raceboard
+    raceboard_object.races = races
+    raceboard_object.race_choices = race_choices_array
+    raceboard_object
   end
 
 
@@ -68,15 +68,12 @@ class Deserializer
   end
 
   def deserialize_map(hsh)
-    regions = hsh.fetch("regions").map do |r|
+    deserialized_regions = hsh.fetch("regions").map do |r|
       deserialize_region(r)
     end
-    Map.new(
-      regions,
-      hsh.fetch("width"),
-      hsh.fetch("height"),
-      hsh.fetch("grid_width")
-    )
+    map_object = Map.new
+    map_object.regions = deserialized_regions
+    map_object
   end
 
   def deserialize_land_type(hsh)
@@ -89,9 +86,6 @@ class Deserializer
 
   def deserialize_region(hsh)
     region_object = Region.new(
-      hsh.fetch("coordinates"),
-      hsh.fetch("width"),
-      hsh.fetch("height"),
       hsh.fetch("id")
     )
     region_object.land_type = deserialize_land_type(hsh.fetch("land_type"))

@@ -23,10 +23,6 @@ class SerializeTest < Minitest::Test
           ],
           "occupied_regions" => [
             {
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
@@ -34,8 +30,6 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => 1,
-           "width" => 3,
-           "height" => 3,
            "player_defense" => nil
           }
           ],
@@ -66,10 +60,6 @@ class SerializeTest < Minitest::Test
       },
       "map" => {
         "regions" => [{
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
@@ -77,14 +67,9 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => 1,
-           "width" => 3,
-           "height" => 3,
            "player_defense" => nil
           }
         ],
-        "width" => 6,
-        "height" => 5,
-        "grid_width" => 1000
       },
       "turn_tracker" => {
         "turns_left" => 10,
@@ -101,10 +86,6 @@ class SerializeTest < Minitest::Test
           ],
           "occupied_regions" => [
             {
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
@@ -112,8 +93,6 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => 1,
-           "width" => 3,
-           "height" => 3,
            "player_defense" => nil
           }
           ],
@@ -133,10 +112,6 @@ class SerializeTest < Minitest::Test
           ],
           "occupied_regions" => [
             {
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
@@ -144,8 +119,6 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => 1,
-           "width" => 3,
-           "height" => 3,
            "player_defense" => nil
           }
           ],
@@ -171,17 +144,15 @@ class SerializeTest < Minitest::Test
   end
 
   def setup_game_master_and_player
-    @region_1 = Region.new(
-      [
-        { "x"=>900.0, "y"=>450.0 },
-        { "x"=>800.0, "y"=>450.0 }
-      ], 3, 3, 1)
+    @region_1 = Region.new(1)
     @region_1.land_type = LandType.new(
       "forest",
       2,
       "yellow"
     )
-    @map = Map.new([@region_1], 6, 5, 1000)
+    @map = Map.new 
+    @map.regions.clear
+    @map.regions[0] = @region_1
     @game_master = GameMaster.new(GameState.new)
     @game_master.create_players([ "bob" ])
     @game_master.game_state.raceboard.races = [ Race.new("golems", 5) ]

@@ -5,23 +5,7 @@ require 'models/region'
 
 class TestRegion < Minitest::Test
   def setup
-    @region = Region.new([{"x"=>900.0, "y"=>450.0}, {"x"=>800.0, "y"=>450.0}], 3, 3, 1)
-    @region.land_type = LandType.new("forest", 2, "yellow")
-    @map = MapDrawer.new.create_new_map(5, 6, 400)
-    @player = Player.new("alexis", "North")
-  end
-
-  def test_svg_coordinates_transform_coordinates_into_a_svg_string_of_points
-    assert_equal "900.0,450.0 800.0,450.0 ", @region.svg_coordinates
-  end
-
-  def test_to_svg_transform_region_to_the_svg_format
-    @player_1 = Player.new("alexis", "North")
-    @player_2 = Player.new("louis", "East")
-    @player_3 = Player.new("susy", "South")
-    @players = [@player_1, @player_2, @player_3]
-    assert_equal "<polygon style=\"fill:yellow;fill-opacity:0.7\" points=\"900.0,450.0 800.0,450.0 \"/>",
-      @region.to_svg(@players)
+    @map = Map.new
   end
 
   def test_has_external_border_returns_true_if_it_is_on_a_corner

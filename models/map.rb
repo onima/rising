@@ -9,7 +9,6 @@ class Map
 
   def initialize
     @regions = (1..30).map { |n| Region.new(n) } 
-    require 'pry'; binding.pry 
     assign_lands
     assign_tribes
   end
@@ -19,7 +18,7 @@ class Map
   end
 
   def assign_lands
-    [@regions.first, @regions.last, @regions[middle_region(map)]].each do |region|
+    [@regions.first, @regions.last, @regions[middle_region]].each do |region|
       region.land_type = sea_land_type
     end
     regions_without_sea.each do |region|
@@ -30,8 +29,14 @@ class Map
   def assign_tribes
     number_of_tribes = (regions_without_sea.length) / REGION_TRIBE_RATIO
     regions_occupied_by_tribes = regions_without_sea.sample(number_of_tribes)
-    regions_occupied_by_tribes.each do |region_occupied|
-      region_occupied.has_tribe = true
+    id_regions_occupied = regions_occupied_by_tribes.map(&:id)
+
+    regions_without_sea.each do |region|
+      if id_regions_occupied.include?(region.id)
+        region.has_tribe = true
+      else
+        region.has_tribe = false
+      end
     end
   end
 

@@ -57,21 +57,15 @@ class Serializer
       serialize_region(r)
     end
     { 
-      "regions"    => map_regions,
-      "width"      => game_map.width,
-      "height"     => game_map.height,
-      "grid_width" => game_map.grid_width
+      "regions"    => map_regions
     }
   end
 
   def serialize_region(region)
      {
-       "coordinates"    => region.coordinates,
        "land_type"      => serialize_land_type(region.land_type),
        "has_tribe"      => region.has_tribe,
        "id"             => region.id,
-       "width"          => region.map_width,
-       "height"         => region.map_height,
        "player_defense" => region.player_defense
      }
   end
