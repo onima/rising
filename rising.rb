@@ -127,7 +127,6 @@ get '/play_turn' do
     redirect to '/' if game_master_obj.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master_obj)
     @game_master_json = game_master_obj.game_state.map.inspect.to_json
-    require 'pry'; binding.pry 
     player = @presenter.player
     regions = @presenter.map.regions
     @conquerable_regions = Presenters::Region.conquerable_regions(
