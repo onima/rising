@@ -8,9 +8,17 @@ class Map
   attr_accessor :regions
 
   def initialize
-    @regions = (1..30).map { |n| Region.new(n) } 
+    @regions = create_id_regions(5, 6)
     assign_lands
     assign_tribes
+  end
+
+  def create_id_regions(columns, rows)
+    (1..columns).flat_map do |i|
+      (1..rows).flat_map do |j|
+        Region.new([i,j])
+      end
+    end
   end
 
   def land_types
