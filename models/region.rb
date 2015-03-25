@@ -1,13 +1,18 @@
 require 'nokogiri'
 
 class Region < Struct.new(:id)
-  attr_accessor :land_type, :has_tribe, :player_defense
+  attr_accessor :land_type, :has_tribe, :player_defense, :columns, :rows
 
   def has_external_border?
-    has_west_border? ||
+      has_west_border? ||
       has_north_border? ||
       has_south_border? ||
       has_east_border?
+  end
+
+  def retrieve_columns_and_rows_from_map(columns,rows)
+    @columns = columns
+    @rows = rows
   end
 
   def external_borders
@@ -28,29 +33,27 @@ class Region < Struct.new(:id)
   end
 
   def occupied?(players)
-     players.any? { |player| player.occupied_regions.include?(self) }
+    players.any? { |player| player.occupied_regions.include?(self) }
   end
 
   def can_be_attacked?(player)
     player.can_attack_region?(self)
   end
 
-  private
-
   def has_west_border?
-    [1,2,3,4,5,6].include?(id)
+    id[0] == 1 && (1..rows).to_a.include?(id[1])
   end
 
   def has_east_border?
-    [25,26,27,28,29,30].include?(id)
+    id[0] == columns && (1..rows).to_a.include?(id[1])
   end
 
   def has_north_border?
-    [1,7,13,19,25].include?(id)
+    id[1] == 1 && (1..columns).to_a.include?(id[0])
   end
 
   def has_south_border?
-    [6,12,18,24,30].include?(id)
+    id[1] == rows && (1..columns).to_a.include?(id[0])
   end
 
 end

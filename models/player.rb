@@ -54,8 +54,30 @@ class Player
   end
 
   def occupied_regions_have_border_with_region?(region)
+    west_last_region, east_last_region =
+      if region.id[0].odd?
+        [
+          [region.id[0] - 1, region.id[1] - 1],
+          [region.id[0] + 1, region.id[1] - 1]
+        ]
+      else
+        [
+          [region.id[0] - 1, region.id[1] + 1],
+          [region.id[0] + 1, region.id[1] + 1]
+        ]
+      end
+
+    regions_which_have_borders_with_region =
+      [
+        [region.id[0], region.id[1] - 1],
+        [region.id[0], region.id[1] + 1],
+        [region.id[0] - 1, region.id[1]],
+        [region.id[0] + 1, region.id[1]],
+        west_last_region, east_last_region
+      ]
+
     @occupied_regions.any? do |occupied_region|
-      (occupied_region.round_coordinates & region.round_coordinates).length == 2
+      regions_which_have_borders_with_region.include?(occupied_region.id)
     end
   end
 
