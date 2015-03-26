@@ -90,19 +90,15 @@ class TestGameMasterService < Minitest::Test
           ],
           "occupied_regions" => [
             {
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => 1,
-           "width" => 3,
-           "height" => 3,
+           "id" => [1,1],
+           "columns" => 5,
+           "rows" => 6,
            "player_defense" => nil
           }
           ],
@@ -133,25 +129,18 @@ class TestGameMasterService < Minitest::Test
       },
       "map" => {
         "regions" => [{
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => 1,
-           "width" => 3,
-           "height" => 3,
+           "id" => [1,1],
+           "columns" => 5,
+           "rows" => 6,
            "player_defense" => nil
           }
         ],
-        "width" => 6,
-        "height" => 5,
-        "grid_width" => 1000
       },
       "turn_tracker" => {
         "turns_left" => 10,
@@ -168,19 +157,15 @@ class TestGameMasterService < Minitest::Test
           ],
           "occupied_regions" => [
             {
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => 1,
-           "width" => 3,
-           "height" => 3,
+           "id" => [1,1],
+           "columns" => 5,
+           "rows" => 6,
            "player_defense" => nil
           }
           ],
@@ -200,19 +185,15 @@ class TestGameMasterService < Minitest::Test
           ],
           "occupied_regions" => [
             {
-            "coordinates" => [
-              { "x" => 900.0, "y" => 450.0 },
-              { "x" => 800.0, "y" => 450.0 }
-            ],
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => 1,
-           "width" => 3,
-           "height" => 3,
+           "id" => [1,1],
+           "columns" => 5,
+           "rows" => 6,
            "player_defense" => nil
           }
           ],

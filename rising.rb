@@ -163,7 +163,7 @@ post '/play_turn' do
     }"
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
-        r.id == region_id.to_i
+        r.id == region_id.scan(/\d/).map { |chr| chr.to_i}
       end
       logger.info "Region_created with region_id => #{ region.inspect }"
       if region.occupied?(@presenter.players)

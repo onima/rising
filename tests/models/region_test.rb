@@ -6,6 +6,7 @@ require 'models/region'
 class TestRegion < Minitest::Test
   def setup
     @map = Map.new
+    @region_3 = @map.regions[2]
   end
 
   def test_has_external_border_returns_true_if_it_is_on_a_corner

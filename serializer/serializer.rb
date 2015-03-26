@@ -66,6 +66,8 @@ class Serializer
        "land_type"      => serialize_land_type(region.land_type),
        "has_tribe"      => region.has_tribe,
        "id"             => region.id,
+       "columns"        => region.columns,
+       "rows"           => region.rows,
        "player_defense" => region.player_defense
      }
   end

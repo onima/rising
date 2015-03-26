@@ -1,18 +1,13 @@
 require 'nokogiri'
 
-class Region < Struct.new(:id)
-  attr_accessor :land_type, :has_tribe, :player_defense, :columns, :rows
+class Region < Struct.new(:id, :columns, :rows)
+  attr_accessor :land_type, :has_tribe, :player_defense
 
   def has_external_border?
       has_west_border? ||
       has_north_border? ||
       has_south_border? ||
       has_east_border?
-  end
-
-  def retrieve_columns_and_rows_from_map(columns,rows)
-    @columns = columns
-    @rows = rows
   end
 
   def external_borders
@@ -41,7 +36,7 @@ class Region < Struct.new(:id)
   end
 
   def has_west_border?
-    id[0] == 1 && (1..rows).to_a.include?(id[1])
+    id[0] == 1 && (1..rows).cover?(id[1])
   end
 
   def has_east_border?
