@@ -60,12 +60,13 @@ helpers do
     )
     logger.debug("GameMaster deserialized => #{ game_master.inspect }")
     rising_id = game_master.game_state.rising_id
-    yield game_master
+    res = yield game_master
     game_master_service.update(
       { "rising_id" => rising_id }, serialize(game_master)
     )
     logger.debug("GameMaster serialized => #{ serialize(game_master) }")
     session[:rising_id] = rising_id
+    res
   end
 end
 
@@ -126,7 +127,6 @@ get '/play_turn' do
     redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
     redirect to '/' if game_master_obj.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master_obj)
-    @game_master_json = game_master_obj.game_state.map.inspect.to_json
     player = @presenter.player
     regions = @presenter.map.regions
     @conquerable_regions = Presenters::Region.conquerable_regions(

@@ -47,7 +47,7 @@ module Presenters
 
     def test_if_method_map_show_map
       @game_presenter.game_master.game_state.initialize_map_turn_tracker_rising_id
-      assert_equal [1, 1], @game_presenter.map.regions[0].id
+      assert_equal "1,1", @game_presenter.map.regions[0].id
     end
 
     def test_if_method_turn_tracker_show_turn_tracker

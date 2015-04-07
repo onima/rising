@@ -1,7 +1,14 @@
 require 'nokogiri'
 
-class Region < Struct.new(:id, :columns, :rows)
-  attr_accessor :land_type, :has_tribe, :player_defense
+class Region
+  attr_accessor :id, :columns, :rows, :coordinates, :land_type, :has_tribe, :player_defense
+
+  def initialize(id, columns, rows)
+    @id = id
+    @columns = columns
+    @rows = rows
+    @coordinates = id.split(',').map(&:to_i)
+  end
 
   def has_external_border?
       has_west_border? ||
@@ -36,19 +43,19 @@ class Region < Struct.new(:id, :columns, :rows)
   end
 
   def has_west_border?
-    id[0] == 1 && (1..rows).cover?(id[1])
+    coordinates[0] == 1 && (1..rows).cover?(coordinates[1])
   end
 
   def has_east_border?
-    id[0] == columns && (1..rows).to_a.include?(id[1])
+    coordinates[0] == columns && (1..rows).to_a.include?(coordinates[1])
   end
 
   def has_north_border?
-    id[1] == 1 && (1..columns).to_a.include?(id[0])
+    coordinates[1] == 1 && (1..columns).to_a.include?(coordinates[0])
   end
 
   def has_south_border?
-    id[1] == rows && (1..columns).to_a.include?(id[0])
+    coordinates[1] == rows && (1..columns).to_a.include?(coordinates[0])
   end
 
 end

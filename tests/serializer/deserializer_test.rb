@@ -35,9 +35,10 @@ class DeserializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -74,9 +75,10 @@ class DeserializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
         ],
@@ -102,9 +104,10 @@ class DeserializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -130,9 +133,10 @@ class DeserializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],

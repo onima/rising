@@ -88,6 +88,7 @@ class Deserializer
     region_object = Region.new(
       hsh.fetch("id"), hsh.fetch("columns"), hsh.fetch("rows")
     )
+    region_object.coordinates = hsh.fetch("coordinates")
     region_object.land_type = deserialize_land_type(hsh.fetch("land_type"))
     region_object.has_tribe = hsh.fetch("has_tribe")
     region_object.player_defense = hsh.fetch("player_defense")

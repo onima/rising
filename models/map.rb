@@ -16,7 +16,8 @@ class Map
   def create_id_regions(columns, rows)
     (1..columns).flat_map do |i|
       (1..rows).flat_map do |j|
-        Region.new([i,j], columns, rows)
+        id = "#{i},#{j}"
+        Region.new(id, columns, rows)
       end
     end
   end

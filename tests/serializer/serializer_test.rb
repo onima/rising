@@ -29,9 +29,10 @@ class SerializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -68,9 +69,10 @@ class SerializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
         ],
@@ -96,9 +98,10 @@ class SerializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -124,9 +127,10 @@ class SerializeTest < Minitest::Test
              "color" => "yellow"
            },
            "has_tribe" => nil,
-           "id" => [1,1],
+           "id" => "1,1",
            "columns" => 5,
            "rows" => 6,
+           "coordinates" =>[1, 1],
            "player_defense" => nil
           }
           ],
@@ -152,7 +156,7 @@ class SerializeTest < Minitest::Test
   end
 
   def setup_game_master_and_player
-    @region_1 = Region.new([1,1], 5, 6)
+    @region_1 = Region.new("1,1", 5, 6)
     @region_1.land_type = LandType.new(
       "forest",
       2,

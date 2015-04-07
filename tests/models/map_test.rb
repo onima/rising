@@ -11,6 +11,6 @@ class TestMap < Minitest::Test
   end
 
   def test_if_create_id_regions_method_assign_id_to_regions
-    assert_equal [2, 5], @map.regions[10].id
+    assert_equal "2,5", @map.regions[10].id
   end
 end
