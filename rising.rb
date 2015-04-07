@@ -189,3 +189,14 @@ post '/play_turn' do
   end
   redirect to '/play_turn'
 end
+
+get '/regions_hsh' do
+  response_wrapper do |game_master_obj|
+    regions_hsh = Hash.new
+    game_master_obj.game_state.map.regions.each do |region|
+      regions_hsh[region.id] = Serializer.new.serialize_land_type(region.land_type)
+    end
+    content_type :json
+    regions_hsh.to_json
+  end
+end

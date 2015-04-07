@@ -4,7 +4,24 @@
   var r                         = 50;
   var hexagonSemiVerticalHeight = Math.sqrt(3) * r / 2;
   var hexagonArray              = [];
-  var svg                       = Snap("#svg");
+  var svg                       = SVG('drawing').size(600, 700);
+  var xhr                       = new XMLHttpRequest();
+
+  xhr.onreadystatechange = alertContents;
+  xhr.open('GET', 'http://localhost:9292/regions_hsh');
+  xhr.send();
+
+  function alertContents() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        regions_object = JSON.parse(xhr.responseText);
+      } else {
+        alert('There was a problem with the request.');
+      }
+    }
+  }
+
+  var createMap = function createMap() {
 
   var findHexagonCoordinates = function findHexagonCoordinates(xCentre, yCentre) {
     var hexagonCoordinates = [];
@@ -30,11 +47,14 @@
       for(var j = 0; j < map.height; j++) {
         var array_i_j = f(i,j);
         var coordinates = findHexagonCoordinates(array_i_j[0] + 50, array_i_j[1] + 50);
-        hexagonArray.push(svg.polyline(coordinates));
+        hexagonArray.push(svg.polyline([coordinates]));
       }
     }
     return hexagonArray;
   };
-
   drawMap(map);
+  };
+
+  createMap();
+
 }) ();
