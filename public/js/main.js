@@ -2,7 +2,6 @@
 
   var map                       = { width: 5, height: 6 };
   var r                         = 50;
-  var hexagonArray              = [];
   var svg                       = SVG('drawing').size(600, 700);
   var xhr                       = new XMLHttpRequest();
 
@@ -10,8 +9,23 @@
         return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
+  var lpad = function(string, padString, length) {
+      var str = string;
+          while (str.length < length)
+          str = padString + str;
+    return str;
+  };
+
+  var mouseOver = function() {
+    this.fill({ color: '#f06' });
+  };
+
   xhr.onreadystatechange = alertContents;
   xhr.open('GET', 'http://localhost:9292/regions_hsh');
+  xhr.send();
+
+  xhr.onreadystatechange = alertContents;
+  xhr.open('GET', 'http://localhost:9292/conquerable_regions');
   xhr.send();
 
   function alertContents() {
@@ -51,10 +65,12 @@
       for(var j = 1; j < map.height + 1; j++) {
         var array_i_j = f(i,j);
         var coordinates = findHexagonCoordinates(array_i_j[0], array_i_j[1]);
-        hexagonArray.push(svg.polyline([coordinates]).attr({ fill: regions_object[i + ',' + j].color, 'fill-opacity': 0.6, stroke: '#000', text: 'hello' }));
+        var region_object = regions_object[i + ',' + j];
+        var defense_points_str = svg.text(region_object.conquest_points + '').attr({ x: coordinates[6] + 45, y: coordinates[7] - 15 });
+        var hexagon = svg.polyline([coordinates]).attr({ fill: regions_object[i + ',' + j].color, 'fill-opacity': 0.5, stroke: '#000' });
+        //hexagon.on('mouseover', mouseOver);
       }
     }
-    return hexagonArray;
   };
   drawMap(map);
   };

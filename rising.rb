@@ -163,7 +163,7 @@ post '/play_turn' do
     }"
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
-        r.id == region_id.scan(/\d/).map { |chr| chr.to_i}
+        r.id == region_id
       end
       logger.info "Region_created with region_id => #{ region.inspect }"
       if region.occupied?(@presenter.players)
@@ -198,5 +198,22 @@ get '/regions_hsh' do
     end
     content_type :json
     regions_hsh.to_json
+  end
+end
+
+get '/conquerable_regions' do
+  response_wrapper do |game_master_obj|
+    @presenter = Presenters::Game.new(game_master_obj)
+    player = @presenter.player
+    regions = @presenter.map.regions
+    @conquerable_regions = Presenters::Region.conquerable_regions(
+      player,
+      regions
+    )
+    @conquerable_regions_array = @conquerable_regions.map do |region|
+      [region.id, region.defense_points]
+    end
+    content_type :json
+    @conquerable_regions_array.to_json
   end
 end
