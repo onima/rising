@@ -1,3 +1,11 @@
-polyline:hover {
+polyline.hexagon:hover {
   stroke-width: 2px;
+}
+
+polyline.hexagon {
+  fill-opacity: 0.2;
+}
+
+.map:hover polyline.hexagon.attackable {
+  fill-opacity: 0.9;
 }
