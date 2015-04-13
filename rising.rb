@@ -192,28 +192,15 @@ end
 
 get '/regions_hsh' do
   response_wrapper do |game_master_obj|
+    @presenter = Presenters::Game.new(game_master_obj)
+    player = @presenter.player
     regions_hsh = Hash.new
     game_master_obj.game_state.map.regions.each do |region|
-      regions_hsh[region.id] = Serializer.new.serialize_land_type(region.land_type)
+    land_type_serialized = Serializer.new.serialize_land_type(region.land_type)
+    land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
+    regions_hsh[region.id] = land_type_serialized
     end
     content_type :json
     regions_hsh.to_json
-  end
-end
-
-get '/conquerable_regions' do
-  response_wrapper do |game_master_obj|
-    @presenter = Presenters::Game.new(game_master_obj)
-    player = @presenter.player
-    regions = @presenter.map.regions
-    @conquerable_regions = Presenters::Region.conquerable_regions(
-      player,
-      regions
-    )
-    @conquerable_regions_array = @conquerable_regions.map do |region|
-      [region.id, region.defense_points]
-    end
-    content_type :json
-    @conquerable_regions_array.to_json
   end
 end
