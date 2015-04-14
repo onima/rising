@@ -5,10 +5,10 @@
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
       if (xhr.status === 200 || xhr.status === 0) {
-        regions_object = JSON.parse(xhr.responseText);
+        var regions_object = JSON.parse(xhr.responseText);
         createMap(regions_object);
       } else {
-        alert('There was a problem with the request.');
+        console.log('There was a problem with the request.');
       }
     }
   }; 
@@ -44,22 +44,22 @@
 
       for(var i = 1; i < map_dimensions.width + 1; i++) {
         for(var j = 1; j < map_dimensions.height + 1; j++) {
-          var i_j_array = f(i,j);
-          var coordinates = findHexagonCoordinates(i_j_array[0], i_j_array[1]);
-          var region_object = regions_object[i + ',' + j];
-          var hexagon = svg.polyline([coordinates]).attr( {
+          var i_j_array           = f(i,j);
+          var coordinates         = findHexagonCoordinates(i_j_array[0], i_j_array[1]);
+          var region_object       = regions_object[i + ',' + j];
+          var hexagon             = svg.polyline([coordinates]).attr( {
             fill: regions_object[i + ',' + j].color,
             stroke: '#000'
+          } );
+          svg.text(region_object.conquest_points + '').attr( { // defense_points_text
+            x: coordinates[6] + 45,
+            y: coordinates[7] - 15
           } );
           hexagon.addClass('hexagon');
           if (region_object.attackable) {
             hexagon.addClass('attackable');
           }
           map.add(hexagon);
-          var defense_points_text = svg.text(region_object.conquest_points + '').attr( {
-            x: coordinates[6] + 45,
-            y: coordinates[7] - 15
-          } );
         }
       }
     };

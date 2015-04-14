@@ -1,0 +1,17 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "undef": true,
+  "unused": true,
+  "nonew": true,
+  "nocomma": true,
+  "latedef": true,
+  "bitwise": true,
+  "forin": true,
+  "freeze": true,
+  "globals": {
+    "XMLHttpRequest": true,
+    "console": true,
+    "SVG": true
+  }
+}
