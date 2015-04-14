@@ -12,6 +12,8 @@
   "globals": {
     "XMLHttpRequest": true,
     "console": true,
-    "SVG": true
+    "SVG": true,
+    "document": true,
+    "confirm": true
   }
 }

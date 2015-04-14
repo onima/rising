@@ -204,3 +204,8 @@ get '/regions_hsh' do
     regions_hsh.to_json
   end
 end
+
+post '/hexa_id' do
+  hexa_id = params[:id]
+  hexa_id
+end

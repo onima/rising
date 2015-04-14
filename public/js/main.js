@@ -1,19 +1,41 @@
 (function() {
 
   var xhr = new XMLHttpRequest();
+  var xhr_2 = new XMLHttpRequest();
 
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200 || xhr.status === 0) {
-        var regions_object = JSON.parse(xhr.responseText);
-        createMap(regions_object);
-      } else {
-        console.log('There was a problem with the request.');
+  var playWithId = function playWithId(hexagon_id) {
+    xhr_2.onreadystatechange = function() {
+      if (xhr_2.readyState === 4) {
+        if (xhr_2.status === 200 || xhr_2.status === 0) {
+          var response = xhr_2.responseText;
+          console.log(response);
+        } else {
+          console.log('There was a problem with the request.');
+        }
       }
-    }
-  }; 
-  xhr.open("GET", 'http://localhost:9292/regions_hsh');
-  xhr.send(null);
+    };
+    xhr_2.open("POST", 'http://localhost:9292/hexa_id');
+    xhr_2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
+    xhr_2.send('id=' + hexagon_id);
+  };
+
+  var makeGetAjaxRequest = function makeGetAjaxRequest() {
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200 || xhr.status === 0) {
+          var regions_object = JSON.parse(xhr.responseText);
+          createMap(regions_object);
+        } else {
+          console.log('There was a problem with the request.');
+        }
+      }
+    };
+    xhr.open("GET", 'http://localhost:9292/regions_hsh');
+    xhr.send(null);
+  };
+
+  makeGetAjaxRequest();
+
 
   var createMap = function createMap(regions_object) {
 
@@ -41,24 +63,28 @@
     };
 
     var drawMap = function drawMap(map_dimensions) {
-
       for(var i = 1; i < map_dimensions.width + 1; i++) {
         for(var j = 1; j < map_dimensions.height + 1; j++) {
+          var id                  = i + ',' + j;
           var i_j_array           = f(i,j);
           var coordinates         = findHexagonCoordinates(i_j_array[0], i_j_array[1]);
-          var region_object       = regions_object[i + ',' + j];
+          var region_object       = regions_object[id];
           var hexagon             = svg.polyline([coordinates]).attr( {
-            fill: regions_object[i + ',' + j].color,
-            stroke: '#000'
-          } );
+            fill: regions_object[id].color,
+            stroke: '#000',
+            id: id
+          });
           svg.text(region_object.conquest_points + '').attr( { // defense_points_text
             x: coordinates[6] + 45,
             y: coordinates[7] - 15
-          } );
+          });
           hexagon.addClass('hexagon');
           if (region_object.attackable) {
             hexagon.addClass('attackable');
           }
+          hexagon.on('click', function(ev) {
+            playWithId(ev.target.id);
+          });
           map.add(hexagon);
         }
       }
