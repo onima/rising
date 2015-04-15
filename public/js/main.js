@@ -1,9 +1,9 @@
 (function() {
 
-  var xhr = new XMLHttpRequest();
-  var xhr_2 = new XMLHttpRequest();
+  var playerName = document.getElementById('player_name').innerText;
 
-  var playWithId = function playWithId(hexagon_id) {
+  var sendIdToServer = function sendIdToServer(hexagon_id) { //send id in string format
+    var xhr_2 = new XMLHttpRequest();
     xhr_2.onreadystatechange = function() {
       if (xhr_2.readyState === 4) {
         if (xhr_2.status === 200 || xhr_2.status === 0) {
@@ -16,10 +16,12 @@
     };
     xhr_2.open("POST", 'http://localhost:9292/hexa_id');
     xhr_2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
-    xhr_2.send('id=' + hexagon_id);
+    var parameters = encodeURI("id=" + hexagon_id + '&name=' + playerName);
+    xhr_2.send(parameters);
   };
 
-  var makeGetAjaxRequest = function makeGetAjaxRequest() {
+  var retrieveRegionsFromServer = function retrieveRegionsFromServer() { //object with id_regions as keys and regions_land_type as values
+    var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
         if (xhr.status === 200 || xhr.status === 0) {
@@ -34,8 +36,7 @@
     xhr.send(null);
   };
 
-  makeGetAjaxRequest();
-
+  retrieveRegionsFromServer();
 
   var createMap = function createMap(regions_object) {
 
@@ -63,6 +64,9 @@
     };
 
     var drawMap = function drawMap(map_dimensions) {
+      var click_on_id = function() {
+        sendIdToServer(this.node.id);
+      };
       for(var i = 1; i < map_dimensions.width + 1; i++) {
         for(var j = 1; j < map_dimensions.height + 1; j++) {
           var id                  = i + ',' + j;
@@ -82,9 +86,7 @@
           if (region_object.attackable) {
             hexagon.addClass('attackable');
           }
-          hexagon.on('click', function(ev) {
-            playWithId(ev.target.id);
-          });
+          hexagon.on('click', click_on_id);
           map.add(hexagon);
         }
       }

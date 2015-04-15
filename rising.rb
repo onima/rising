@@ -146,7 +146,7 @@ get '/play_turn' do
   end
   erb :game
 end
-
+=begin
 post '/play_turn' do
 
   response_wrapper do |game_master_obj|
@@ -189,6 +189,32 @@ post '/play_turn' do
   end
   redirect to '/play_turn'
 end
+=end
+
+post '/hexa_id' do
+  response_wrapper do |game_master_obj|
+    region_id = params[:id]
+    player_name = params[:name]
+    @presenter = Presenters::Game.new(game_master_obj)
+    player = game_master_obj.game_state.players.find do |p| 
+      p.name == player_name
+    end
+    if region_id
+      region = game_master_obj.game_state.map.regions.find do |r|
+        r.id == region_id
+      end
+      if region.occupied?(@presenter.players)
+        player.races.first.troops_number -= region.player_defense
+      else
+        player.races.first.troops_number -= region.neutral_defense_points
+        region.player_defense = region.neutral_defense_points
+      end
+      player.occupied_regions << region
+    else
+      game_master_obj.game_state.turn_tracker.update(player)
+    end
+  end
+end
 
 get '/regions_hsh' do
   response_wrapper do |game_master_obj|
@@ -203,9 +229,4 @@ get '/regions_hsh' do
     content_type :json
     regions_hsh.to_json
   end
-end
-
-post '/hexa_id' do
-  hexa_id = params[:id]
-  hexa_id
 end
