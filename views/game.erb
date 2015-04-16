@@ -10,7 +10,7 @@
           </tr>
           <tr>
             <td>Turns left</td>
-            <td><%= @presenter.turn_tracker.turns_left %></td>
+            <td id="turn_left"><%= @presenter.turn_tracker.turns_left %></td>
           </tr>
           <tr>
             <td>Actual Turn</td>
@@ -30,23 +30,11 @@
           </tr>
           <tr>
             <td>Troops Number</td>
-            <td><%= @presenter.player.races.first.troops_number%></td>
+            <td id="troops_number"><%= @presenter.player.races.first.troops_number%></td>
           </tr>
           <tr>
             <td>Start Position</td>
             <td> <%= @presenter.player.cardinal_point %> </td>
-          </tr>
-          <tr>
-            <td>Occupied Regions</td>
-            <td>
-              <%= @owned_regions.map(&:id).join(" ") %>
-            </td>
-          </tr>
-          <tr>
-            <td>Lands that can be conquered</td>
-            <td>
-              <%= @conquerable_regions.map(&:id).join(" ") %>
-            </td>
           </tr>
         </table>
       </div>

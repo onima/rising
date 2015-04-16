@@ -6,6 +6,10 @@ polyline.hexagon {
   fill-opacity: 0.2;
 }
 
+polyline.occupied {
+  stroke-width: 9px;
+}
+
 .map:hover polyline.hexagon.attackable {
   fill-opacity: 0.9;
 }

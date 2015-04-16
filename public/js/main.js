@@ -1,14 +1,20 @@
 (function() {
 
-  var playerName = document.getElementById('player_name').innerText;
-
-  var sendIdToServer = function sendIdToServer(hexagon_id) { //send id in string format
+  var sendHexagonObjectToServer = function sendIdToServer(hexagon_object) { //send id in string format
+    var hexagon_id = hexagon_object.node.id;
+    var playerName = document.getElementById('player_name').innerText;
     var xhr_2 = new XMLHttpRequest();
     xhr_2.onreadystatechange = function() {
       if (xhr_2.readyState === 4) {
         if (xhr_2.status === 200 || xhr_2.status === 0) {
-          var response = xhr_2.responseText;
-          console.log(response);
+          var playerObj = JSON.parse(xhr_2.responseText);
+          var updateGameBoard = function updateGameBoard() {
+            var troopsNumber = document.getElementById('troops_number');
+            troopsNumber.innerText = playerObj.races[0].troops_number + '';
+            hexagon_object.stroke({ color: playerObj.color, width: 2 });
+            hexagon_object.removeClass('attackable');
+          };
+          updateGameBoard();
         } else {
           console.log('There was a problem with the request.');
         }
@@ -25,8 +31,9 @@
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
         if (xhr.status === 200 || xhr.status === 0) {
-          var regions_object = JSON.parse(xhr.responseText);
-          createMap(regions_object);
+          var regionsObject = JSON.parse(xhr.responseText);
+          createMap(regionsObject);
+//          retrieveRegionsAttackablesFromServer(map);
         } else {
           console.log('There was a problem with the request.');
         }
@@ -35,6 +42,22 @@
     xhr.open("GET", 'http://localhost:9292/regions_hsh');
     xhr.send(null);
   };
+/*
+  var retrieveRegionsAttackablesFromServer = function retrieveRegionsAttackablesFromServer(map) {
+    var xhr_3 = new XMLHttpRequest();
+    xhr_3.onreadystatechange = function() {
+      if (xhr_3.readyState === 4) {
+        if (xhr_3.status === 200 || xhr_3.status === 0) {
+          var regionsAttackables = JSON.parse(xhr_3.responseText);
+        } else {
+          console.log('There was a problem with the request.');
+        }
+      }
+    };
+    xhr_3.open("GET", 'http://localhost:9292/regions_attackable');
+    xhr_3.send(null);
+  };
+*/
 
   retrieveRegionsFromServer();
 
@@ -64,8 +87,8 @@
     };
 
     var drawMap = function drawMap(map_dimensions) {
-      var click_on_id = function() {
-        sendIdToServer(this.node.id);
+      var clickOnId = function() {
+        sendHexagonObjectToServer(this);
       };
       for(var i = 1; i < map_dimensions.width + 1; i++) {
         for(var j = 1; j < map_dimensions.height + 1; j++) {
@@ -85,13 +108,14 @@
           hexagon.addClass('hexagon');
           if (region_object.attackable) {
             hexagon.addClass('attackable');
+            hexagon.on('click', clickOnId);
           }
-          hexagon.on('click', click_on_id);
           map.add(hexagon);
         }
       }
     };
     drawMap(map_dimensions);
+    return map;
   };
 
 }) ();

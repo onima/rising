@@ -213,6 +213,9 @@ post '/hexa_id' do
     else
       game_master_obj.game_state.turn_tracker.update(player)
     end
+    player_hsh = Serializer.new.serialize_player(player)
+    content_type :json
+    player_hsh.to_json
   end
 end
 
@@ -228,5 +231,22 @@ get '/regions_hsh' do
     end
     content_type :json
     regions_hsh.to_json
+  end
+end
+
+get '/regions_attackable' do
+  response_wrapper do |game_master_obj|
+    @presenter = Presenters::Game.new(game_master_obj)
+    player = @presenter.player
+    regions_attackables_hsh = Hash.new
+    game_master_obj.game_state.map.regions.each do |region|
+    land_type_serialized = Serializer.new.serialize_land_type(region.land_type)
+    if region.can_be_attacked?(player)
+      land_type_serialized["attackable"]
+      regions_attackables_hsh[region.id] = land_type_serialized
+    end
+    end
+    content_type :json
+    regions_attackables_hsh.to_json
   end
 end
