@@ -146,50 +146,6 @@ get '/play_turn' do
   end
   erb :game
 end
-=begin
-post '/play_turn' do
-
-  response_wrapper do |game_master_obj|
-    region_id = params["land"]
-    player_string = params["name"]
-    @presenter = Presenters::Game.new(game_master_obj)
-    logger.info "Region_id from params_land is =>  #{ region_id }"
-    logger.info "Player_string from params_name is =>  #{ player_string }"
-    player = game_master_obj.game_state.players.find do |p| 
-      p.name == player_string
-    end
-    logger.info "Show player_create with params => #{
-      @presenter.player.inspect
-    }"
-    if region_id
-      region = game_master_obj.game_state.map.regions.find do |r|
-        r.id == region_id
-      end
-      logger.info "Region_created with region_id => #{ region.inspect }"
-      if region.occupied?(@presenter.players)
-        logger.info display_player_troops_number
-        logger.info "Subtract player_troops_number with region_player_defense_number"
-        player.races.first.troops_number -= region.player_defense
-        logger.info display_player_troops_number
-      else
-        logger.info display_player_troops_number
-        logger.info "Substract player_troops_number with region_neutral_defense"
-        player.races.first.troops_number -= region.neutral_defense_points
-        logger.info display_player_troops_number
-        region.player_defense = region.neutral_defense_points
-      end
-      player.occupied_regions << region
-      logger.info display_player_occupied_regions
-    else
-      logger.info "Region_id is nil so the game will update soon"
-      logger.info "Turn_tracker before update => #{display_turn_tracker}"
-      game_master_obj.game_state.turn_tracker.update(player)
-      logger.info "Turn_tracker after update => #{display_turn_tracker}"
-    end
-  end
-  redirect to '/play_turn'
-end
-=end
 
 post '/hexa_id' do
   response_wrapper do |game_master_obj|
@@ -223,30 +179,20 @@ get '/regions_hsh' do
   response_wrapper do |game_master_obj|
     @presenter = Presenters::Game.new(game_master_obj)
     player = @presenter.player
+    player_occupied_regions = player.occupied_regions
+    occupied_regions_id = player_occupied_regions.map {|region| region.id}
     regions_hsh = Hash.new
     game_master_obj.game_state.map.regions.each do |region|
     land_type_serialized = Serializer.new.serialize_land_type(region.land_type)
-    land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
+    if region.can_be_attacked?(player)
+      land_type_serialized["attackable"] = true
+    end
+    if occupied_regions_id.include?(region.id)
+      land_type_serialized["occupied"] = player.color
+    end
     regions_hsh[region.id] = land_type_serialized
     end
     content_type :json
     regions_hsh.to_json
-  end
-end
-
-get '/regions_attackable' do
-  response_wrapper do |game_master_obj|
-    @presenter = Presenters::Game.new(game_master_obj)
-    player = @presenter.player
-    regions_attackables_hsh = Hash.new
-    game_master_obj.game_state.map.regions.each do |region|
-    land_type_serialized = Serializer.new.serialize_land_type(region.land_type)
-    if region.can_be_attacked?(player)
-      land_type_serialized["attackable"]
-      regions_attackables_hsh[region.id] = land_type_serialized
-    end
-    end
-    content_type :json
-    regions_attackables_hsh.to_json
   end
 end
