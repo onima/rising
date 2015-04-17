@@ -53,14 +53,14 @@ helpers do
       'rising_db',
       'rising_coll'
     )
-    rising_id = session[:rising_id]
+    rising_id           = session[:rising_id]
     logger.info("Found orgiac id #{ rising_id }")
-    game_master = game_master_service.generate_game_master_with_session_id(
+    game_master         = game_master_service.generate_game_master_with_session_id(
       rising_id
     )
     logger.debug("GameMaster deserialized => #{ game_master.inspect }")
-    rising_id = game_master.game_state.rising_id
-    res = yield game_master
+    rising_id           = game_master.game_state.rising_id
+    res                 = yield game_master
     game_master_service.update(
       { "rising_id" => rising_id }, serialize(game_master)
     )
@@ -110,8 +110,8 @@ end
 post '/choose_race' do
   response_wrapper do |game_master_obj|
     player_name = params["player"]
-    race_name = params["race"]
-    player = game_master_obj.game_state.players.find do |p|
+    race_name   = params["race"]
+    player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
     chosen_race = game_master_obj.game_state.raceboard.active_races.find do |r|
@@ -127,16 +127,7 @@ get '/play_turn' do
     redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
     redirect to '/' if game_master_obj.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master_obj)
-    player = @presenter.player
-    regions = @presenter.map.regions
-    @conquerable_regions = Presenters::Region.conquerable_regions(
-      player,
-      regions
-    )
-    @owned_regions = Presenters::Region.owned_regions(
-      player,
-      regions
-    )
+
     logger.info "Players are => #{
       @presenter.players.map(&:name)
     }"
@@ -147,14 +138,15 @@ get '/play_turn' do
   erb :game
 end
 
-post '/hexa_id' do
+post '/hexa_id_and_player_name' do
   response_wrapper do |game_master_obj|
-    region_id = params[:id]
+    region_id   = params[:id]
     player_name = params[:name]
-    @presenter = Presenters::Game.new(game_master_obj)
-    player = game_master_obj.game_state.players.find do |p| 
+    @presenter  = Presenters::Game.new(game_master_obj)
+    player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
+
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
         r.id == region_id
@@ -163,12 +155,13 @@ post '/hexa_id' do
         player.races.first.troops_number -= region.player_defense
       else
         player.races.first.troops_number -= region.neutral_defense_points
-        region.player_defense = region.neutral_defense_points
+        region.player_defense             = region.neutral_defense_points
       end
       player.occupied_regions << region
     else
       game_master_obj.game_state.turn_tracker.update(player)
     end
+
     player_hsh = Serializer.new.serialize_player(player)
     content_type :json
     player_hsh.to_json
@@ -177,21 +170,18 @@ end
 
 get '/regions_hsh' do
   response_wrapper do |game_master_obj|
-    @presenter = Presenters::Game.new(game_master_obj)
-    player = @presenter.player
-    player_occupied_regions = player.occupied_regions
-    occupied_regions_id = player_occupied_regions.map {|region| region.id}
-    regions_hsh = Hash.new
+    presenter           = Presenters::Game.new(game_master_obj)
+    player              = presenter.player
+    occupied_regions_id = player.occupied_regions.map { |region| region.id }
+    regions_hsh         = Hash.new
+
     game_master_obj.game_state.map.regions.each do |region|
-    land_type_serialized = Serializer.new.serialize_land_type(region.land_type)
-    if region.can_be_attacked?(player)
-      land_type_serialized["attackable"] = true
+      land_type_serialized               = Serializer.new.serialize_land_type(region.land_type)
+      land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
+      land_type_serialized["occupied"]   = player.color if occupied_regions_id.include?(region.id)
+      regions_hsh[region.id]             = land_type_serialized
     end
-    if occupied_regions_id.include?(region.id)
-      land_type_serialized["occupied"] = player.color
-    end
-    regions_hsh[region.id] = land_type_serialized
-    end
+
     content_type :json
     regions_hsh.to_json
   end
