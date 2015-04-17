@@ -101,7 +101,7 @@
             y: coordinates[7] - 15
           });
           hexagon.addClass('hexagon');
-          if (region_object.attackable) {
+          if (region_object.attackable && !region_object.occupied) {
             hexagon.addClass('attackable');
             hexagon.on('click', clickOnId);
           }

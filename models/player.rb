@@ -13,7 +13,7 @@ class Player
     @coins = 5
     @cardinal_point = cardinal_point
     @races = Set.new
-    @occupied_regions = Set.new #array_of_regions_occupied_by_the_player
+    @occupied_regions = []
   end
 
   def can_pay_for_race?(race, game_state)
@@ -57,13 +57,13 @@ class Player
     west_last_region, east_last_region =
       if region.coordinates[0].odd?
         [
-          [region.coordinates[0] - 1, region.coordinates[1] - 1],
-          [region.coordinates[0] + 1, region.coordinates[1] - 1]
+          [region.coordinates[0] - 1, region.coordinates[1] + 1],
+          [region.coordinates[0] + 1, region.coordinates[1] + 1]
         ]
       else
         [
-          [region.coordinates[0] - 1, region.coordinates[1] + 1],
-          [region.coordinates[0] + 1, region.coordinates[1] + 1]
+          [region.coordinates[0] - 1, region.coordinates[1] - 1],
+          [region.coordinates[0] + 1, region.coordinates[1] - 1]
         ]
       end
 
