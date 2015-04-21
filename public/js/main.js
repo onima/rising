@@ -1,7 +1,6 @@
 (function() {
 
   var sendIdAndPlayerName = function sendIdAndPlayerName(hexagonObject) {
-
     var hexagonId  = hexagonObject.node.id;
     var playerName = document.getElementById('player_name').innerText;
     var parameters = encodeURI('id=' + hexagonId + '&name=' + playerName);
@@ -30,7 +29,6 @@
   };
 
   var showActualGameState = function showActualGameState() { //object with id_regions as keys and regions_land_type as values
-
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
@@ -59,14 +57,12 @@
   };
 
   var createMap = function createMap(regionsObject) {
-
-    var svg                       = SVG('drawing').size(600, 700);
-    var map                       = svg.group().addClass('map');
-    var mapDimensions             = { width: 5, height: 6 };
-    var r                         = 50;
+    var svg           = SVG('drawing').size(600, 700);
+    var map           = svg.group().addClass('map');
+    var mapDimensions = { width: 5, height: 6 };
+    var r             = 50;
 
     var findHexagonCoordinates = function findHexagonCoordinates(xCentre, yCentre) {
-
       var hexagonCoordinates = [];
 
       for (var k = 0; k < 7; k++) {
@@ -80,7 +76,6 @@
     };
 
     var f = function f(i,j) {
-
       var x = 1.5 * i * r;
       var y = i % 2 === 0 ? Math.sqrt(3) * j * r : Math.sqrt(3) * j * r + ((Math.sqrt(3) / 2) * r);
 
@@ -88,7 +83,6 @@
     };
 
     var drawMap = function drawMap(mapDimensions) {
-
       var clickOnId = function() {
         sendIdAndPlayerName(this);
       };
@@ -96,11 +90,11 @@
       for(var i = 1; i < mapDimensions.width + 1; i++) {
         for(var j = 1; j < mapDimensions.height + 1; j++) {
 
-          var id                  = i + ',' + j;
-          var arrayOfIJ           = f(i,j);
-          var coordinates         = findHexagonCoordinates(arrayOfIJ[0], arrayOfIJ[1]);
-          var regionObject        = regionsObject[id];
-          var hexagon             = svg.polyline([coordinates]).attr( {
+          var id           = i + ',' + j;
+          var arrayOfIJ    = f(i,j);
+          var coordinates  = findHexagonCoordinates(arrayOfIJ[0], arrayOfIJ[1]);
+          var regionObject = regionsObject[id];
+          var hexagon      = svg.polyline([coordinates]).attr( {
             fill: regionObject.color,
             stroke: '#000',
             id: id
