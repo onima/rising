@@ -13,15 +13,15 @@ class GameMaster
     players_names.each do |name|
       raise PlayerDoNotHaveName unless /\A\w+\z/.match(name)
     end
-    raise TooManyPlayers if players_names.length > 4
-    cardinal_points = ["North", "East", "South", "West"]
+    raise TooManyPlayers if players_names.length > 2
+    cardinal_points = ["North", "South"]
     players_names.each do |name|
       @game_state.players << Player.new(name, cardinal_points.shift)
     end
   end
 
   def assign_players_color(players)
-    colors = ["blue", "black", "red", "purple"]
+    colors = ["blue", "red"]
     players.zip(colors).each do |player, color|
       player.color = color
     end
@@ -36,6 +36,6 @@ class GameMaster
   end
 
   def check_if_players_names_are_valid?(players_params)
-    !players_params.include?(",") && players_params.split.count > 1
+    !players_params.include?(",") && players_params.split.count == 2
   end
 end

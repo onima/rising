@@ -19,7 +19,7 @@ module Presenters
     end
 
     def test_if_method_player_show_the_current_player
-      @game_presenter.game_master.create_players( ["bob", "alice", "hugo"] )
+      @game_presenter.game_master.create_players( ["bob", "alice"] )
       assert_equal "bob", @game_presenter.player.name
       @turn_tracker.update(@turn_tracker.players[0])
       assert_equal "alice", @game_presenter.player.name
