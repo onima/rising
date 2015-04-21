@@ -14,12 +14,13 @@ class TestPlayer < Minitest::Test
   def setup
     @state = GameState.new
     @state.reset!
-    @map = MapDrawer.new.create_new_map(5,6, 400)
+    @map = Map.new
     @player = Player.new("alexis", "North")
     @player.races = [Race.new("humans", 5)].to_set
-    @player.occupied_regions= [@map.regions[6],  @map.regions[18]].to_set
+    @player.occupied_regions = [@map.regions[6],  @map.regions[18]]
     @player_2 = Player.new("manue", "South")
     @player_2.races = [Race.new("orcs", 6)].to_set
+    @player_2.occupied_regions = [@map.regions[12]]
     @player_3 = Player.new("tom", "East")
     @player_3.races = [Race.new("elves", 1)].to_set
     @raceboard = @state.raceboard
@@ -41,7 +42,7 @@ class TestPlayer < Minitest::Test
   end
 
   def test_is_player_territories_has_borders_with_region
-    assert @player.occupied_regions_have_border_with_region?(@map.regions[12])
+    assert @player_2.occupied_regions_have_border_with_region?(@map.regions[7])
   end
 
   def test_if_player_can_conquest_region_on_first_turn

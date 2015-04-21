@@ -1,19 +1,7 @@
 <div class="row">
   <div class="col-lg-12">
     <div class="row">
-      <div class="col-lg-1 col-lg-push-7">
-        <svg width="435px" height="625px"
-          xmlns="http://www.w3.org/2000/svg" version="1.1">
-          <% @presenter.map.regions.each do |region| %>
-            <%= region.to_svg(@presenter.players) %>
-            <text style="font-family: monospace" x="<%= region.x_text %>" y="<%= region.y_text %>">
-              <%= region.land_type.name.center(14,"x").gsub("x", "&nbsp;") %>
-            </text>
-            <text style="font-family: monospace" x="<%= region.x_id %>" y="<%= region.y_id %>">
-              <%= ("" + region.id.to_s).center(14, "x").gsub("x", "&nbsp;") %>
-            </text>
-          <% end %>
-        </svg>
+      <div id="drawing" class="col-lg-1 col-lg-push-6">
       </div>
       <div class="col-lg-4">
         <table class="table table-bordered table-striped table-condensed table-responsive">
@@ -22,7 +10,7 @@
           </tr>
           <tr>
             <td>Turns left</td>
-            <td><%= @presenter.turn_tracker.turns_left %></td>
+            <td id="turn_left"><%= @presenter.turn_tracker.turns_left %></td>
           </tr>
           <tr>
             <td>Actual Turn</td>
@@ -30,7 +18,7 @@
           </tr>
           <tr>
             <td>Player</td>
-            <td><%= @presenter.player.name %></td>
+            <td id="player_name"><%= @presenter.player.name %></td>
           </tr>
           <tr>
             <td>Color</td>
@@ -42,53 +30,13 @@
           </tr>
           <tr>
             <td>Troops Number</td>
-            <td><%= @presenter.player.races.first.troops_number%></td>
+            <td id="troops_number"><%= @presenter.player.races.first.troops_number%></td>
           </tr>
           <tr>
             <td>Start Position</td>
             <td> <%= @presenter.player.cardinal_point %> </td>
           </tr>
-          <tr>
-            <td>Occupied Regions</td>
-            <td>
-              <%= @owned_regions.map(&:id).join(" ") %>
-            </td>
-          </tr>
-          <tr>
-            <td>Lands that can be conquered</td>
-            <td>
-              <%= @conquerable_regions.map(&:id).join(" ") %>
-            </td>
-          </tr>
         </table>
-        <form action="/play_turn" method="post" class="well">
-          <fieldset>
-            <% if @presenter.player.can_yet_attack?(@presenter.map) %>
-              <legend><h4>Which Land Do You Want To Attack ?</h4></legend>
-          <% else %>
-              <legend><h4>Not Enough Troops</h4></legend>
-          <% end %>
-            <div class="col-lg-12">
-              <% @conquerable_regions.each do |region| %>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="land" value="<%= region.id %>">
-                    <%= region.id %>
-                </label>
-                  <label>
-                    Defense : <%= region.defense_points %>
-                </label>
-              </div>
-            <% end %>
-            </div>
-            <input type="hidden" name="name" value="<%= @presenter.player.name %>">
-            <% if @presenter.player.can_yet_attack?(@presenter.map) %>
-              <input class="col-lg-4 col-lg-offset-4 btn btn-primary" type="submit" value="Invade">
-          <% else %>
-              <input class="col-lg-4 col-lg-offset-4 btn btn-default" type="submit" value="Finish Turn">
-          <% end %>
-          </fieldset>
-        </form>
       </div>
     </div>
   </div>

@@ -1,10 +1,17 @@
 require 'nokogiri'
 
-class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
-  attr_accessor :land_type, :has_tribe, :player_defense
+class Region
+  attr_accessor :id, :columns, :rows, :coordinates, :land_type, :has_tribe, :player_defense
+
+  def initialize(id, columns, rows)
+    @id = id
+    @columns = columns
+    @rows = rows
+    @coordinates = id.split(',').map(&:to_i)
+  end
 
   def has_external_border?
-    has_west_border? ||
+      has_west_border? ||
       has_north_border? ||
       has_south_border? ||
       has_east_border?
@@ -19,36 +26,8 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
     cardinal_points
   end
 
-  def to_svg(players)
-    obj = Nokogiri::XML::Builder.new do
-      polygon
-    end
-    root = obj.doc.root
-    fill_region_with_color(root)
-    players.each do |player|
-      if player.occupied_regions.include?(self)
-        draw_stroke(root, player)
-      end
-    end
-    root['points'] = svg_coordinates
-    root.to_xml
-  end
-
-  def svg_coordinates
-    svg_coordinates = coordinates.map do |h|
-      "#{h.fetch("x")},#{h.fetch("y")} "
-    end
-    svg_coordinates.reduce("",:<<)
-  end
-
   def is_not_a_sea?
     land_type.name != "sea"
-  end
-
-  def round_coordinates
-    coordinates.map do |hash|
-      {"x"=> hash.fetch("x").round, "y"=>hash.fetch("y").round}
-    end
   end
 
   def neutral_defense_points
@@ -56,55 +35,27 @@ class Region < Struct.new(:coordinates, :map_width, :map_height, :id)
   end
 
   def occupied?(players)
-     players.any? { |player| player.occupied_regions.include?(self) }
-  end
-
-  def x_text
-    coordinates[3]["x"]
-  end
-
-  def y_text
-    coordinates[2]["y"] - ((coordinates[2]["y"] - coordinates[4]["y"]) / 2)
-  end
-
-  def x_id
-    coordinates[3]["x"]
-  end
-
-  def y_id
-    coordinates[0]["y"] + ((coordinates[1]["y"] - coordinates[0]["y"]) / 2 )
+    players.any? { |player| player.occupied_regions.include?(self) }
   end
 
   def can_be_attacked?(player)
     player.can_attack_region?(self)
   end
 
-  private
-
   def has_west_border?
-    id <= map_height
+    coordinates[0] == 1 && (1..rows).cover?(coordinates[1])
   end
 
   def has_east_border?
-    id > map_width * map_height - map_height && id <= map_width * map_height
+    coordinates[0] == columns && (1..rows).to_a.include?(coordinates[1])
   end
 
   def has_north_border?
-    (id - 1) % map_height == 0
+    coordinates[1] == 1 && (1..columns).to_a.include?(coordinates[0])
   end
 
   def has_south_border?
-    (id) % map_height == 0
-  end
-
-  def fill_region_with_color(root)
-    root['style'] = "fill:#{land_type.color};fill-opacity:0.7"
-  end
-
-  def draw_stroke(root, player)
-    root['style'] = "fill:#{land_type.color};
-    stroke:#{player.color};
-    stroke-width:2.5px;fill-opacity:0.7"
+    coordinates[1] == rows && (1..columns).to_a.include?(coordinates[0])
   end
 
 end

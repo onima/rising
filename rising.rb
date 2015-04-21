@@ -1,13 +1,13 @@
 require 'sinatra'
 require 'mongo'
 require 'logger'
+require 'json'
 require 'config/game_state'
 require 'models/race'
 require 'models/raceboard'
 require 'models/player'
 require 'models/game_master'
 require 'models/map'
-require 'models/map_drawer'
 require 'models/turn_tracker'
 require 'models/land_type'
 require 'services/game_master_service'
@@ -53,19 +53,20 @@ helpers do
       'rising_db',
       'rising_coll'
     )
-    rising_id = session[:rising_id]
+    rising_id           = session[:rising_id]
     logger.info("Found orgiac id #{ rising_id }")
-    game_master = game_master_service.generate_game_master_with_session_id(
+    game_master         = game_master_service.generate_game_master_with_session_id(
       rising_id
     )
     logger.debug("GameMaster deserialized => #{ game_master.inspect }")
-    rising_id = game_master.game_state.rising_id
-    yield game_master
+    rising_id           = game_master.game_state.rising_id
+    res                 = yield game_master
     game_master_service.update(
       { "rising_id" => rising_id }, serialize(game_master)
     )
     logger.debug("GameMaster serialized => #{ serialize(game_master) }")
     session[:rising_id] = rising_id
+    res
   end
 end
 
@@ -109,8 +110,8 @@ end
 post '/choose_race' do
   response_wrapper do |game_master_obj|
     player_name = params["player"]
-    race_name = params["race"]
-    player = game_master_obj.game_state.players.find do |p|
+    race_name   = params["race"]
+    player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
     chosen_race = game_master_obj.game_state.raceboard.active_races.find do |r|
@@ -126,16 +127,7 @@ get '/play_turn' do
     redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
     redirect to '/' if game_master_obj.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master_obj)
-    player = @presenter.player
-    regions = @presenter.map.regions
-    @conquerable_regions = Presenters::Region.conquerable_regions(
-      player,
-      regions
-    )
-    @owned_regions = Presenters::Region.owned_regions(
-      player,
-      regions
-    )
+
     logger.info "Players are => #{
       @presenter.players.map(&:name)
     }"
@@ -146,45 +138,51 @@ get '/play_turn' do
   erb :game
 end
 
-post '/play_turn' do
-
+post '/hexa_id_and_player_name' do
   response_wrapper do |game_master_obj|
-    region_id = params["land"]
-    player_string = params["name"]
-    @presenter = Presenters::Game.new(game_master_obj)
-    logger.info "Region_id from params_land is =>  #{ region_id }"
-    logger.info "Player_string from params_name is =>  #{ player_string }"
-    player = game_master_obj.game_state.players.find do |p| 
-      p.name == player_string
+    region_id   = params[:id]
+    player_name = params[:name]
+    @presenter  = Presenters::Game.new(game_master_obj)
+    player      = game_master_obj.game_state.players.find do |p|
+      p.name == player_name
     end
-    logger.info "Show player_create with params => #{
-      @presenter.player.inspect
-    }"
+
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
-        r.id == region_id.to_i
+        r.id == region_id
       end
-      logger.info "Region_created with region_id => #{ region.inspect }"
       if region.occupied?(@presenter.players)
-        logger.info display_player_troops_number
-        logger.info "Subtract player_troops_number with region_player_defense_number"
         player.races.first.troops_number -= region.player_defense
-        logger.info display_player_troops_number
       else
-        logger.info display_player_troops_number
-        logger.info "Substract player_troops_number with region_neutral_defense"
         player.races.first.troops_number -= region.neutral_defense_points
-        logger.info display_player_troops_number
-        region.player_defense = region.neutral_defense_points
+        region.player_defense             = region.neutral_defense_points
       end
       player.occupied_regions << region
-      logger.info display_player_occupied_regions
     else
-      logger.info "Region_id is nil so the game will update soon"
-      logger.info "Turn_tracker before update => #{display_turn_tracker}"
       game_master_obj.game_state.turn_tracker.update(player)
-      logger.info "Turn_tracker after update => #{display_turn_tracker}"
     end
+
+    player_hsh = Serializer.new.serialize_player(player)
+    content_type :json
+    player_hsh.to_json
   end
-  redirect to '/play_turn'
+end
+
+get '/regions_hsh' do
+  response_wrapper do |game_master_obj|
+    presenter           = Presenters::Game.new(game_master_obj)
+    player              = presenter.player
+    occupied_regions_id = player.occupied_regions.map { |region| region.id }
+    regions_hsh         = Hash.new
+
+    game_master_obj.game_state.map.regions.each do |region|
+      land_type_serialized               = Serializer.new.serialize_land_type(region.land_type)
+      land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
+      land_type_serialized["occupied"]   = player.color if occupied_regions_id.include?(region.id)
+      regions_hsh[region.id]             = land_type_serialized
+    end
+
+    content_type :json
+    regions_hsh.to_json
+  end
 end
