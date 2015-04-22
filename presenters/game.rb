@@ -19,12 +19,8 @@ module Presenters
       players.at(actual_player_index)
     end
 
-    def race_choices
-      @game_master.game_state.raceboard.race_choices
-    end
-
-    def active_races
-      @game_master.game_state.raceboard.active_races
+    def races
+      @game_master.game_state.raceboard.races
     end
 
     def map

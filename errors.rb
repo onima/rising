@@ -1,15 +1,6 @@
 class TooManyRacesRequired < RuntimeError
 end
 
-class NotEnoughRaces < RuntimeError
-end
-
-class ActiveRacesAlreadyPicked < RuntimeError
-end
-
-class RaceNotActive < RuntimeError
-end
-
 class TooManyPlayers < RuntimeError
 end
 

@@ -34,8 +34,7 @@ class Deserializer
       hsh.fetch("name"),
       hsh.fetch("cardinal_point")
     )
-    player_object.coins = hsh.fetch("coins")
-    player_object.races = hsh.fetch("races").map do |race|
+    player_object.race = hsh.fetch("race").map do |race|
       deserialize_race(race)
     end.to_set
     occupied_regions = hsh.fetch("occupied_regions").map do |region|
@@ -51,11 +50,7 @@ class Deserializer
     races = hsh.fetch("races").map do |r|
       deserialize_race(r)
     end
-    race_choices_array = hsh.fetch("race_choices").map do |r|
-      [deserialize_race(r.first), r.last]
-    end
     raceboard_object.races = races
-    raceboard_object.race_choices = race_choices_array
     raceboard_object
   end
 

@@ -16,29 +16,11 @@ class TestPlayer < Minitest::Test
     @state.reset!
     @map = Map.new
     @player = Player.new("alexis", "North")
-    @player.races = [Race.new("humans", 5)].to_set
+    @player.race = [Race.new("humans", 15)].to_set
     @player.occupied_regions = [@map.regions[6],  @map.regions[18]]
     @player_2 = Player.new("manue", "South")
-    @player_2.races = [Race.new("orcs", 6)].to_set
+    @player_2.race = [Race.new("orcs", 15)].to_set
     @player_2.occupied_regions = [@map.regions[12]]
-    @player_3 = Player.new("tom", "East")
-    @player_3.races = [Race.new("elves", 1)].to_set
-    @raceboard = @state.raceboard
-    @raceboard.pick_active_races
-  end
-
-  def test_price_of_race
-    race = @raceboard.active_races[3]
-    assert_equal 3, @player.price_of_race(race, @state)
-  end
-
-  def test_can_pay_for_race
-    race = @raceboard.active_races[1]
-    assert @player.can_pay_for_race?(race, @state)
-
-    @player.pay(5)
-
-    refute @player.can_pay_for_race?(race, @state)
   end
 
   def test_is_player_territories_has_borders_with_region
@@ -67,7 +49,6 @@ class TestPlayer < Minitest::Test
 
   def test_if_player_can_yet_attack
     assert @player_2.can_yet_attack?(@map)
-    refute @player_3.can_yet_attack?(@map)
   end
 
 end

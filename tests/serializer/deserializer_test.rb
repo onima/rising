@@ -19,9 +19,8 @@ class DeserializeTest < Minitest::Test
       [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -36,9 +35,9 @@ class DeserializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -48,24 +47,14 @@ class DeserializeTest < Minitest::Test
       "raceboard" => {
         "races" => [
           {
-            "name" => "golems",
+            "name" => "humans",
             "troops_number" => 5
           },
+          {
+            "name" => "orcs",
+            "troops_number" => 5
+          }
         ],
-        "race_choices" => [
-          [
-            {
-              "name" => "dragons",
-              "troops_number" => 5
-            }, 0 
-          ],
-          [
-            {
-              "name" => "elves",
-              "troops_number" => 5
-            }, 0 
-          ]
-        ]
       },
       "map" => {
         "regions" => [{
@@ -76,9 +65,9 @@ class DeserializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
         ],
@@ -88,9 +77,8 @@ class DeserializeTest < Minitest::Test
         "players" => [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -105,9 +93,9 @@ class DeserializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -117,9 +105,8 @@ class DeserializeTest < Minitest::Test
       "turn_played" => [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -134,9 +121,9 @@ class DeserializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],

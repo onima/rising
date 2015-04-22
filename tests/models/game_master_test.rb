@@ -53,11 +53,9 @@ class GameMasterTest < Minitest::Test
   def test_if_attribute_race
     @game_master.create_players( ["bob", "alice"] )
     @player = @game_master.game_state.players[0]
-    @game_master.game_state.raceboard.pick_active_races
-    @race_1 = Race.new("humans", 5)
-    @game_master.game_state.raceboard.race_choices[0][0] = @race_1
+    @race_1 = Race.new("humans", 15)
     @game_master.attribute_race(@player, @race_1)
-    assert_equal "humans", @player.races.first.name
+    assert_equal "humans", @player.race.first.name
   end
 
   def test_if_check_if_players_names_method_is_valid

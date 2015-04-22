@@ -1,24 +1,3 @@
-<table class="table table-striped table-condensed table-hover table-responsive">
-  <fieldset>
-    <legend>RaceBoard</legend>
-    <thead>
-      <tr class="info">
-        <td>Name</td>
-        <td>Troops number</td>
-        <td>Coins</td>
-      </tr>
-    </thead>
-    <tbody>
-    <% @presenter.race_choices.each do |race_choice| %>
-      <tr>
-      <td><%= race_choice.first.name %></td>
-      <td><%= race_choice.first.troops_number %></td>
-      <td><%= race_choice.last %></td>
-    </tr>
-  <% end %>
-    </tbody>
-  </fieldset>
-</table>
 <% if @presenter.players_without_race %>
   <form action="/choose_race" method="post">
   <fieldset>
@@ -30,7 +9,7 @@
         </label>
         <div class="btn-group" data-toggle="buttons">
           <% @presenter.players.each do |player| %>
-            <% if player.races.empty? %>
+            <% if player.race.empty? %>
             <label class="btn btn-primary btn-sm round left-shift">
             <input type="radio" name="player" value="<%= player.name %>">
             <%= player.name %>
@@ -44,7 +23,7 @@
           Select A Race
         </label>
         <div class="btn-group" data-toggle="buttons">
-          <% @presenter.active_races.each do |race| %>
+          <% @presenter.races.each do |race| %>
             <label class="btn btn-primary btn-sm left-shift">
             <input type="radio" name="race" value="<%= race.name %>">
             <%= race.name %>
@@ -67,7 +46,6 @@
         <th>#</th>
         <th>Player</th>
         <th>Race Choosen</th>
-        <th>Player Coins</th>
         <th>Player Color</th>
       </tr>
     </thead>
@@ -78,8 +56,7 @@
       <td><%= index %></td>
       <% index += 1 %>
       <td><%= player.name %></td>
-      <td><%= player.races.first.name if player.races.any? %></td>
-      <td><%= player.coins %></td>
+      <td><%= player.race.first.name if player.race.any? %></td>
       <td><%= player.color %></td>
     </tr>
   <% end %>

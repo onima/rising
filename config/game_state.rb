@@ -32,19 +32,19 @@ class GameState
   def players_without_race?
     player_without_races = false
     @players.each do |player|
-      player_without_races = true if player.races.empty?
+      player_without_races = true if player.race.empty?
     end
     player_without_races
+  end
+
+  def turn_tracker_generate
+    @turn_tracker = TurnTracker.new(10, @players)
   end
 
   private
 
   def map_generate
     @map = Map.new
-  end
-
-  def turn_tracker_generate
-    @turn_tracker = TurnTracker.new(10, @players)
   end
 
   def initialize_rising_id

@@ -13,8 +13,8 @@ class TestGameState < Minitest::Test
     @game_master = GameMaster.new(GameState.new) 
     @game_master.create_players(["bob", "alice"])
     assert @game_master.game_state.players_without_race?
-    @game_master.game_state.players[0].races = [Race.new("humans", 5)].to_set
-    @game_master.game_state.players[1].races = [Race.new("orcs", 6)].to_set
+    @game_master.game_state.players[0].race = [Race.new("humans", 5)].to_set
+    @game_master.game_state.players[1].race = [Race.new("orcs", 5)].to_set
     refute @game_master.game_state.players_without_race?
   end
 

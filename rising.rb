@@ -32,22 +32,6 @@ helpers do
     Deserializer.new.deserialize_game_master_game_state(hsh)
   end
 
-  def display_player_troops_number
-    "#{ @presenter.player.name }_troops_number = #{ @presenter.player.races.first.troops_number }"
-  end
-
-  def display_player_occupied_regions
-    "#{ @presenter.player.name }' occupied_regions are => #{
-      @presenter.player.occupied_regions.map do |occupied_region|
-        p occupied_region.id
-      end
-    }"
-  end
-
-  def display_turn_tracker
-    @presenter.turn_tracker.turn_played.map {|p| p.name}
-  end
-
   def response_wrapper
     game_master_service = GameMasterService.new(
       'rising_db',
@@ -80,9 +64,6 @@ end
 get '/players_choice' do
   response_wrapper do |game_master_obj|
     redirect to 'choose_race' if game_master_obj.game_state.players.any?
-    if game_master_obj.game_state.raceboard.race_choices.empty?
-      game_master_obj.game_state.raceboard.pick_active_races
-    end
   end
   erb :players_choice
 end
@@ -92,6 +73,7 @@ post '/create_players' do
     if game_master_obj.check_if_players_names_are_valid?(params['players'])
       players_names = params['players'].split
       game_master_obj.create_players(players_names)
+      game_master_obj.game_state.turn_tracker_generate
     else
       redirect to 'players_choice'
     end
@@ -114,17 +96,17 @@ post '/choose_race' do
     player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
-    chosen_race = game_master_obj.game_state.raceboard.active_races.find do |r|
+    chosen_race = game_master_obj.game_state.raceboard.races.find do |r|
       r.name == race_name
     end
     game_master_obj.attribute_race(player, chosen_race)
+    game_master_obj.game_state.raceboard.races.delete(chosen_race)
   end
   redirect to 'choose_race'
 end
 
 get '/play_turn' do
   response_wrapper do |game_master_obj|
-    redirect to '/' if game_master_obj.game_state.raceboard.active_races.empty?
     redirect to '/' if game_master_obj.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master_obj)
 
@@ -136,6 +118,24 @@ get '/play_turn' do
     }"
   end
   erb :game
+end
+
+post '/play_turn' do
+  response_wrapper do |game_master_obj|
+    player_name = params["player"]
+    player      = game_master_obj.game_state.players.find do |p|
+      p.name == player_name
+    end
+    logger.info "TurntrackerState before update => #{
+      game_master_obj.game_state.turn_tracker.inspect
+    }"
+    game_master_obj.game_state.turn_tracker.update(player)
+    logger.info "TurntrackerState after update => #{
+      game_master_obj.game_state.turn_tracker.inspect
+    }"
+    player.race.first.troops_number = 5
+  end
+  redirect to 'play_turn'
 end
 
 post '/hexa_id_and_player_name' do
@@ -152,14 +152,14 @@ post '/hexa_id_and_player_name' do
         r.id == region_id
       end
       if region.occupied?(@presenter.players)
-        player.races.first.troops_number -= region.player_defense
+        player.race.first.troops_number -= region.player_defense
       else
-        player.races.first.troops_number -= region.neutral_defense_points
-        region.player_defense             = region.neutral_defense_points
+        player.race.first.troops_number -= region.neutral_defense_points
+        region.player_defense            = region.neutral_defense_points
       end
       player.occupied_regions << region
     else
-      game_master_obj.game_state.turn_tracker.update(player)
+      raise 'region_id is nil'
     end
 
     player_hsh = Serializer.new.serialize_player(player)
