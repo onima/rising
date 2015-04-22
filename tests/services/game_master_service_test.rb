@@ -48,7 +48,7 @@ class TestGameMasterService < Minitest::Test
     delete_test_app_db
     @game_master_service.insert(@exp)
     g_m = @game_master_service.generate_game_master_with_session_id(nil)
-    assert_equal "golems", g_m.game_state.raceboard.races[0].name
+    assert_equal "humans", g_m.game_state.raceboard.races[0].name
     delete_test_app_db
   end
 
@@ -80,9 +80,8 @@ class TestGameMasterService < Minitest::Test
       [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -109,24 +108,14 @@ class TestGameMasterService < Minitest::Test
       "raceboard" => {
         "races" => [
           {
-            "name" => "golems",
+            "name" => "humans",
             "troops_number" => 5
           },
+          {
+            "name" => "orcs",
+            "troops_number" => 5
+          }
         ],
-        "race_choices" => [
-          [
-            {
-              "name" => "dragons",
-              "troops_number" => 5
-            }, 0 
-          ],
-          [
-            {
-              "name" => "elves",
-              "troops_number" => 5
-            }, 0 
-          ]
-        ]
       },
       "map" => {
         "regions" => [{
@@ -149,9 +138,8 @@ class TestGameMasterService < Minitest::Test
         "players" => [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -178,9 +166,8 @@ class TestGameMasterService < Minitest::Test
       "turn_played" => [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5

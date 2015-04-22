@@ -17,7 +17,7 @@ class CapybaraTest < Minitest::Test
       assert_equal '/players_choice', page.current_path
       
       #User must use comma to create players
-      page.fill_in 'players', :with => 'Alice Bob John'
+      page.fill_in 'players', :with => 'Alice Bob'
       page.click_on('validate_players')
       assert_equal '/choose_race', page.current_path
     end

@@ -13,9 +13,8 @@ class SerializeTest < Minitest::Test
       [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -30,9 +29,9 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -42,24 +41,14 @@ class SerializeTest < Minitest::Test
       "raceboard" => {
         "races" => [
           {
-            "name" => "golems",
+            "name" => "humans",
             "troops_number" => 5
           },
+          {
+            "name" => "orcs",
+            "troops_number" => 5
+          }
         ],
-        "race_choices" => [
-          [
-            {
-              "name" => "dragons",
-              "troops_number" => 5
-            }, 0 
-          ],
-          [
-            {
-              "name" => "elves",
-              "troops_number" => 5
-            }, 0 
-          ]
-        ]
       },
       "map" => {
         "regions" => [{
@@ -70,9 +59,9 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
         ],
@@ -82,9 +71,8 @@ class SerializeTest < Minitest::Test
         "players" => [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -99,9 +87,9 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" => [1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" => [1, 1],
            "player_defense" => nil
           }
           ],
@@ -111,9 +99,8 @@ class SerializeTest < Minitest::Test
       "turn_played" => [
         {
           "name" => "bob",
-          "coins" => 5,
           "cardinal_point" => "North",
-          "races" => [
+          "race" => [
           {
             "name" => "humans",
             "troops_number" => 5
@@ -128,9 +115,9 @@ class SerializeTest < Minitest::Test
            },
            "has_tribe" => nil,
            "id" => "1,1",
+           "coordinates" =>[1, 1],
            "columns" => 5,
            "rows" => 6,
-           "coordinates" =>[1, 1],
            "player_defense" => nil
           }
           ],
@@ -167,16 +154,11 @@ class SerializeTest < Minitest::Test
     @map.regions[0] = @region_1
     @game_master = GameMaster.new(GameState.new)
     @game_master.create_players([ "bob" ])
-    @game_master.game_state.raceboard.races = [ Race.new("golems", 5) ]
-    @game_master.game_state.raceboard.race_choices = [
-      [ Race.new("dragons", 5), 0 ],
-      [ Race.new("elves", 5), 0 ]
-    ]
     @game_master.game_state.map = @map
     @game_master.game_state.rising_id = 1423065615.304268
     @players = @game_master.game_state.players
     @player = @game_master.game_state.players.first 
-    @player.races = [Race.new("humans", 5)].to_set
+    @player.race = [Race.new("humans", 5)].to_set
     @player.occupied_regions = [@region_1].to_set
     @turn_tracker = TurnTracker.new(10, @players)
     @game_master.game_state.turn_tracker = @turn_tracker

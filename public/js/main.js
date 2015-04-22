@@ -13,7 +13,7 @@
           var playerObj       = JSON.parse(xhr2.responseText);
           var updateGameBoard = function updateGameBoard() {
             var troopsNumber = document.getElementById('troops_number');
-            troopsNumber.innerText = playerObj.races[0].troops_number + '';
+            troopsNumber.innerText = playerObj.race[0].troops_number + '';
           };
 
           updateGameBoard();

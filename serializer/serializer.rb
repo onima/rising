@@ -22,16 +22,15 @@ class Serializer
       end
     {
       "name"             => player.name,
-      "coins"            => player.coins,
       "cardinal_point"   => player.cardinal_point,
-      "races"            => serialize_player_race(player),
+      "race"             => serialize_player_race(player),
       "occupied_regions" => occupied_regions,
       "color"            => player.color
     }
   end
 
   def serialize_player_race(player)
-      player.races.map do |r|
+      player.race.map do |r|
          serialize_race(r)
       end
   end
@@ -39,9 +38,6 @@ class Serializer
   def serialize_raceboard(raceboard)
     {
       "races"        => raceboard.races.map {|r| serialize_race(r)},
-      "race_choices" => raceboard.race_choices.map do |r, coins|
-        [serialize_race(r), coins]
-      end
     }
   end
 

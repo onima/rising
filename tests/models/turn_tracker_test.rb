@@ -12,8 +12,7 @@ class TestTurntracker < Minitest::Test
     @state.reset!
     @player_1 = Player.new("alexis", "North")
     @player_2 = Player.new("manue", "East")
-    @player_3 = Player.new("tom", "South")
-    @state.players = [@player_1, @player_2 , @player_3]
+    @state.players = [@player_1, @player_2]
     @turn_tracker = TurnTracker.new(10, @state.players)
   end
 

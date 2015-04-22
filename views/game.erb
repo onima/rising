@@ -26,11 +26,11 @@
           </tr>
           <tr>
             <td>Race</td>
-            <td><%=@presenter.player.races.first.name%></td>
+            <td><%=@presenter.player.race.first.name%></td>
           </tr>
           <tr>
             <td>Troops Number</td>
-            <td id="troops_number"><%= @presenter.player.races.first.troops_number%></td>
+            <td id="troops_number"><%= @presenter.player.race.first.troops_number%></td>
           </tr>
           <tr>
             <td>Start Position</td>
@@ -40,4 +40,10 @@
       </div>
     </div>
   </div>
+</div>
+<div class="row">
+  <form action="/play_turn" method="post">
+    <input type="hidden" name="player" value="<%= @presenter.player.name %>">
+    <input class="col-lg-4 col-lg-offset-4 btn btn-default" type="submit" value="Finish Turn">
+  </form>
 </div>

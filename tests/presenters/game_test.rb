@@ -19,29 +19,21 @@ module Presenters
     end
 
     def test_if_method_player_show_the_current_player
-      @game_presenter.game_master.create_players( ["bob", "alice", "hugo"] )
+      @game_presenter.game_master.create_players( ["bob", "alice"] )
       assert_equal "bob", @game_presenter.player.name
       @turn_tracker.update(@turn_tracker.players[0])
       assert_equal "alice", @game_presenter.player.name
     end
 
-    def test_if_method_race_choices_show_raceboard_race_choices
-      @raceboard.pick_active_races
-      @raceboard.race_choices[0][0] = Race.new("humans", 5)
-      assert_equal "humans", @game_presenter.race_choices[0][0].name
-    end
-
-    def test_if_method_active_races_show_raceboard_active_races
-      @raceboard.pick_active_races
-      @raceboard.race_choices[0][0] = Race.new("humans", 5)
-      assert_equal "humans", @game_presenter.active_races.first.name
+    def test_if_method_races_show_raceboard_races
+      assert_equal 2, @game_presenter.races.length
     end
 
     def test_if_method_players_without_races_works
       @game_presenter.game_master.create_players( ["bob", "alice"] )
       assert @game_presenter.players_without_race
-      @players[0].races = [Race.new("humans", 5)].to_set
-      @players[1].races = [Race.new("orcs", 5)].to_set
+      @players[0].race = [Race.new("humans", 15)].to_set
+      @players[1].race = [Race.new("orcs", 15)].to_set
       refute @game_presenter.players_without_race
     end
 
