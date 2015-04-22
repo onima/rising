@@ -172,13 +172,22 @@ get '/regions_hsh' do
   response_wrapper do |game_master_obj|
     presenter           = Presenters::Game.new(game_master_obj)
     player              = presenter.player
-    occupied_regions_id = player.occupied_regions.map { |region| region.id }
+    players             = presenter.players
     regions_hsh         = Hash.new
+    owned_regions       = Hash.new
+
+    players.each do |gamer|
+      gamer.occupied_regions.each do |region|
+        owned_regions[region.id] = gamer.color
+      end
+    end
 
     game_master_obj.game_state.map.regions.each do |region|
       land_type_serialized               = Serializer.new.serialize_land_type(region.land_type)
       land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
-      land_type_serialized["occupied"]   = player.color if occupied_regions_id.include?(region.id)
+      if owned_regions.include?(region.id)
+        land_type_serialized["occupied"]   = owned_regions.fetch(region.id)
+      end
       regions_hsh[region.id]             = land_type_serialized
     end
 
