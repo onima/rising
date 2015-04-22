@@ -185,8 +185,9 @@ get '/regions_hsh' do
     game_master_obj.game_state.map.regions.each do |region|
       land_type_serialized               = Serializer.new.serialize_land_type(region.land_type)
       land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
+      land_type_serialized["has_tribe"]  = true if region.has_tribe == true
       if owned_regions.include?(region.id)
-        land_type_serialized["occupied"]   = owned_regions.fetch(region.id)
+        land_type_serialized["occupied"] = owned_regions.fetch(region.id)
       end
       regions_hsh[region.id]             = land_type_serialized
     end

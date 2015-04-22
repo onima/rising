@@ -109,6 +109,14 @@
             hexagon.on('click', clickOnId);
           }
 
+          if (regionObject.has_tribe) {
+            svg.text('T').attr( {
+              x: coordinates[6] + 45,
+              y: coordinates[7] + 10
+            } );
+            regionObject.conquest_points += 1;
+          }
+
           map.add(hexagon);
 
           svg.text(regionObject.conquest_points + '').attr( { // defense_points_text
