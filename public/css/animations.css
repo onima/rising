@@ -2,6 +2,39 @@ polyline.hexagon:hover {
   stroke-width: 2px;
 }
 
+.fig img {
+  height: 200px;
+  width: 200px;
+
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.fig:hover img {
+  border: 2px solid blue;
+  width: 300px;
+  height: 300px;
+}
+
+.fig h1 {
+   opacity: 0;
+   transition:opacity 0.4s linear;
+}
+.fig:hover h1 {
+   opacity: 1;
+}
+
+.fig figcaption {
+   opacity: 0; 
+   transition:opacity 0.4s linear;
+}
+.fig:hover figcaption {
+   opacity: 1;
+}
+
 polyline.hexagon {
   fill-opacity: 0.2;
 }
