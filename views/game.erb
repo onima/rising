@@ -6,7 +6,11 @@
       <div class="col-lg-4">
         <table class="table table-bordered table-striped table-condensed table-responsive">
           <tr>
-            <th colspan="2" class="info">Gameboard</th>
+            <% if @presenter.player.color == 'blue' %>
+              <th colspan="2" class="info">Gameboard</th>
+            <% else %>
+              <th colspan="2" class="danger">Gameboard</th>
+            <% end %>
           </tr>
           <tr>
             <td>Turns left</td>

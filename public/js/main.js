@@ -1,5 +1,66 @@
 (function() {
 
+  var interactWithImages = function interactWithImages() {
+
+    var racesImg   = document.getElementsByClassName('race-img');
+    var orcImg     = racesImg[0];
+    var humanImg   = racesImg[1];
+    var capitalize = function capitalize(string) {
+      return string.replace(/^./, capitalize.call.bind("".toUpperCase));
+    };
+
+    var sendRace   = function sendRace(img) {
+      var name      = img.id;
+      var parameter = encodeURI('name=' + name);
+      var xhr3      = new XMLHttpRequest();
+
+      xhr3.onreadystatechange = function() {
+        if (xhr3.readyState === 4) {
+          if (xhr3.status === 200 || xhr3.status === 0) {
+            window.location.href = "http://localhost:9292/play_turn";
+          } else {
+            console.log('There was a problem with the request.');
+          }
+        }
+      };
+      xhr3.open("POST", 'http://localhost:9292/race');
+      xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
+      xhr3.send(parameter);
+    };
+
+    var addClickEventOnPicture = function addClickEventOnPicture(img1, img2) {
+      img1.addEventListener('click', function() {
+        swal({
+          title: "Are you sure you want to choose " + capitalize(img1.id) + "?",
+          type: "info",
+          showCancelButton: true,
+          confirmButtonColor: "#6CDA6C",
+          confirmButtonText: "Yes, I'm sure!",
+          cancelButtonText: "No, not yet!",
+          cancelButtonColor: "#00CC00",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        },
+        function(isConfirm){
+          if (isConfirm) {
+            swal({
+              title: "You choose " + capitalize(img1.id) + "!",
+              text: "Player red has received the " + capitalize(img2.id) + "\n" + "Now it's time to fight !",
+              imageUrl: "images/sword.png",
+              timer: 3000,
+              showConfirmButton: false
+            });
+            setTimeout(function() {sendRace(img1);}, 3000);
+          } else {
+            swal("Well", "You can choose an other race :)", "info");
+          }
+        });
+      });
+    };
+    addClickEventOnPicture(orcImg, humanImg);
+    addClickEventOnPicture(humanImg, orcImg);
+  };
+
   var sendIdAndPlayerName = function sendIdAndPlayerName(hexagonObject) {
     var hexagonId  = hexagonObject.node.id;
     var playerName = document.getElementById('player_name').innerText;
@@ -109,6 +170,14 @@
             hexagon.on('click', clickOnId);
           }
 
+          if (regionObject.has_tribe) {
+            svg.text('T').attr( {
+              x: coordinates[6] + 45,
+              y: coordinates[7] + 10
+            } );
+            regionObject.conquest_points += 1;
+          }
+
           map.add(hexagon);
 
           svg.text(regionObject.conquest_points + '').attr( { // defense_points_text
@@ -122,5 +191,6 @@
   };
 
   showActualGameState();
+  interactWithImages();
 
 }) ();

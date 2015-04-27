@@ -85,24 +85,27 @@ get '/choose_race' do
   response_wrapper do |game_master_obj|
     @presenter = Presenters::Game.new(game_master_obj)
     game_master_obj.assign_players_color(@presenter.players)
+    @actual_player = @presenter.players[0]
   end
   erb :race_choice
 end
 
-post '/choose_race' do
+post '/race' do
   response_wrapper do |game_master_obj|
-    player_name = params["player"]
-    race_name   = params["race"]
-    player      = game_master_obj.game_state.players.find do |p|
-      p.name == player_name
-    end
+    @presenter  = Presenters::Game.new(game_master_obj)
+    race_name = params[:name]
     chosen_race = game_master_obj.game_state.raceboard.races.find do |r|
       r.name == race_name
     end
-    game_master_obj.attribute_race(player, chosen_race)
-    game_master_obj.game_state.raceboard.races.delete(chosen_race)
+    player_1 = game_master_obj.game_state.players[0]
+    player_2 = game_master_obj.game_state.players[1]
+    game_master_obj.attribute_race(player_1, chosen_race)
+    game_master_obj.game_state.raceboard.races.each do |race|
+      game_master_obj.attribute_race(player_1, chosen_race) if race.name == params[:name]
+      game_master_obj.attribute_race(player_2, race) if race.name != params[:name]
+    end
+    @presenter.players[0].race.add(chosen_race)
   end
-  redirect to 'choose_race'
 end
 
 get '/play_turn' do
@@ -138,6 +141,7 @@ post '/play_turn' do
   redirect to 'play_turn'
 end
 
+
 post '/hexa_id_and_player_name' do
   response_wrapper do |game_master_obj|
     region_id   = params[:id]
@@ -172,13 +176,23 @@ get '/regions_hsh' do
   response_wrapper do |game_master_obj|
     presenter           = Presenters::Game.new(game_master_obj)
     player              = presenter.player
-    occupied_regions_id = player.occupied_regions.map { |region| region.id }
+    players             = presenter.players
     regions_hsh         = Hash.new
+    owned_regions       = Hash.new
+
+    players.each do |gamer|
+      gamer.occupied_regions.each do |region|
+        owned_regions[region.id] = gamer.color
+      end
+    end
 
     game_master_obj.game_state.map.regions.each do |region|
       land_type_serialized               = Serializer.new.serialize_land_type(region.land_type)
       land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
-      land_type_serialized["occupied"]   = player.color if occupied_regions_id.include?(region.id)
+      land_type_serialized["has_tribe"]  = true if region.has_tribe == true
+      if owned_regions.include?(region.id)
+        land_type_serialized["occupied"] = owned_regions.fetch(region.id)
+      end
       regions_hsh[region.id]             = land_type_serialized
     end
 
