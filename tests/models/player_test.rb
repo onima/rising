@@ -51,4 +51,8 @@ class TestPlayer < Minitest::Test
     assert @player_2.can_yet_attack?(@map)
   end
 
+  def test_player_1_can_attack_region_occupied_by_player_2
+    assert @player.can_attack_region?(@map.regions[12])
+  end
+
 end

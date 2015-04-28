@@ -54,4 +54,14 @@ class TestRegion < Minitest::Test
     refute @map.regions[14].can_be_attacked?(@player_1)
   end
 
+  def test_if_region_occupied_by_player_is_attackable
+    @player_1 = Player.new("alexis", "North")
+    @player_2 = Player.new("louis", "East")
+    @player_1.race = [Race.new("orcs", 5)].to_set
+    @player_2.race = [Race.new("humans", 5)].to_set
+    @player_1.occupied_regions << @map.regions[6]
+    @player_2.occupied_regions << @map.regions[7]
+    assert @map.regions[7].can_be_attacked?(@player_1)
+  end
+
 end

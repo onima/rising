@@ -150,6 +150,9 @@ post '/hexa_id_and_player_name' do
     player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
+    player_2      = game_master_obj.game_state.players.find do |p|
+      p.name != player_name
+    end
 
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
@@ -162,6 +165,9 @@ post '/hexa_id_and_player_name' do
         region.player_defense            = region.neutral_defense_points
       end
       player.occupied_regions << region
+      player_2.occupied_regions.delete_if do |reg|
+        reg.id == region.id
+      end
     else
       raise 'region_id is nil'
     end
@@ -176,7 +182,13 @@ get '/regions_hsh' do
   response_wrapper do |game_master_obj|
     presenter           = Presenters::Game.new(game_master_obj)
     player              = presenter.player
-    players             = presenter.players
+    player_1            = game_master_obj.game_state.players.find do |p|
+      p.name == player.name
+    end
+    player_2            = game_master_obj.game_state.players.find do |p|
+      p.name != player.name
+    end
+    players = [player_1, player_2]
     regions_hsh         = Hash.new
     owned_regions       = Hash.new
 
