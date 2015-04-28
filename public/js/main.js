@@ -75,10 +75,10 @@
           var updateGameBoard = function updateGameBoard() {
             var troopsNumber = document.getElementById('troops_number');
             troopsNumber.innerText = playerObj.race[0].troops_number + '';
+            showActualGameState();
           };
 
           updateGameBoard();
-          showActualGameState();
         } else {
           console.log('There was a problem with the request.');
         }
@@ -122,6 +122,7 @@
     var map           = svg.group().addClass('map');
     var mapDimensions = { width: 5, height: 6 };
     var r             = 50;
+    var actualPlayerColor = document.getElementById('player_color').innerText;
 
     var findHexagonCoordinates = function findHexagonCoordinates(xCentre, yCentre) {
       var hexagonCoordinates = [];
@@ -165,7 +166,7 @@
             hexagon.stroke({ color: regionObject.occupied, width: 2 });
           }
 
-          if (regionObject.attackable && !regionObject.occupied) {
+          if (regionObject.attackable && regionObject.occupied !== actualPlayerColor ) {
             hexagon.addClass('attackable');
             hexagon.on('click', clickOnId);
           }
