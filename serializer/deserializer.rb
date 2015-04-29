@@ -75,7 +75,8 @@ class Deserializer
     LandType.new(
       hsh.fetch("name"),
       hsh.fetch("conquest_points"),
-      hsh.fetch("color")
+      hsh.fetch("color"),
+      hsh.fetch("status_point")
     )
   end
 

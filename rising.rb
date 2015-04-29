@@ -136,7 +136,35 @@ post '/play_turn' do
     logger.info "TurntrackerState after update => #{
       game_master_obj.game_state.turn_tracker.inspect
     }"
+
     player.race.first.troops_number = 5
+
+    if actual_turn != game_master_obj.game_state.turn_tracker.actual_turn
+      map              = game_master_obj.game_state.map
+      regions_occupied = game_master_obj.game_state.players.map do |p|
+        p.occupied_regions.to_a
+      end
+      regions_occupied.flatten!
+
+      map.regions.each do |region|
+        regions_occupied.each do |r|
+          if region.id == r.id
+            region.land_type.affect_increase_or_decrease_str
+            if region.land_type.status_point.nil?
+              region.land_type.conquest_points += 1
+            end
+            if region.land_type.status_point == "increasing"
+              region.land_type.conquest_points += 1
+            end
+            if region.land_type.status_point == "decreasing"
+              region.land_type.conquest_points -= 1
+            end
+          end
+        end
+      end
+
+    end
+
   end
   redirect to 'play_turn'
 end

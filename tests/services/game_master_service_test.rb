@@ -92,7 +92,8 @@ class TestGameMasterService < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -122,7 +123,8 @@ class TestGameMasterService < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -150,7 +152,8 @@ class TestGameMasterService < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -178,7 +181,8 @@ class TestGameMasterService < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",

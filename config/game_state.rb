@@ -8,7 +8,8 @@ class GameState
     LandType.new(
       land_type.fetch("name"),
       land_type.fetch("conquest_points"),
-      land_type.fetch("color")
+      land_type.fetch("color"),
+      land_type["status_point"]
     )
   end
 
