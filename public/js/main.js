@@ -176,7 +176,6 @@
               x: coordinates[6] + 45,
               y: coordinates[7] + 10
             } );
-            regionObject.conquest_points += 1;
           }
 
           map.add(hexagon);
