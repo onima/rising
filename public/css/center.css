@@ -6,3 +6,8 @@
 .left-shift {
   padding-left: 12px;
 }
+
+.presentation {
+  position: fixed;
+  top: 450px;
+}
