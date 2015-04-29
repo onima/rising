@@ -83,9 +83,9 @@ end
 
 get '/choose_race' do
   response_wrapper do |game_master_obj|
-    @presenter = Presenters::Game.new(game_master_obj)
-    game_master_obj.assign_players_color(@presenter.players)
+    @presenter     = Presenters::Game.new(game_master_obj)
     @actual_player = @presenter.players[0]
+    game_master_obj.assign_players_color(@presenter.players)
   end
   erb :race_choice
 end
@@ -93,12 +93,12 @@ end
 post '/race' do
   response_wrapper do |game_master_obj|
     @presenter  = Presenters::Game.new(game_master_obj)
-    race_name = params[:name]
+    race_name   = params[:name]
+    player_1    = game_master_obj.game_state.players[0]
+    player_2    = game_master_obj.game_state.players[1]
     chosen_race = game_master_obj.game_state.raceboard.races.find do |r|
       r.name == race_name
     end
-    player_1 = game_master_obj.game_state.players[0]
-    player_2 = game_master_obj.game_state.players[1]
     game_master_obj.attribute_race(player_1, chosen_race)
     game_master_obj.game_state.raceboard.races.each do |race|
       game_master_obj.attribute_race(player_1, chosen_race) if race.name == params[:name]
@@ -125,10 +125,17 @@ end
 
 post '/play_turn' do
   response_wrapper do |game_master_obj|
+    turns_left   = game_master_obj.game_state.turn_tracker.turns_left
+    actual_turn = game_master_obj.game_state.turn_tracker.actual_turn
     player_name = params["player"]
     player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
+
+    if turns_left == 1 && game_master_obj.game_state.players[1].name == player_name
+      redirect to 'end_game'
+    end
+
     logger.info "TurntrackerState before update => #{
       game_master_obj.game_state.turn_tracker.inspect
     }"
@@ -136,11 +143,45 @@ post '/play_turn' do
     logger.info "TurntrackerState after update => #{
       game_master_obj.game_state.turn_tracker.inspect
     }"
+
     player.race.first.troops_number = 5
+
+    if actual_turn != game_master_obj.game_state.turn_tracker.actual_turn
+      map              = game_master_obj.game_state.map
+      regions_occupied = game_master_obj.game_state.players.map do |p|
+        p.occupied_regions.to_a
+      end
+      regions_occupied.flatten!
+
+      map.regions.each do |region|
+        regions_occupied.each do |r|
+          if region.id == r.id
+            region.land_type.affect_increase_or_decrease_str
+            if region.land_type.status_point.nil?
+              region.land_type.conquest_points += 1
+            end
+            if region.land_type.status_point == "increasing"
+              region.land_type.conquest_points += 1
+            end
+            if region.land_type.status_point == "decreasing"
+              region.land_type.conquest_points -= 1
+            end
+          end
+        end
+      end
+
+      map.regions.each do |region|
+        if region.has_tribe
+          random_number = rand 6
+          region.land_type.conquest_points = random_number
+        end
+      end
+
+    end
+
   end
   redirect to 'play_turn'
 end
-
 
 post '/hexa_id_and_player_name' do
   response_wrapper do |game_master_obj|
@@ -150,10 +191,16 @@ post '/hexa_id_and_player_name' do
     player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
     end
+    player_2    = game_master_obj.game_state.players.find do |p|
+      p.name != player_name
+    end
 
     if region_id
       region = game_master_obj.game_state.map.regions.find do |r|
         r.id == region_id
+      end
+      if region.has_tribe
+        player.race.first.troops_number += 1
       end
       if region.occupied?(@presenter.players)
         player.race.first.troops_number -= region.player_defense
@@ -162,6 +209,9 @@ post '/hexa_id_and_player_name' do
         region.player_defense            = region.neutral_defense_points
       end
       player.occupied_regions << region
+      player_2.occupied_regions.delete_if do |reg|
+        reg.id == region.id
+      end
     else
       raise 'region_id is nil'
     end
@@ -174,11 +224,20 @@ end
 
 get '/regions_hsh' do
   response_wrapper do |game_master_obj|
-    presenter           = Presenters::Game.new(game_master_obj)
-    player              = presenter.player
-    players             = presenter.players
-    regions_hsh         = Hash.new
-    owned_regions       = Hash.new
+    actual_turn          = game_master_obj.game_state.turn_tracker.actual_turn
+    turn_played          = game_master_obj.game_state.turn_tracker.turn_played
+    new_turn_tracker_obj =  GameState.new.turn_tracker_generate
+    presenter            = Presenters::Game.new(game_master_obj)
+    player               = presenter.player
+    regions_hsh          = Hash.new
+    owned_regions        = Hash.new
+    player_1             = game_master_obj.game_state.players.find do |p|
+      p.name == player.name
+    end
+    player_2             = game_master_obj.game_state.players.find do |p|
+      p.name != player.name
+    end
+    players              = [player_1, player_2]
 
     players.each do |gamer|
       gamer.occupied_regions.each do |region|
@@ -187,16 +246,40 @@ get '/regions_hsh' do
     end
 
     game_master_obj.game_state.map.regions.each do |region|
-      land_type_serialized               = Serializer.new.serialize_land_type(region.land_type)
-      land_type_serialized["attackable"] = true if region.can_be_attacked?(player)
-      land_type_serialized["has_tribe"]  = true if region.has_tribe == true
+      land_type_serialized                    = Serializer.new.serialize_land_type(region.land_type)
+      land_type_serialized["attackable"]      = true if region.can_be_attacked?(player)
+        if actual_turn == new_turn_tracker_obj.actual_turn && turn_played.empty? && region.has_tribe && player_1.occupied_regions.empty?
+          region.land_type.conquest_points += 1
+        end
+      if region.has_tribe
+        land_type_serialized["has_tribe"] = true
+      end
       if owned_regions.include?(region.id)
         land_type_serialized["occupied"] = owned_regions.fetch(region.id)
       end
-      regions_hsh[region.id]             = land_type_serialized
+      land_type_serialized["conquest_points"] = region.land_type.conquest_points
+      regions_hsh[region.id]                  = land_type_serialized
     end
 
     content_type :json
     regions_hsh.to_json
   end
+end
+
+get '/end_game' do
+  response_wrapper do |game_master_obj|
+    player_1 = game_master_obj.game_state.players[0]
+    player_2 = game_master_obj.game_state.players[1]
+    regions_occupied_by_player_1 = player_1.occupied_regions.length
+    regions_occupied_by_player_2 = player_2.occupied_regions.length
+    @winner =
+      if regions_occupied_by_player_1 > regions_occupied_by_player_2
+        player_1.name
+      elsif regions_occupied_by_player_1 < regions_occupied_by_player_2
+        player_2.name
+      else
+        false
+      end
+  end
+  erb :end_game
 end

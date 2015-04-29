@@ -25,7 +25,8 @@ class SerializeTest < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -55,7 +56,8 @@ class SerializeTest < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -83,7 +85,8 @@ class SerializeTest < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -111,7 +114,8 @@ class SerializeTest < Minitest::Test
            "land_type" => {
              "name" => "forest",
              "conquest_points" => 2,
-             "color" => "yellow"
+             "color" => "yellow",
+             "status_point" => "increasing"
            },
            "has_tribe" => nil,
            "id" => "1,1",
@@ -147,7 +151,8 @@ class SerializeTest < Minitest::Test
     @region_1.land_type = LandType.new(
       "forest",
       2,
-      "yellow"
+      "yellow",
+      "increasing"
     )
     @map = Map.new 
     @map.regions.clear

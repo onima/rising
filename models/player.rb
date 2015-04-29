@@ -31,11 +31,7 @@ class Player
   end
 
   def has_enough_troops?(region)
-      if region.has_tribe
-        @race.first.troops_number >= region.land_type.conquest_points + 1
-      else
-        @race.first.troops_number >= region.land_type.conquest_points
-      end
+    @race.first.troops_number >= region.land_type.conquest_points
   end
 
   def occupied_regions_have_border_with_region?(region)

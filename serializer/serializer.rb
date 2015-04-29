@@ -73,7 +73,8 @@ class Serializer
      {
        "name"            => land_type.name,
        "conquest_points" => land_type.conquest_points,
-       "color"           => land_type.color
+       "color"           => land_type.color,
+       "status_point"    => land_type.status_point
      }
   end
 
