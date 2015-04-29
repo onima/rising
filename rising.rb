@@ -171,7 +171,6 @@ post '/play_turn' do
   redirect to 'play_turn'
 end
 
-
 post '/hexa_id_and_player_name' do
   response_wrapper do |game_master_obj|
     region_id   = params[:id]
