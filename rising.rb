@@ -125,10 +125,15 @@ end
 
 post '/play_turn' do
   response_wrapper do |game_master_obj|
+    turns_left   = game_master_obj.game_state.turn_tracker.turns_left
     actual_turn = game_master_obj.game_state.turn_tracker.actual_turn
     player_name = params["player"]
     player      = game_master_obj.game_state.players.find do |p|
       p.name == player_name
+    end
+
+    if turns_left == 1 && game_master_obj.game_state.players[1].name == player_name
+      redirect to 'end_game'
     end
 
     logger.info "TurntrackerState before update => #{
@@ -259,4 +264,22 @@ get '/regions_hsh' do
     content_type :json
     regions_hsh.to_json
   end
+end
+
+get '/end_game' do
+  response_wrapper do |game_master_obj|
+    player_1 = game_master_obj.game_state.players[0]
+    player_2 = game_master_obj.game_state.players[1]
+    regions_occupied_by_player_1 = player_1.occupied_regions.length
+    regions_occupied_by_player_2 = player_2.occupied_regions.length
+    @winner =
+      if regions_occupied_by_player_1 > regions_occupied_by_player_2
+        player_1.name
+      elsif regions_occupied_by_player_1 < regions_occupied_by_player_2
+        player_2.name
+      else
+        false
+      end
+  end
+  erb :end_game
 end
