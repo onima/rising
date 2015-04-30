@@ -11,3 +11,8 @@
   position: fixed;
   top: 450px;
 }
+
+.playerschoice {
+  position: relative;
+  top: 50px;
+}

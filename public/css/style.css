@@ -4,3 +4,17 @@
   font-size: 9em;
   right: 30px;
 }
+
+.subtitle {
+  position: relative;
+  font-family: 'gooddogregular', Arial, sans-serif;
+  font-size: 4em;
+  right: 30px;
+}
+
+.text {
+  position: relative;
+  font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
+  font-size: 2em;
+  right: 30px;
+}
