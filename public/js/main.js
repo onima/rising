@@ -37,7 +37,7 @@
           confirmButtonColor: "#6CDA6C",
           confirmButtonText: "Yes, I'm sure!",
           cancelButtonText: "No, not yet!",
-          cancelButtonColor: "#00CC00",
+          cancelButtonColor: "#b3b3b3",
           closeOnConfirm: false,
           closeOnCancel: false
         },
@@ -45,14 +45,16 @@
           if (isConfirm) {
             swal({
               title: "You choose " + capitalize(img1.id) + "!",
-              text: "Player red has received the " + capitalize(img2.id) + "\n" + "Now it's time to fight !",
+              text: "Player red has received the " + capitalize(img2.id) + ".  " + "Now it's time to fight !",
               imageUrl: "images/sword.png",
-              timer: 3000,
-              showConfirmButton: false
+              showConfirmButton: true
+            },
+            function() {
+              swal.disableButtons();
+              sendRace(img1);
             });
-            setTimeout(function() {sendRace(img1);}, 3000);
           } else {
-            swal("Well", "You can choose an other race :)", "info");
+            swal("Well", "You can choose an other race :)", "error");
           }
         });
       });
