@@ -76,7 +76,9 @@
           var playerObj       = JSON.parse(xhr2.responseText);
           var updateGameBoard = function updateGameBoard() {
             var troopsNumber = document.getElementById('troops_number');
+            var occupiedRegions = document.getElementById('occupied_regions');
             troopsNumber.innerText = playerObj.race[0].troops_number + '';
+            occupiedRegions.innerText = playerObj.occupied_regions.length + '';
             showActualGameState();
           };
 

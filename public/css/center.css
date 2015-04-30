@@ -16,3 +16,14 @@
   position: relative;
   top: 50px;
 }
+
+.finishturn {
+  position: fixed;
+  left: 25px;
+  bottom: 25px;
+}
+
+.gametitle {
+  position: relative;
+  top: 50px;
+}

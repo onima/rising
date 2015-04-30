@@ -12,6 +12,20 @@
   right: 30px;
 }
 
+.tabletitle {
+  position: relative;
+  font-family: 'gooddogregular', Arial, sans-serif;
+  font-size: 2em;
+  right: 100px;
+}
+
+.tablerows {
+  position: relative;
+  font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
+  font-size: 20px;
+  right: 30px;
+}
+
 .text {
   position: relative;
   font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
@@ -22,5 +36,23 @@
 .quote {
   position: relative;
   font-family: 'sf_cartoonist_handitalic', Arial, sans-serif;
+  font-size: 2em;
+}
+
+.bluecolor {
+  background: #0074D9;
+  color: #fff;
+  border: none;
+}
+
+.redcolor {
+  background: #FF4136;
+  color: #fff;
+  border: none;
+}
+
+.finishbutton {
+  position: relative;
+  font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
   font-size: 2em;
 }
