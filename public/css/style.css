@@ -18,3 +18,9 @@
   font-size: 2em;
   right: 30px;
 }
+
+.quote {
+  position: relative;
+  font-family: 'sf_cartoonist_handitalic', Arial, sans-serif;
+  font-size: 2em;
+}
