@@ -16,14 +16,12 @@
   position: relative;
   font-family: 'gooddogregular', Arial, sans-serif;
   font-size: 2em;
-  right: 100px;
 }
 
 .tablerows {
   position: relative;
   font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
   font-size: 20px;
-  right: 30px;
 }
 
 .text {
@@ -37,6 +35,7 @@
   position: relative;
   font-family: 'sf_cartoonist_handitalic', Arial, sans-serif;
   font-size: 2em;
+  right: 25px;
 }
 
 .bluecolor {

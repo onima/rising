@@ -1,53 +1,50 @@
+<div class="game">
   <div class="row">
-    <div class="col-lg-12">
-      <div class="row">
-        <h1 class="subtitle col-lg-offset-6 gametitle">Rising</h1>
-        <div id="drawing" class="col-lg-1 col-lg-push-6">
-        </div>
-        <div class="col-lg-4 col-lg-offset-1">
-          </br></br></br>
-          <table class="table table-bordered table-condensed table-responsive starter-template">
-            <tr class="left-shift tabletitle">
-              <% if @presenter.player.color == 'blue' %>
-                <th colspan="2" class="bluecolor starter-template">Gameboard</th>
-            <% else %>
-                <th colspan="2" class="redcolor starter-template">Gameboard</th>
-            <% end %>
-            </tr>
-            <tr class="tablerows">
-              <td>Turns left</td>
-              <td id="turn_left"><%= @presenter.turn_tracker.turns_left %></td>
-            </tr>
-            <tr class="tablerows">
-              <td>Actual Turn</td>
-              <td><%= @presenter.turn_tracker.actual_turn %></td>
-            </tr>
-            <tr class="tablerows">
-              <td>Player</td>
-              <td id="player_name"><%= @presenter.player.name %></td>
-            </tr>
-            <tr class="tablerows">
-              <td>Troops Number</td>
-              <td id="troops_number"><%= @presenter.player.race.first.troops_number%></td>
-            </tr>
-            <tr class="tablerows">
-              <td>Occupied Regions</td>
-              <td id="occupied_regions"><%= @presenter.player.occupied_regions.length%></td>
-            </tr>
-            <tr class="tablerows">
-              <td>Start Position</td>
-              <td> <%= @presenter.player.cardinal_point %> </td>
-            </tr>
-          </table>
-          </br>
-          <div class="col-lg-6 col-lg-offset-3 head">
-            <% if @presenter.player.race.first.name == 'orcs' %>
-              <img src="images/orchead.jpg" class="img-responsive img-thumbnail">
-          <% else %>
-              <img src="images/humanhead.jpg" class="img-responsive img-thumbnail">
-          <% end %>
-          </div>
-        </div>
+    <h1 class="subtitle col-lg-offset-6 gametitle">Rising</h1>
+    <div id="drawing" class="col-lg-1 col-lg-push-6">
+    </div>
+    <div class="col-lg-4 col-lg-offset-1">
+      </br></br></br>
+      <table class="table table-bordered table-condensed table-responsive starter-template">
+        <tr class="left-shift tabletitle">
+          <% if @presenter.player.color == 'blue' %>
+            <th colspan="2" class="bluecolor starter-template">Gameboard</th>
+        <% else %>
+            <th colspan="2" class="redcolor starter-template">Gameboard</th>
+        <% end %>
+        </tr>
+        <tr class="tablerows">
+          <td>Turns left</td>
+          <td id="turn_left"><%= @presenter.turn_tracker.turns_left %></td>
+        </tr>
+        <tr class="tablerows">
+          <td>Actual Turn</td>
+          <td><%= @presenter.turn_tracker.actual_turn %></td>
+        </tr>
+        <tr class="tablerows">
+          <td>Player</td>
+          <td id="player_name"><%= @presenter.player.name %></td>
+        </tr>
+        <tr class="tablerows">
+          <td>Troops Number</td>
+          <td id="troops_number"><%= @presenter.player.race.first.troops_number%></td>
+        </tr>
+        <tr class="tablerows">
+          <td>Occupied Regions</td>
+          <td id="occupied_regions"><%= @presenter.player.occupied_regions.length%></td>
+        </tr>
+        <tr class="tablerows">
+          <td>Start Position</td>
+          <td> <%= @presenter.player.cardinal_point %> </td>
+        </tr>
+      </table>
+      </br>
+      <div class="col-lg-6 col-lg-offset-3">
+        <% if @presenter.player.race.first.name == 'orcs' %>
+          <img src="images/orcres.png" class="img-responsive img-circle">
+      <% else %>
+          <img src="images/humanres.png" class="img-responsive img-circle">
+      <% end %>
       </div>
     </div>
   </div>
