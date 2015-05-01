@@ -83,6 +83,7 @@ end
 
 get '/choose_race' do
   response_wrapper do |game_master_obj|
+    redirect to 'play_turn' if !game_master_obj.game_state.players[0].race.empty?
     @presenter     = Presenters::Game.new(game_master_obj)
     @actual_player = @presenter.players[0]
     game_master_obj.assign_players_color(@presenter.players)
