@@ -274,12 +274,21 @@ get '/end_game' do
     regions_occupied_by_player_2 = player_2.occupied_regions.length
     @winner =
       if regions_occupied_by_player_1 > regions_occupied_by_player_2
-        player_1.name
+        player_1
       elsif regions_occupied_by_player_1 < regions_occupied_by_player_2
-        player_2.name
+        player_2
       else
         false
       end
+    if @winner
+      @winner_name  =  @winner.name
+      @winner_color =  @winner.color
+    end
   end
   erb :end_game
+end
+
+post '/restart_game' do
+  session.delete(:rising_id)
+  redirect to '/'
 end

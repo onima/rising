@@ -27,3 +27,29 @@
   position: relative;
   top: 50px;
 }
+
+.end_shield {
+  position: relative;
+  right: 25px;
+  top: 50px;
+}
+
+.restart_button {
+  position: relative;
+  top: 100px;
+}
+
+.draw {
+  position: fixed;
+  left: 20px;
+}
+
+.handshake {
+  position: relative;
+  left: 20px;
+}
+
+.game {
+  position: relative;
+  bottom: 50px;
+}
