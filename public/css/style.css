@@ -1,0 +1,56 @@
+.title {
+  position: relative;
+  font-family: 'gooddogregular', Arial, sans-serif;
+  font-size: 9em;
+  right: 30px;
+}
+
+.subtitle {
+  position: relative;
+  font-family: 'gooddogregular', Arial, sans-serif;
+  font-size: 4em;
+  right: 30px;
+}
+
+.tabletitle {
+  position: relative;
+  font-family: 'gooddogregular', Arial, sans-serif;
+  font-size: 2em;
+}
+
+.tablerows {
+  position: relative;
+  font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
+  font-size: 20px;
+}
+
+.text {
+  position: relative;
+  font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
+  font-size: 2em;
+}
+
+.quote {
+  position: relative;
+  font-family: 'sf_cartoonist_handitalic', Arial, sans-serif;
+  font-size: 2em;
+  right: 25px;
+}
+
+.bluecolor {
+  background: #0074D9;
+  color: #fff;
+  border: none;
+}
+
+.redcolor {
+  background: #FF4136;
+  color: #fff;
+  border: none;
+}
+
+.finishbutton {
+  position: relative;
+  font-family: 'sf_cartoonist_handregular', Arial, sans-serif;
+  font-size: 2em;
+}

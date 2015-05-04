@@ -1,28 +1,27 @@
-<form action="/create_players" method="post" class="form-horizontal">
-  <fieldset>
-    <legend>Players</legend>
-    <div class="row">
-      <div class="form-group starter-template">
-        <label for="players" class="col-lg-6">
-          <h4>Enter players' names separated by whitespace (2 players)</h4>
-        </label>
-        <div class="col-lg-3">
-          <input type="text" name="players" id="players" class="form-control" placeholder="Ex : Alice Bob">
-        </div>
-        <div class="col-lg-3">
-          <input type="submit" id="validate_players" value="Validate" class=" col-lg-4 btn btn-primary">
+<div class="playerschoice">
+  <form action="/create_players" method="post" class="form-horizontal">
+    <fieldset>
+      <legend class="subtitle">Players</legend>
+      <div class="row">
+        <div class="form-group starter-template">
+          <label for="players" class="col-lg-6">
+            <h4 class="text">Enter players' names separated by whitespace (2 players)</h4>
+          </label>
+          <div class="col-lg-3">
+            <input type="text" name="players" id="players" class="form-control" placeholder="Ex : Alice Bob">
+          </div>
+          <div class="col-lg-3">
+            <input type="submit" id="validate_players" value="Validate" class=" col-lg-4 btn btn-primary">
+          </div>
         </div>
       </div>
-    </div>
-  </fieldset>
-</form>
-<div class="row">
-  <figure>
-    <div class="col-lg-offset-4 col-lg-4">
-      <img src="images/knight.jpg" class="img-responsive img-circle">
-      <figcaption class="starter-template">
-      Illustrated By <a href="https://www.flickr.com/photos/pareeerica/">Parée</a>
-      </figcaption>
-    </div>
-  </figure>
+    </fieldset>
+  </form>
+  <div class="row">
+    <figure>
+      <div class="col-lg-offset-6 col-lg-4 imgwarrior">
+        <img src="images/guerriericon.jpg" class="img-responsive">
+      </div>
+    </figure>
+  </div>
 </div>

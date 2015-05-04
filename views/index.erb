@@ -1,17 +1,16 @@
-<section>
+<div class="row col-lg-offset-1">
+  <img src="images/flowerban.png"  class="col-lg-11 img-responsive">
+</div>
+<section class="presentation">
   <figure>
     <div class="row">
-      <div class="col-lg-offset-3">
-        <img src="images/landdark.jpg" class="img-responsive img-rounded">
-        <figcaption>
-        Illustrated By
-        <a href="https://www.flickr.com/photos/drazzacov/">Dr. Azzacov</a>
-        </figcaption>
-      </div>
+      <img src="images/bluearmor.png"  class="col-lg-2 col-lg-offset-1 img-responsive left_shield">
+      <h1 class="title col-lg-2 col-lg-offset-2">Rising</h1>
+      <img src="images/redarmor.png"  class="col-lg-2 col-lg-offset-2 img-responsive right_shield">
     </div>
   </figure>
   <div class="row">
-    <div class="col-lg-offset-1 starter-template">
+    <div class="starter-template">
       <% if @presenter.players.empty? %>
         <a href="/players_choice" id="new_game" class="btn btn-default btn-lg">New Game</a>
     <% else %>

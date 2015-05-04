@@ -83,6 +83,7 @@ end
 
 get '/choose_race' do
   response_wrapper do |game_master_obj|
+    redirect to 'play_turn' if !game_master_obj.game_state.players[0].race.empty?
     @presenter     = Presenters::Game.new(game_master_obj)
     @actual_player = @presenter.players[0]
     game_master_obj.assign_players_color(@presenter.players)
@@ -172,7 +173,7 @@ post '/play_turn' do
 
       map.regions.each do |region|
         if region.has_tribe
-          random_number = rand 6
+          random_number = rand (1..6)
           region.land_type.conquest_points = random_number
         end
       end
@@ -274,12 +275,21 @@ get '/end_game' do
     regions_occupied_by_player_2 = player_2.occupied_regions.length
     @winner =
       if regions_occupied_by_player_1 > regions_occupied_by_player_2
-        player_1.name
+        player_1
       elsif regions_occupied_by_player_1 < regions_occupied_by_player_2
-        player_2.name
+        player_2
       else
         false
       end
+    if @winner
+      @winner_name  =  @winner.name
+      @winner_color =  @winner.color
+    end
   end
   erb :end_game
+end
+
+post '/restart_game' do
+  session.delete(:rising_id)
+  redirect to '/'
 end
