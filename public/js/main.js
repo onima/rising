@@ -1,5 +1,42 @@
 (function() {
 
+  var rulesButton = document.getElementById('rules');
+
+  var addClickEventOnRulesButton = function addClickEventOnRulesButton() {
+    rulesButton.onclick = function() {
+      swal({
+        title: 'Rules',
+        html:
+        '<b>How many players are there? </b> There are 2 players. ' +
+        'Player 1 must choose between orc and humans. Player 2 will receive the other race. ' +
+        'Please note that race choice has no impact on game logic.' +
+        '</br>' +
+        '</br>' +
+        '<b>How do you win this game? </b>' +
+        'You must conquer more regions than your opponent. Each region has a number of defense points.' +
+        'You have only 5 troops to spend each turn.' +
+        'When it\'s your turn, hover over the map and you will easily recognize conquerable regions.' +
+        '</br>' +
+        '</br>' +
+        '<b>How long will it take to complete the game ?</b> 10 turns. When the last turn has been played by each player, the game is finished and the player who has most regions wins.' +
+        '</br>' +
+        '</br>' +
+        '<b>I saw some T letters on certain regions... What is it?</b> Well, some regions have tribes. Once all players have had a turn, a new turn begins and those regions have new random defense points. ' +
+        'Sometimes, it will be easy for you to conquer some regions, sometimes not...' +
+        '</br>' +
+        '</br>' +
+        '<b> Why can\'t I attack blue regions ?</b> Because those regions are seas' +
+        '</br>' +
+        '</br>' +
+        '<b> Ok, I think I understand this game</b> ' +
+        '<p> Well, let\'s go !</p>',
+        width: 700,
+        imageUrl: 'images/rules.png',
+        animation: false
+      });
+    };
+  };
+
   var interactWithImages = function interactWithImages() {
 
     var racesImg   = document.getElementsByClassName('race-img');
@@ -172,7 +209,7 @@
 
           if (regionObject.attackable && regionObject.occupied !== actualPlayerColor ) {
             hexagon.addClass('attackable');
-            hexagon.on('click', clickOnId);
+            hexagon.click(clickOnId);
           }
 
           if (regionObject.has_tribe) {
@@ -193,7 +230,7 @@
     };
     drawMap(mapDimensions);
   };
-
+  addClickEventOnRulesButton();
   showActualGameState();
   interactWithImages();
 
