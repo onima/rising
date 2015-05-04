@@ -173,7 +173,7 @@ post '/play_turn' do
 
       map.regions.each do |region|
         if region.has_tribe
-          random_number = rand 6
+          random_number = rand (1..6)
           region.land_type.conquest_points = random_number
         end
       end
