@@ -37,7 +37,7 @@ class GameMasterTest < Minitest::Test
     }
   end
 
-  def test_create_player_raises_error_if_players_names_not_unique
+  def test_create_player_raises_error_if_players_names_are_not_unique
     assert_raises(IdenticalPlayersNames) {
       @game_master.create_players( ["bob", "bob"] )
     }
@@ -50,12 +50,14 @@ class GameMasterTest < Minitest::Test
     assert_equal "red", @game_master.game_state.players[1].color
   end
 
-  def test_if_attribute_race
+  def test_if_attribute_races
     @game_master.create_players( ["bob", "alice"] )
-    @player = @game_master.game_state.players[0]
-    @race_1 = Race.new("humans", 15)
-    @game_master.attribute_race(@player, @race_1)
-    assert_equal "humans", @player.race.first.name
+    @player_1 = @game_master.game_state.players[0]
+    @player_2 = @game_master.game_state.players[1]
+    @race_1 = Race.new("humans", 5)
+    @game_master.attribute_races(@player_1, @race_1, @player_2)
+    assert_equal "humans", @player_1.race.first.name
+    assert_equal "orcs", @player_2.race.first.name
   end
 
   def test_if_check_if_players_names_method_is_valid
@@ -63,4 +65,12 @@ class GameMasterTest < Minitest::Test
     refute @game_master.check_if_players_names_are_valid?("bobby")
   end
 
+  def test_retrieve_chosen_race_method_returns_race_name
+    race_name = 'orcs'
+    assert_equal 'orcs', @game_master.retrieve_chosen_race(race_name).to_a[0]
+    race_name = 'dragons'
+    assert_raises(RaceNameDoNotExist) {
+      @game_master.retrieve_chosen_race(race_name)
+    }
+  end
 end

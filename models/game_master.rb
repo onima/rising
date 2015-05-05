@@ -27,11 +27,19 @@ class GameMaster
     end
   end
 
-  def attribute_race(player, race)
-    if race && player && player
-      @game_state.raceboard.pick_race(race, player)
+  def attribute_races(player_1, chosen_race, player_2)
+    other_race = @game_state.raceboard.races.find { |race| race != chosen_race }
+    @game_state.raceboard.pick_race(chosen_race, player_1)
+    @game_state.raceboard.pick_race(other_race, player_2)
+  end
+
+  def retrieve_chosen_race(race_name)
+    if race_name == 'orcs' || race_name == 'humans'
+      @game_state.raceboard.races.find do |r|
+        r.name == race_name
+      end
     else
-      raise RaceNotAssign 
+      raise RaceNameDoNotExist
     end
   end
 

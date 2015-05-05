@@ -14,5 +14,4 @@ class RaceBoard
   def pick_race(chosen_race, player)
     player.race << chosen_race
   end
-
 end

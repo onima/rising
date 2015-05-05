@@ -17,5 +17,4 @@ class TestGameState < Minitest::Test
     @game_master.game_state.players[1].race = [Race.new("orcs", 5)].to_set
     refute @game_master.game_state.players_without_race?
   end
-
 end

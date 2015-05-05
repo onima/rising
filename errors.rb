@@ -15,3 +15,6 @@ end
 
 class RaceNotAssign < RuntimeError
 end
+
+class RaceNameDoNotExist < RuntimeError
+end
