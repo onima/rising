@@ -1,20 +1,8 @@
-class TooManyRacesRequired < RuntimeError
-end
-
-class TooManyPlayers < RuntimeError
-end
-
-class PlayersHaveBeenChosen < RuntimeError
-end
-
-class PlayerDoNotHaveName < RuntimeError
-end
-
-class IdenticalPlayersNames < RuntimeError
-end
-
-class RaceNotAssign < RuntimeError
-end
-
-class RaceNameDoNotExist < RuntimeError
-end
+TooManyRacesRequired  = Class.new(RuntimeError)
+TooManyPlayers        = Class.new(RuntimeError)
+PlayersHaveBeenChosen = Class.new(RuntimeError)
+PlayerDoNotHaveName   = Class.new(RuntimeError)
+IdenticalPlayersNames = Class.new(RuntimeError)
+RaceNotAssign         = Class.new(RuntimeError)
+RaceNameDoNotExist    = Class.new(RuntimeError)
+PlayerNotFound        = Class.new(RuntimeError)

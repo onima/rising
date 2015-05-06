@@ -35,15 +35,10 @@ class GameMaster
 
   def retrieve_chosen_race(race_name)
     if race_name == 'orcs' || race_name == 'humans'
-      @game_state.raceboard.races.find do |r|
-        r.name == race_name
-      end
+      @game_state.raceboard.races.find { |r| r.name == race_name}
     else
       raise RaceNameDoNotExist
     end
   end
 
-  def check_if_players_names_are_valid?(players_params)
-    !players_params.include?(",") && players_params.split.count == 2
-  end
 end

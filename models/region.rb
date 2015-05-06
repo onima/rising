@@ -11,10 +11,10 @@ class Region
   end
 
   def has_external_border?
-      has_west_border? ||
-      has_north_border? ||
-      has_south_border? ||
-      has_east_border?
+    has_west_border? ||
+    has_north_border? ||
+    has_south_border? ||
+    has_east_border?
   end
 
   def external_borders
