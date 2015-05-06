@@ -20,6 +20,19 @@ class GameMaster
     end
   end
 
+  def check_if_players_names_are_valid?(players_params)
+    !players_params.include?(",") && players_params.split.count == 2
+  end
+
+  def retrieve_actual_player(player_name)
+    actual_player = @game_state.players.find { |p| p.name == player_name }
+    if actual_player
+      actual_player
+    else
+      raise PlayerNotFound
+    end
+  end
+
   def assign_players_color(players)
     colors = ["blue", "red"]
     players.zip(colors).each do |player, color|

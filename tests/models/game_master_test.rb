@@ -65,6 +65,16 @@ class GameMasterTest < Minitest::Test
     refute @game_master.check_if_players_names_are_valid?("bobby")
   end
 
+  def test_retrieve_player_name_method_returns_player_name
+    @game_master.create_players( ["alice", "bob"] )
+    player_name = 'alice'
+    assert_equal 'alice', @game_master.retrieve_actual_player(player_name).name
+    player_name = 'henry'
+    assert_raises(PlayerNotFound) {
+      @game_master.retrieve_actual_player(player_name)
+    }
+  end
+
   def test_retrieve_chosen_race_method_returns_race_name
     race_name = 'orcs'
     assert_equal 'orcs', @game_master.retrieve_chosen_race(race_name).to_a[0]
