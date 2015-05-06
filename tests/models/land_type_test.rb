@@ -6,7 +6,8 @@ require 'models/land_type'
 class TestLandType < MiniTest::Test
 
   def setup
-    @land_type = LandType.new('hill', 2, '#FFD700', 'increasing')
+    @land_type   = LandType.new('hill', 2, '#FFD700', nil)
+    @land_type_2 = LandType.new('mountain', 3, '#FFD700', nil)
   end
 
   def test_if_maximum_reach
@@ -19,16 +20,14 @@ class TestLandType < MiniTest::Test
     assert @land_type.minimum_reach?
   end
 
-  def test_if_increase_str_is_affected
+  def test_if_affect_status_method_works
     @land_type.conquest_points = 6
-    @land_type.affect_increase_or_decrease_str
+    @land_type.affect_status
+    @land_type_2.conquest_points = 1
+    @land_type_2.affect_status
     assert_equal 'decreasing', @land_type.status_point
+    assert_equal 5, @land_type.conquest_points
+    assert_equal 'increasing', @land_type_2.status_point
+    assert_equal 2, @land_type_2.conquest_points
   end
-
-  def test_if_decrease_str_is_affected
-    @land_type.conquest_points = 1
-    @land_type.affect_increase_or_decrease_str
-    assert_equal 'increasing', @land_type.status_point
-  end
-
 end

@@ -31,7 +31,15 @@ class Map
       region.land_type = sea_land_type
     end
     regions_without_sea.each do |region|
-      region.land_type = land_types_without_sea.sample
+      land_types_without_sea
+      random_land_type = land_types_without_sea.sample
+      new_land_type = LandType.new(
+                        random_land_type.name,
+                        random_land_type.conquest_points,
+                        random_land_type.color,
+                        random_land_type.status_point
+                      )
+      region.land_type = new_land_type
     end
   end
 

@@ -58,4 +58,8 @@ class Region
     coordinates[1] == rows && (1..columns).to_a.include?(coordinates[0])
   end
 
+  def affect_rand_number
+    random_number = rand (1..6)
+    land_type.conquest_points = random_number
+  end
 end

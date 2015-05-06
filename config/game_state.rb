@@ -42,6 +42,18 @@ class GameState
     @turn_tracker = TurnTracker.new(10, @players)
   end
 
+  def game_end?(actual_player_name)
+    turn_tracker.turns_left == 1 && @players[1].name == actual_player_name
+  end
+
+  def update(player, turn_before_update)
+    update_turn_tracker(player)
+    update_troops_number(player)
+    if turn_tracker.actual_turn != turn_before_update
+      assign_status_and_points_to_regions
+    end
+  end
+
   private
 
   def map_generate
@@ -52,4 +64,28 @@ class GameState
     @rising_id = Time.now.to_f
   end
 
+  def update_turn_tracker(player)
+    turn_tracker.update(player)
+  end
+
+  def update_troops_number(player)
+    player.race.first.troops_number = 5
+  end
+
+  def assign_status_and_points_to_regions
+    affect_status_string_and_points
+  end
+
+  def affect_status_string_and_points
+    map.regions.each do |region|
+      regions_occupied.each do |region_occupied|
+        region.land_type.affect_status if region.id == region_occupied.id
+      end
+      region.affect_rand_number if region.has_tribe
+    end
+  end
+
+  def regions_occupied
+    @players.map { |p| p.occupied_regions.to_a }.flatten!
+  end
 end

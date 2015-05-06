@@ -106,7 +106,6 @@ get '/play_turn' do
   response_wrapper do |game_master|
     redirect to '/' if game_master.game_state.players.empty?
     @presenter = Presenters::Game.new(game_master)
-
     logger.info "Players are => #{
       @presenter.players.map(&:name)
     }"
@@ -119,60 +118,11 @@ end
 
 post '/play_turn' do
   response_wrapper do |game_master|
-    turns_left   = game_master.game_state.turn_tracker.turns_left
-    actual_turn = game_master.game_state.turn_tracker.actual_turn
-    player_name = params["player"]
-    player      = game_master.game_state.players.find do |p|
-      p.name == player_name
-    end
-
-    if turns_left == 1 && game_master.game_state.players[1].name == player_name
-      redirect to 'end_game'
-    end
-
-    logger.info "TurntrackerState before update => #{
-      game_master.game_state.turn_tracker.inspect
-    }"
-    game_master.game_state.turn_tracker.update(player)
-    logger.info "TurntrackerState after update => #{
-      game_master.game_state.turn_tracker.inspect
-    }"
-
-    player.race.first.troops_number = 5
-
-    if actual_turn != game_master.game_state.turn_tracker.actual_turn
-      map              = game_master.game_state.map
-      regions_occupied = game_master.game_state.players.map do |p|
-        p.occupied_regions.to_a
-      end
-      regions_occupied.flatten!
-
-      map.regions.each do |region|
-        regions_occupied.each do |r|
-          if region.id == r.id
-            region.land_type.affect_increase_or_decrease_str
-            if region.land_type.status_point.nil?
-              region.land_type.conquest_points += 1
-            end
-            if region.land_type.status_point == "increasing"
-              region.land_type.conquest_points += 1
-            end
-            if region.land_type.status_point == "decreasing"
-              region.land_type.conquest_points -= 1
-            end
-          end
-        end
-      end
-
-      map.regions.each do |region|
-        if region.has_tribe
-          random_number = rand (1..6)
-          region.land_type.conquest_points = random_number
-        end
-      end
-
-    end
-
+    turn_before_update = game_master.game_state.turn_tracker.actual_turn
+    player_name        = params["player"]
+    player             = game_master.retrieve_actual_player(player_name)
+    redirect to 'end_game' if game_master.game_state.game_end?(player_name)
+    game_master.game_state.update(player, turn_before_update)
   end
   redirect to 'play_turn'
 end

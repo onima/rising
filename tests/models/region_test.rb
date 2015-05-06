@@ -64,4 +64,8 @@ class TestRegion < Minitest::Test
     assert @map.regions[7].can_be_attacked?(@player_1)
   end
 
+  def test_if_region_with_tribe_responds_to_affect_rand_number_method
+    @region_3.has_tribe = true
+    assert_respond_to(@region_3, :affect_rand_number)
+  end
 end
