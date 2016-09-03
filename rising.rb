@@ -106,6 +106,7 @@ post '/race' do
       game_master_obj.attribute_race(player_2, race) if race.name != params[:name]
     end
     @presenter.players[0].race.add(chosen_race)
+    game_master_obj
   end
 end
 
