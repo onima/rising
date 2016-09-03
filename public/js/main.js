@@ -54,13 +54,13 @@
       xhr3.onreadystatechange = function() {
         if (xhr3.readyState === 4) {
           if (xhr3.status === 200 || xhr3.status === 0) {
-            window.location.href = "http://localhost:9292/play_turn";
+            window.location.href = "/play_turn";
           } else {
             console.log('There was a problem with the request.');
           }
         }
       };
-      xhr3.open("POST", 'http://localhost:9292/race');
+      xhr3.open("POST", '/race');
       xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
       xhr3.send(parameter);
     };
@@ -125,7 +125,7 @@
         }
       }
     };
-    xhr2.open("POST", 'http://localhost:9292/hexa_id_and_player_name');
+    xhr2.open("POST", '/hexa_id_and_player_name');
     xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded ');
     xhr2.send(parameters);
   };
@@ -154,7 +154,7 @@
         }
       }
     };
-    xhr.open("GET", 'http://localhost:9292/regions_hsh');
+    xhr.open("GET", '/regions_hsh');
     xhr.send(null);
   };
 
